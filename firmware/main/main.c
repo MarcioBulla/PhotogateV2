@@ -3,6 +3,7 @@
 #include <driver/pulse_cnt.h>
 #include <encoder.h>
 #include <esp_log.h>
+#include <esp_random.h>
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/portmacro.h>
@@ -17,23 +18,25 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include <main.h>
-#include <time.h>
 
 static const char *TAG = "main";
 
 menu_node_t root = {
     .label = "Main Menu",
-    .num_options = 4,
+    .num_options = 5,
     .submenus = root_options,
 };
 
-menu_node_t root_options[4] = {
+menu_node_t root_options[5] = {
     {.label = "Pendulum", .function = &Pendulum},
     {.label = "Spring", .function = &Spring},
     {.label = "Energy", .function = &Energy},
+    {.label = "History", .function = &History},
     {.label = "Settings", .submenus = settings_options, .num_options = 3},
 };
 
@@ -183,18 +186,17 @@ Navigate_t map(void) {
     }
   } else if (e.type == RE_ET_BTN_LONG_PRESSED) {
     if (hHourglass != NULL) {
-      ESP_LOGI(TAG,  "notnull");
       vTaskDelete(hHourglass);
       hHourglass = NULL;
     }
-  for (uint8_t i = 0; i < 2; i++) {
-    if (currentWatchers[i] > 0) {
-      ESP_ERROR_CHECK(
-          pcnt_unit_remove_watch_point(pcnt_unit, currentWatchers[i]));
+    for (uint8_t i = 0; i < 2; i++) {
+      if (currentWatchers[i] > 0) {
+        ESP_ERROR_CHECK(
+            pcnt_unit_remove_watch_point(pcnt_unit, currentWatchers[i]));
+      }
+      currentWatchers[i] = -1;
     }
-    currentWatchers[i] = -1;
-  }
-    
+
     ESP_LOGI(TAG, "BACK");
     return NAVIGATE_BACK;
   } else {
@@ -279,10 +281,7 @@ static bool cronos(pcnt_unit_handle_t pcnt_unit,
                    const pcnt_watch_event_data_t *edata, void *user_ctx) {
   BaseType_t high_task_wakeup;
   QueueHandle_t qPCNT = (QueueHandle_t)user_ctx;
-  save_time_t temp_time = {
-      .watchPoint = edata->watch_point_value,
-      .time = esp_timer_get_time(),
-  };
+  time_t temp_time = esp_timer_get_time();
   xQueueSendFromISR(qPCNT, &temp_time, &high_task_wakeup);
   return (high_task_wakeup == pdTRUE);
 };
@@ -292,7 +291,7 @@ pcnt_event_callbacks_t pcnt_event = {
 };
 
 esp_err_t startPCNT(void) {
-  qPCNT = xQueueCreate(2, sizeof(save_time_t));
+  qPCNT = xQueueCreate(2, sizeof(time_t));
   pcnt_new_unit(&config_unit, &pcnt_unit);
   pcnt_new_channel(pcnt_unit, &config_chan, &pcnt_chan);
 
@@ -302,23 +301,31 @@ esp_err_t startPCNT(void) {
   pcnt_unit_register_event_callbacks(pcnt_unit, &pcnt_event, qPCNT);
 
   ESP_ERROR_CHECK(pcnt_unit_enable(pcnt_unit));
-  ESP_ERROR_CHECK(pcnt_unit_clear_count(pcnt_unit));
 
   return ESP_OK;
 }
 
 void pcnt_config_experiment(experiment_config_t config_experiment) {
+  ESP_ERROR_CHECK(pcnt_unit_disable(pcnt_unit));
 
   ESP_ERROR_CHECK(pcnt_channel_set_edge_action(
       pcnt_chan, config_experiment.rising, config_experiment.falling));
+
+  ESP_ERROR_CHECK(
+      pcnt_unit_set_glitch_filter(pcnt_unit, &config_experiment.filter));
+
+  ESP_ERROR_CHECK(pcnt_unit_enable(pcnt_unit));
+
   for (uint8_t i = 0; i < 2; i++) {
     if (currentWatchers[i] > 0) {
       ESP_ERROR_CHECK(
           pcnt_unit_remove_watch_point(pcnt_unit, currentWatchers[i]));
+      ESP_LOGI(TAG, "Remove watch point: %" PRId32, currentWatchers[i]);
     }
     ESP_ERROR_CHECK(
         pcnt_unit_add_watch_point(pcnt_unit, config_experiment.watchPoint[i]));
     currentWatchers[i] = config_experiment.watchPoint[i];
+    ESP_LOGI(TAG, "Set watch point: %" PRId32, config_experiment.watchPoint[i]);
   }
 
   ESP_ERROR_CHECK(pcnt_unit_clear_count(pcnt_unit));
@@ -401,11 +408,12 @@ void Pendulum(void *args) {
   char set_periods_str[3];
   char current_periods_str[3];
   time_t first = 0, lest = 0;
-  save_time_t time;
+  time_t time;
   experiment_stage_t stage = EXPERIMENT_CONFIG;
   experiment_config_t config = {
       .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
       .falling = PCNT_CHANNEL_EDGE_ACTION_HOLD,
+      .filter = {.max_glitch_ns = 100},
       .watchPoint[0] = 1,
   };
   vSemaphoreCreateBinary(sHourglass);
@@ -463,7 +471,7 @@ void Pendulum(void *args) {
       xQueueReceive(qCommand, &e, 0);
       back_to_config(e.type, &stage, config);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
-        first = time.time;
+        first = time;
         stage = EXPERIMENT_TIMING;
         print_timing();
       }
@@ -472,7 +480,7 @@ void Pendulum(void *args) {
       pcnt_unit_get_count(pcnt_unit, &count);
       periods_to_string((count - 1) / 2, current_periods_str);
 
-      lest = esp_timer_get_time();
+      lest = esp_timer_get_time() + esp_random() % 10000;
 
       update_time(first, lest);
       update_periods(current_periods_str);
@@ -482,7 +490,7 @@ void Pendulum(void *args) {
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
         print_done();
-        lest = time.time;
+        lest = time;
 
         update_periods(set_periods_str);
         update_time(first, lest);
@@ -509,6 +517,12 @@ void Energy(void *args) {
   END_MENU_FUNCTION;
 }
 
+void History(void *args) {
+  hd44780_clear(&lcd);
+  hd44780_puts(&lcd, "Developing");
+
+  END_MENU_FUNCTION;
+}
 // Settings
 
 uint8_t option_type_menu = 0;

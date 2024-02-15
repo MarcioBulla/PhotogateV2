@@ -2,10 +2,10 @@
 #define __MAIN_H__
 
 #include "hal/pcnt_types.h"
-#include <menu_manager.h>
-#include <esp_err.h>
-#include <stdint.h>
 #include <driver/pulse_cnt.h>
+#include <esp_err.h>
+#include <menu_manager.h>
+#include <stdint.h>
 #include <time.h>
 
 // Start function
@@ -24,35 +24,31 @@ void displayNormal(menu_path_t *current_path);
 
 void displayLoop(menu_path_t *current_path);
 
-extern menu_node_t root_options[4];
+extern menu_node_t root_options[5];
 
-// Experiments 
-
-typedef struct {
-  int32_t watchPoint;
-  time_t time;
-}save_time_t;
+// Experiments
 
 typedef struct {
   pcnt_channel_edge_action_t rising;
   pcnt_channel_edge_action_t falling;
+  pcnt_glitch_filter_config_t filter;
   int32_t watchPoint[2];
-}experiment_config_t;
+} experiment_config_t;
 
 typedef enum {
   EXPERIMENT_CONFIG = 0,
   EXPERIMENT_WAITTING,
   EXPERIMENT_TIMING,
   EXPERIMENT_DONE,
-}experiment_stage_t;
-
-void crono();
+} experiment_stage_t;
 
 void Pendulum(void *args);
 
 void Spring(void *args);
 
 void Energy(void *args);
+
+void History(void *args);
 
 // Settings
 
