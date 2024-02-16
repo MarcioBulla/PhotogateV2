@@ -45,20 +45,13 @@ config SPRING
   int "Set Default Spring's periods"
   default 1
 
-choice ENERGY
-    prompt "Set shape of the cylinder:"
-    default SOLID
-       
-    config SOLID
-        bool "Solid"
-        
-    config RIRE
-        bool "Ri+Re"
+config ENERGY
+    int "Set shape of the cylinder:"
+    default 0
+    help
+        Solid = 0;
+        Ri+Re = 1;
+        2Re = 2;
+        2Ri = 3;
 
-    config RE
-        bool "2Re"
-
-    config RI
-        bool "2Ri"
-endchoice
 endmenu

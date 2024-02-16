@@ -42,6 +42,13 @@ typedef enum {
   EXPERIMENT_DONE,
 } experiment_stage_t;
 
+typedef enum {
+  ENERGY_SOLID = 0,
+  ENERGY_RIRE,
+  ENERGY_RE,
+  ENERGY_RI,
+}energy_t;
+
 void Pendulum(void *args);
 
 void Spring(void *args);

@@ -67,7 +67,7 @@ void app_main(void) {
 int32_t currentWatchers[2] = {-1, -1};
 
 TaskHandle_t hHourglass = NULL;
-SemaphoreHandle_t sHourglass = NULL;
+SemaphoreHandle_t sDisplay = NULL;
 pcnt_unit_handle_t pcnt_unit = NULL;
 pcnt_channel_handle_t pcnt_chan = NULL;
 QueueHandle_t qPCNT = NULL;
@@ -128,6 +128,7 @@ static const uint8_t char_data[] = {
 
 esp_err_t startLCD(void) {
   ESP_ERROR_CHECK(i2cdev_init());
+  vSemaphoreCreateBinary(sDisplay);
   ESP_ERROR_CHECK(pcf8574_init_desc(&pcf8574, CONFIG_DISPLAY_ADDR, 0,
                                     CONFIG_I2C_SDA, CONFIG_I2C_SCL));
 
@@ -144,10 +145,10 @@ esp_err_t startLCD(void) {
 void HourGlass_animation(void *args) {
   while (true) {
     for (uint8_t i = 4; i < 8; i++) {
-      xSemaphoreTake(sHourglass, portMAX_DELAY);
+      xSemaphoreTake(sDisplay, portMAX_DELAY);
       hd44780_gotoxy(&lcd, 4, 2);
       hd44780_putc(&lcd, i);
-      xSemaphoreGive(sHourglass);
+      xSemaphoreGive(sDisplay);
       vTaskDelay(pdMS_TO_TICKS(500));
     }
   }
@@ -334,23 +335,31 @@ void pcnt_config_experiment(experiment_config_t config_experiment) {
 }
 
 void print_config(void) {
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 0, 3);
   hd44780_puts(&lcd, "     !!Config!!     ");
+  xSemaphoreGive(sDisplay);
 }
 
 void print_waitting(void) {
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 0, 3);
-  hd44780_puts(&lcd, "    !!waitting!!    ");
+  hd44780_puts(&lcd, "    !!Waitting!!    ");
+  xSemaphoreGive(sDisplay);
 }
 
 void print_timing(void) {
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 0, 3);
   hd44780_puts(&lcd, "     !!Timing!!     ");
+  xSemaphoreGive(sDisplay);
 }
 
 void print_done(void) {
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 0, 3);
   hd44780_puts(&lcd, "      !!Done!!      ");
+  xSemaphoreGive(sDisplay);
 }
 
 void periods_to_string(uint8_t periods, char *string) {
@@ -358,6 +367,7 @@ void periods_to_string(uint8_t periods, char *string) {
   string[1] = '0' + periods % 10;
   string[2] = '\0';
 }
+
 void micro_to_second(int64_t microsecond, char *string) {
   double seconds = microsecond / 1000000.0;
   unsigned int int_seconds = (unsigned int)seconds;
@@ -369,19 +379,19 @@ void micro_to_second(int64_t microsecond, char *string) {
 }
 
 void update_periods(char *current_periods_str) {
-  xQueueSemaphoreTake(sHourglass, 0);
+  xQueueSemaphoreTake(sDisplay, 0);
   hd44780_gotoxy(&lcd, 12, 1);
   hd44780_puts(&lcd, current_periods_str);
-  xSemaphoreGive(sHourglass);
+  xSemaphoreGive(sDisplay);
 }
 
 void update_time(time_t first, time_t lest) {
   char time_str[12];
   micro_to_second(lest - first, time_str);
-  xQueueSemaphoreTake(sHourglass, 0);
+  xQueueSemaphoreTake(sDisplay, 0);
   hd44780_gotoxy(&lcd, 5, 2);
   hd44780_puts(&lcd, time_str);
-  xSemaphoreGive(sHourglass);
+  xSemaphoreGive(sDisplay);
 }
 
 void back_to_config(rotary_encoder_event_type_t event,
@@ -391,11 +401,9 @@ void back_to_config(rotary_encoder_event_type_t event,
 
     pcnt_unit_stop(pcnt_unit);
     update_time(0, 0);
-    update_periods("00");
     event = RE_ET_BTN_RELEASED;
     vTaskDelete(hHourglass);
     hHourglass = NULL;
-    xSemaphoreGive(sHourglass);
     hd44780_gotoxy(&lcd, 4, 2);
     hd44780_putc(&lcd, 7);
   }
@@ -416,7 +424,6 @@ void Pendulum(void *args) {
       .filter = {.max_glitch_ns = 100},
       .watchPoint[0] = 1,
   };
-  vSemaphoreCreateBinary(sHourglass);
 
   periods_to_string(set_periods, set_periods_str);
 
@@ -433,14 +440,17 @@ void Pendulum(void *args) {
   update_time(first, lest);
 
   while (true) {
+    update_periods("00");
     print_config();
     hd44780_gotoxy(&lcd, 17, 1);
     hd44780_control(&lcd, true, true, false);
 
     while (stage == EXPERIMENT_CONFIG) {
+      xSemaphoreTake(sDisplay, portMAX_DELAY);
       periods_to_string(set_periods, set_periods_str);
       hd44780_puts(&lcd, set_periods_str);
       hd44780_gotoxy(&lcd, 17, 1);
+      xSemaphoreGive(sDisplay);
 
       xQueueReceive(qCommand, &e, portMAX_DELAY);
 
@@ -489,9 +499,10 @@ void Pendulum(void *args) {
       back_to_config(e.type, &stage, config);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
-        print_done();
-        lest = time;
 
+        print_done();
+
+        lest = time;
         update_periods(set_periods_str);
         update_time(first, lest);
       }
@@ -504,17 +515,262 @@ void Pendulum(void *args) {
 }
 
 void Spring(void *args) {
-  hd44780_clear(&lcd);
-  hd44780_puts(&lcd, "Developing");
+  rotary_encoder_event_t e;
+  int count = 0;
+  uint8_t set_periods = CONFIG_SPRING;
+  char set_periods_str[3];
+  char current_periods_str[3];
+  time_t first = 0, lest = 0;
+  time_t time;
+  experiment_stage_t stage = EXPERIMENT_CONFIG;
+  experiment_config_t config = {
+      .rising = PCNT_CHANNEL_EDGE_ACTION_HOLD,
+      .falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
+      .filter = {.max_glitch_ns = 100},
+      .watchPoint[0] = 1,
+  };
 
-  END_MENU_FUNCTION;
+  periods_to_string(set_periods, set_periods_str);
+
+  hd44780_clear(&lcd);
+  hd44780_gotoxy(&lcd, 7, 0);
+  hd44780_puts(&lcd, "Spring");
+  hd44780_gotoxy(&lcd, 1, 1);
+  hd44780_puts(&lcd, "Periods: n");
+  hd44780_putc(&lcd, 3);
+  hd44780_puts(&lcd, "00/n");
+  hd44780_putc(&lcd, 3);
+  hd44780_gotoxy(&lcd, 4, 2);
+  hd44780_putc(&lcd, 7);
+  update_time(first, lest);
+
+  while (true) {
+    update_periods("00");
+    print_config();
+    hd44780_control(&lcd, true, false, true);
+
+    while (stage == EXPERIMENT_CONFIG) {
+      xSemaphoreTake(sDisplay, portMAX_DELAY);
+      periods_to_string(set_periods, set_periods_str);
+      hd44780_gotoxy(&lcd, 17, 1);
+      hd44780_puts(&lcd, set_periods_str);
+      hd44780_gotoxy(&lcd, 16, 1);
+      xSemaphoreGive(sDisplay);
+
+      xQueueReceive(qCommand, &e, portMAX_DELAY);
+
+      if (e.type == RE_ET_CHANGED) {
+        if (e.diff > 0) {
+          if (set_periods < 99)
+            set_periods++;
+        } else {
+          if (set_periods > 1)
+            set_periods--;
+        }
+      } else if (e.type == RE_ET_BTN_CLICKED) {
+        e.type = RE_ET_BTN_RELEASED;
+        stage = EXPERIMENT_WAITTING;
+
+        hd44780_control(&lcd, true, false, false);
+        config.watchPoint[1] = set_periods + 1;
+
+        pcnt_config_experiment(config);
+
+        print_waitting();
+
+        xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
+                                2048, NULL, 1, &hHourglass, 0);
+      }
+    }
+    while (stage == EXPERIMENT_WAITTING) {
+      xQueueReceive(qCommand, &e, 0);
+      back_to_config(e.type, &stage, config);
+      if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
+        first = time;
+        stage = EXPERIMENT_TIMING;
+        print_timing();
+      }
+    }
+    while (stage == EXPERIMENT_TIMING) {
+      pcnt_unit_get_count(pcnt_unit, &count);
+      periods_to_string((count - 1), current_periods_str);
+
+      lest = esp_timer_get_time() + esp_random() % 10000;
+
+      update_time(first, lest);
+      update_periods(current_periods_str);
+
+      xQueueReceive(qCommand, &e, 0);
+      back_to_config(e.type, &stage, config);
+      if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
+        stage = EXPERIMENT_DONE;
+
+        print_done();
+
+        lest = time;
+        update_periods(set_periods_str);
+        update_time(first, lest);
+      }
+    }
+    while (stage == EXPERIMENT_DONE) {
+      xQueueReceive(qCommand, &e, portMAX_DELAY);
+      back_to_config(e.type, &stage, config);
+    }
+  }
+}
+
+void select_shape_energy(energy_t select, experiment_config_t *exp_config) {
+  switch (select) {
+
+  case ENERGY_SOLID:
+    exp_config->rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->watchPoint[0] = 1;
+    exp_config->watchPoint[1] = 2;
+    break;
+
+  case ENERGY_RIRE:
+    exp_config->rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->falling = PCNT_CHANNEL_EDGE_ACTION_HOLD;
+    exp_config->watchPoint[0] = 1;
+    exp_config->watchPoint[1] = 2;
+    break;
+
+  case ENERGY_RI:
+    exp_config->rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->watchPoint[0] = 2;
+    exp_config->watchPoint[1] = 3;
+    break;
+
+  case ENERGY_RE:
+    exp_config->rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE;
+    exp_config->watchPoint[0] = 1;
+    exp_config->watchPoint[1] = 4;
+    break;
+  }
+}
+
+void print_shape_energy(energy_t selecte) {
+
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
+  hd44780_gotoxy(&lcd, 8, 1);
+  ESP_LOGI(TAG, "SHAPE: %d", selecte);
+  switch (selecte) {
+
+  case ENERGY_SOLID:
+    hd44780_puts(&lcd, "Solid");
+    break;
+
+  case ENERGY_RIRE:
+    hd44780_putc(&lcd, 'R');
+    hd44780_putc(&lcd, 2);
+    hd44780_putc(&lcd, '+');
+    hd44780_putc(&lcd, 'R');
+    hd44780_putc(&lcd, 1);
+    break;
+
+  case ENERGY_RI:
+    hd44780_putc(&lcd, '2');
+    hd44780_putc(&lcd, 'R');
+    hd44780_putc(&lcd, 2);
+    hd44780_puts(&lcd,  "  ");
+    break;
+
+  case ENERGY_RE:
+    hd44780_putc(&lcd, '2');
+    hd44780_putc(&lcd, 'R');
+    hd44780_putc(&lcd, 1);
+    hd44780_puts(&lcd,  "  ");
+    break;
+  }
+  hd44780_gotoxy(&lcd, 7, 1);
+  xSemaphoreGive(sDisplay);
 }
 
 void Energy(void *args) {
-  hd44780_clear(&lcd);
-  hd44780_puts(&lcd, "Developing");
+  rotary_encoder_event_t e;
+  energy_t set_shape = (energy_t)CONFIG_ENERGY;
+  time_t first = 0, lest = 0;
+  time_t time;
+  experiment_stage_t stage = EXPERIMENT_CONFIG;
+  experiment_config_t config = {
+      .filter = {.max_glitch_ns = 100},
+  };
 
-  END_MENU_FUNCTION;
+  hd44780_clear(&lcd);
+  hd44780_gotoxy(&lcd, 1, 0);
+  hd44780_puts(&lcd, "Mechanical  Energy");
+  hd44780_gotoxy(&lcd, 1, 1);
+  hd44780_puts(&lcd, "Shape: ");
+  print_shape_energy(set_shape);
+  hd44780_gotoxy(&lcd, 4, 2);
+  hd44780_putc(&lcd, 7);
+  update_time(first, lest);
+
+  while (true) {
+    print_config();
+    hd44780_control(&lcd, true, false, true);
+
+    while (stage == EXPERIMENT_CONFIG) {
+      print_shape_energy(set_shape);
+
+      xQueueReceive(qCommand, &e, portMAX_DELAY);
+
+      if (e.type == RE_ET_CHANGED) {
+        if (e.diff > 0) {
+          if (set_shape < 3)
+            set_shape++;
+        } else {
+          if (set_shape > 0)
+            set_shape--;
+        }
+      } else if (e.type == RE_ET_BTN_CLICKED) {
+        e.type = RE_ET_BTN_RELEASED;
+        stage = EXPERIMENT_WAITTING;
+
+        hd44780_control(&lcd, true, false, false);
+
+        select_shape_energy(set_shape, &config);
+        pcnt_config_experiment(config);
+
+        print_waitting();
+
+        xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
+                                2048, NULL, 1, &hHourglass, 0);
+      }
+    }
+    while (stage == EXPERIMENT_WAITTING) {
+      xQueueReceive(qCommand, &e, 0);
+      back_to_config(e.type, &stage, config);
+      if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
+        first = time;
+        stage = EXPERIMENT_TIMING;
+        print_timing();
+      }
+    }
+    while (stage == EXPERIMENT_TIMING) {
+      lest = esp_timer_get_time();
+
+      update_time(first, lest);
+
+      xQueueReceive(qCommand, &e, 0);
+      back_to_config(e.type, &stage, config);
+      if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
+        stage = EXPERIMENT_DONE;
+
+        print_done();
+
+        lest = time;
+        update_time(first, lest);
+      }
+    }
+    while (stage == EXPERIMENT_DONE) {
+      xQueueReceive(qCommand, &e, portMAX_DELAY);
+      back_to_config(e.type, &stage, config);
+    }
+  }
 }
 
 void History(void *args) {
