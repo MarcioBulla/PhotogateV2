@@ -5,6 +5,7 @@
 #include <driver/pulse_cnt.h>
 #include <esp_err.h>
 #include <menu_manager.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <time.h>
 
@@ -54,6 +55,21 @@ void Pendulum(void *args);
 void Spring(void *args);
 
 void Energy(void *args);
+
+typedef struct {
+  char timed[12];
+  char option[8];
+}experiment_data_t;
+
+typedef struct {
+  experiment_data_t *array;
+  size_t size;
+  size_t capability;
+}experiment_data_array_t;
+
+void append_history(experiment_data_t data);
+
+void remove_at_history(size_t index);
 
 void History(void *args);
 
