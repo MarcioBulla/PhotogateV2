@@ -17,6 +17,8 @@ esp_err_t startEncoder(void);
 
 esp_err_t startPCNT(void);
 
+esp_err_t startNVS(void);
+
 // Menu Manager
 
 Navigate_t map(void);

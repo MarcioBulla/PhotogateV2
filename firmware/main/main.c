@@ -1,5 +1,6 @@
 #include "freertos/projdefs.h"
 #include "hal/pcnt_types.h"
+#include <driver/gpio.h>
 #include <driver/pulse_cnt.h>
 #include <encoder.h>
 #include <esp_log.h>
@@ -13,6 +14,8 @@
 #include <hd44780.h>
 #include <i2cdev.h>
 #include <menu_manager.h>
+#include <nvs.h>
+#include <nvs_flash.h>
 #include <pcf8574.h>
 #include <sdkconfig.h>
 #include <stdbool.h>
@@ -39,36 +42,43 @@ menu_node_t root = {
 menu_node_t root_options[5] = {
     {.label = "Pendulum", .function = &Pendulum},
     {.label = "Spring", .function = &Spring},
-    {.label = "Energy", .function = &Energy},
+    {.label = "Mechanical  Energy", .function = &Energy},
     {.label = "History", .function = &History},
     {.label = "Settings", .submenus = settings_options, .num_options = 3},
 };
 
 menu_node_t settings_options[3] = {
-    {.label = "Menu Type: 1", .function = &Change_menu},
-    {.label = "Brightness: 100%", .function = &Brightness},
+    {.label = "Menu type: 1", .function = &Change_menu},
+  esp_err_t err;
+    {.label = "Brightness 100%", .function = &Brightness},
     {.label = "Info", .function = &Info},
 };
 
 menu_config_t config_menu;
 
+uint8_t option_type_menu;
+switch_menu_t options_display[2] = {
+    {.type_menu = &displayNormal, .loop_menu = false, .label = "Menu type: 1"},
+    {.type_menu = &displayLoop, .loop_menu = true, .label = "Menu type: 2"},
+};
+
 void app_main(void) {
 
-  config_menu.root = root;
-  config_menu.input = &map;
-  config_menu.display = &displayNormal;
-  config_menu.loop = false;
-
+  ESP_ERROR_CHECK(startNVS());
   ESP_ERROR_CHECK(startLCD());
   ESP_ERROR_CHECK(startEncoder());
   ESP_ERROR_CHECK(startPCNT());
+
+  config_menu.root = root;
+  config_menu.input = &map;
+  config_menu.display = options_display[option_type_menu].type_menu;
+  config_menu.loop = options_display[option_type_menu].loop_menu;
+  settings_options[0].label = options_display[option_type_menu].label;
 
   xTaskCreatePinnedToCore(&menu_init, "menu_init", 2048, &config_menu, 1, NULL,
                           0);
   vTaskDelete(NULL);
 }
-
-int32_t currentWatchers[2] = {-1, -1};
 
 TaskHandle_t hHourglass = NULL;
 SemaphoreHandle_t sDisplay = NULL;
@@ -77,6 +87,48 @@ pcnt_channel_handle_t pcnt_chan = NULL;
 QueueHandle_t qPCNT = NULL;
 QueueHandle_t qEncoder;
 QueueHandle_t qCommand;
+nvs_handle_t nvs;
+
+int32_t currentWatchers[2] = {-1, -1};
+uint8_t brightness;
+
+esp_err_t startNVS(void) {
+  esp_err_t err;
+  err = nvs_flash_init();
+
+  if (err == ESP_ERR_NVS_NO_FREE_PAGES ||
+      err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    err = nvs_flash_init();
+  }
+
+  ESP_ERROR_CHECK(err);
+
+  err = nvs_open("storage", NVS_READWRITE, &nvs);
+  if (err != ESP_OK) {
+    ESP_LOGE(TAG, "Error (%s) opening NVS handle!", esp_err_to_name(err));
+  } else {
+
+    err = nvs_get_u8(nvs, "switchmenu", &option_type_menu);
+    switch (err) {
+    case ESP_OK:
+      ESP_LOGI(TAG, "Done");
+      ESP_LOGI(TAG, "Restart counter = %" PRIu8, option_type_menu);
+      break;
+    case ESP_ERR_NVS_NOT_FOUND:
+      ESP_LOGW(TAG, "The value is not initialized yet!");
+      option_type_menu = 0;
+      err = ESP_OK;
+      break;
+    default:
+      ESP_LOGE(TAG, "Error (%s) reading!", esp_err_to_name(err));
+      return err;
+    }
+  }
+  nvs_close(nvs);
+
+  return err;
+}
 
 static rotary_encoder_t re = {
     .pin_a = CONFIG_ENCODER_CLK,
@@ -144,6 +196,12 @@ esp_err_t startLCD(void) {
   ESP_LOGI(TAG, "LCD ON!");
 
   return ESP_OK;
+}
+
+void hd44780_clear_line(const hd44780_t *lcd, uint8_t line) {
+  hd44780_gotoxy(lcd, 0, line);
+  hd44780_puts(lcd, "                    ");
+  hd44780_gotoxy(lcd, 0, line);
 }
 
 void HourGlass_animation(void *args) {
@@ -365,6 +423,13 @@ void print_done(void) {
   xSemaphoreGive(sDisplay);
 }
 
+void print_obstruct_error(void) {
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
+  hd44780_gotoxy(&lcd, 0, 3);
+  hd44780_puts(&lcd, "!Obstructed  Sensor!");
+  xSemaphoreGive(sDisplay);
+}
+
 void periods_to_string(uint8_t periods, char *string) {
   string[0] = '0' + periods / 10;
   string[1] = '0' + periods % 10;
@@ -411,6 +476,16 @@ void back_to_config(rotary_encoder_event_type_t event,
     hHourglass = NULL;
     hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
     hd44780_putc(&lcd, 7);
+  }
+}
+
+void check_obstruct_sensor(void) {
+  while (gpio_get_level(CONFIG_SENSOR_IR)) {
+
+    print_obstruct_error();
+    vTaskDelay(pdMS_TO_TICKS(250));
+    hd44780_clear_line(&lcd, 3);
+    vTaskDelay(pdMS_TO_TICKS(250));
   }
 }
 
@@ -468,17 +543,15 @@ void Pendulum(void *args) {
         }
       } else if (e.type == RE_ET_BTN_CLICKED) {
         e.type = RE_ET_BTN_RELEASED;
-        stage = EXPERIMENT_WAITTING;
-
-        snprintf(data.option, 8, "Pen%02d", set_periods);
-
         hd44780_control(&lcd, true, false, false);
-        config.watchPoint[1] = 2 * set_periods + 1;
+        check_obstruct_sensor();
 
-        pcnt_config_experiment(config);
-
+        stage = EXPERIMENT_WAITTING;
+        snprintf(data.option, 8, "Pen%02d", set_periods);
         print_waitting();
 
+        config.watchPoint[1] = 2 * set_periods + 1;
+        pcnt_config_experiment(config);
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
                                 2048, NULL, 1, &hHourglass, 0);
       }
@@ -736,6 +809,7 @@ void Energy(void *args) {
         stage = EXPERIMENT_WAITTING;
 
         hd44780_control(&lcd, true, false, false);
+        check_obstruct_sensor();
 
         select_shape_energy(set_shape, &config);
         pcnt_config_experiment(config);
@@ -817,12 +891,6 @@ void print_hist_data(size_t index, uint8_t line) {
   hd44780_gotoxy(&lcd, 0, line);
 }
 
-void hd44780_clear_line(const hd44780_t *lcd, uint8_t line) {
-  hd44780_gotoxy(lcd, 0, line);
-  hd44780_puts(lcd, "                    ");
-  hd44780_gotoxy(lcd, 0, line);
-}
-
 void History(void *args) {
   rotary_encoder_event_t e;
   uint8_t select_hist = 0;
@@ -900,17 +968,33 @@ void History(void *args) {
 }
 // Settings
 
-uint8_t option_type_menu = 0;
-switch_menu_t options_display[2] = {
-    {.type_menu = &displayNormal, .loop_menu = false, .label = "Menu type: 1"},
-    {.type_menu = &displayLoop, .loop_menu = true, .label = "Menu type: 2"},
-};
+void openNVS(void) {
+  esp_err_t err;
+
+  ESP_LOGI(TAG, "Opening Non-Volatile Storage (NVS) handle... ");
+  err = nvs_open("storage", NVS_READWRITE, &nvs);
+  if (err != ESP_OK) {
+    ESP_LOGE(TAG, "Error (%s) opening NVS handle!", esp_err_to_name(err));
+  } else {
+    ESP_LOGI(TAG, "Done");
+  }
+}
 
 void Change_menu(void *args) {
+
+  openNVS();
+
+  nvs_get_u8(nvs, "switchmenu", &option_type_menu);
+
   option_type_menu ^= 1;
   config_menu.display = options_display[option_type_menu].type_menu;
   config_menu.loop = options_display[option_type_menu].loop_menu;
   settings_options[0].label = options_display[option_type_menu].label;
+
+  nvs_set_u8(nvs, "switchmenu", option_type_menu);
+  nvs_commit(nvs);
+
+  nvs_close(nvs);
 
   SET_QUICK_FUNCTION;
   END_MENU_FUNCTION;
