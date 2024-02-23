@@ -36,6 +36,9 @@ config SENSOR_IR
   int "Set Sensor pin"
   default 25
 
+config PWM_DISPLAY
+  int "Set pin of the PWM that control display"
+  default 18
 
 config PENDULUM
   int "Set Default Pendulum's periods"

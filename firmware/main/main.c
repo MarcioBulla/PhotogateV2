@@ -1,6 +1,8 @@
 #include "freertos/projdefs.h"
+#include "hal/ledc_types.h"
 #include "hal/pcnt_types.h"
 #include <driver/gpio.h>
+#include <driver/ledc.h>
 #include <driver/pulse_cnt.h>
 #include <encoder.h>
 #include <esp_log.h>
@@ -13,6 +15,7 @@
 #include <freertos/task.h>
 #include <hd44780.h>
 #include <i2cdev.h>
+#include <main.h>
 #include <menu_manager.h>
 #include <nvs.h>
 #include <nvs_flash.h>
@@ -26,10 +29,9 @@
 #include <string.h>
 #include <time.h>
 
-#include <main.h>
-
 #define H_POSITION_HOURGLASS 3
 #define V_POSITION_HOURGLASS 2
+#define PERCENT_TO_10_BIT(percent) (uint32_t)((percent) * 1024 / 100)
 
 static const char *TAG = "main";
 
@@ -42,15 +44,16 @@ menu_node_t root = {
 menu_node_t root_options[5] = {
     {.label = "Pendulum", .function = &Pendulum},
     {.label = "Spring", .function = &Spring},
-    {.label = "Mechanical  Energy", .function = &Energy},
+    {.label = "Mechanical Energy", .function = &Energy},
     {.label = "History", .function = &History},
     {.label = "Settings", .submenus = settings_options, .num_options = 3},
 };
 
+char menu_type_label[15];
+char brightness_label[16];
 menu_node_t settings_options[3] = {
-    {.label = "Menu type: 1", .function = &Change_menu},
-  esp_err_t err;
-    {.label = "Brightness 100%", .function = &Brightness},
+    {.label = menu_type_label, .function = &Change_menu},
+    {.label = brightness_label, .function = &Brightness},
     {.label = "Info", .function = &Info},
 };
 
@@ -58,13 +61,16 @@ menu_config_t config_menu;
 
 uint8_t option_type_menu;
 switch_menu_t options_display[2] = {
-    {.type_menu = &displayNormal, .loop_menu = false, .label = "Menu type: 1"},
-    {.type_menu = &displayLoop, .loop_menu = true, .label = "Menu type: 2"},
+    {.type_menu = &displayNormal, .loop_menu = false},
+    {.type_menu = &displayLoop, .loop_menu = true},
 };
+
+uint8_t brightness;
 
 void app_main(void) {
 
   ESP_ERROR_CHECK(startNVS());
+  ESP_ERROR_CHECK(startPWM());
   ESP_ERROR_CHECK(startLCD());
   ESP_ERROR_CHECK(startEncoder());
   ESP_ERROR_CHECK(startPCNT());
@@ -73,14 +79,13 @@ void app_main(void) {
   config_menu.input = &map;
   config_menu.display = options_display[option_type_menu].type_menu;
   config_menu.loop = options_display[option_type_menu].loop_menu;
-  settings_options[0].label = options_display[option_type_menu].label;
 
   xTaskCreatePinnedToCore(&menu_init, "menu_init", 2048, &config_menu, 1, NULL,
                           0);
   vTaskDelete(NULL);
 }
 
-TaskHandle_t hHourglass = NULL;
+TaskHandle_t tHourglass = NULL;
 SemaphoreHandle_t sDisplay = NULL;
 pcnt_unit_handle_t pcnt_unit = NULL;
 pcnt_channel_handle_t pcnt_chan = NULL;
@@ -90,7 +95,6 @@ QueueHandle_t qCommand;
 nvs_handle_t nvs;
 
 int32_t currentWatchers[2] = {-1, -1};
-uint8_t brightness;
 
 esp_err_t startNVS(void) {
   esp_err_t err;
@@ -113,7 +117,7 @@ esp_err_t startNVS(void) {
     switch (err) {
     case ESP_OK:
       ESP_LOGI(TAG, "Done");
-      ESP_LOGI(TAG, "Restart counter = %" PRIu8, option_type_menu);
+      ESP_LOGI(TAG, "Menu ID = %d", option_type_menu + 1);
       break;
     case ESP_ERR_NVS_NOT_FOUND:
       ESP_LOGW(TAG, "The value is not initialized yet!");
@@ -124,6 +128,25 @@ esp_err_t startNVS(void) {
       ESP_LOGE(TAG, "Error (%s) reading!", esp_err_to_name(err));
       return err;
     }
+    snprintf(menu_type_label, 15, "Menu Type: %d", option_type_menu + 1);
+
+    err = nvs_get_u8(nvs, "brightness", &brightness);
+    switch (err) {
+    case ESP_OK:
+      ESP_LOGI(TAG, "Done");
+      ESP_LOGI(TAG, "Brightness = %" PRIu8 "%%", brightness);
+      break;
+    case ESP_ERR_NVS_NOT_FOUND:
+      ESP_LOGW(TAG, "The value is not initialized yet!");
+      brightness = 100;
+
+      err = ESP_OK;
+      break;
+    default:
+      ESP_LOGE(TAG, "Error (%s) reading!", esp_err_to_name(err));
+      return err;
+    }
+    snprintf(brightness_label, 16, "Brightness %03d%%", brightness);
   }
   nvs_close(nvs);
 
@@ -143,6 +166,36 @@ esp_err_t startEncoder(void) {
   ESP_ERROR_CHECK(rotary_encoder_init(qEncoder));
   ESP_ERROR_CHECK(rotary_encoder_add(&re));
   return ESP_OK;
+}
+
+ledc_timer_t ledTimer = LEDC_TIMER_0;
+ledc_mode_t ledMode = LEDC_LOW_SPEED_MODE;
+ledc_channel_t ledChannel = LEDC_CHANNEL_0;
+ledc_timer_bit_t duty_resulution = LEDC_TIMER_10_BIT;
+uint32_t ledFreq = 4000;
+
+esp_err_t startPWM(void) {
+
+  ledc_timer_config_t ledc_timer = {
+      .speed_mode = ledMode,
+      .duty_resolution = duty_resulution,
+      .timer_num = ledTimer,
+      .freq_hz = ledFreq,
+      .clk_cfg = LEDC_AUTO_CLK,
+  };
+  ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
+
+  ledc_channel_config_t ledc_channel = {
+      .speed_mode = ledMode,
+      .channel = ledChannel,
+      .timer_sel = ledTimer,
+      .intr_type = LEDC_INTR_DISABLE,
+      .gpio_num = CONFIG_PWM_DISPLAY,
+      .duty = PERCENT_TO_10_BIT(brightness),
+      .hpoint = 0,
+  };
+
+  return ledc_channel_config(&ledc_channel);
 }
 
 static i2c_dev_t pcf8574;
@@ -165,8 +218,8 @@ hd44780_t lcd = {.write_cb = write_lcd_data,
                  }};
 
 static const uint8_t char_data[] = {
-    // Right Arrow - 0
-    0x00, 0x04, 0x02, 0x1F, 0x02, 0x04, 0x00, 0x00,
+    //  LOAD - 0
+    0x18, 0x1C, 0x10, 0x1C, 0x1E, 0x18, 0x1E, 0x18,
     // char e - 1
     0x00, 0x00, 0x00, 0x0C, 0x12, 0x1C, 0x10, 0x0E,
     // char i - 2
@@ -248,10 +301,14 @@ Navigate_t map(void) {
       ESP_LOGI(TAG, "NOTHIN");
     }
   } else if (e.type == RE_ET_BTN_LONG_PRESSED) {
-    if (hHourglass != NULL) {
-      vTaskDelete(hHourglass);
-      hHourglass = NULL;
+    if (tHourglass != NULL) {
+      vTaskDelete(tHourglass);
+      tHourglass = NULL;
     }
+
+    ledc_set_duty(ledMode, ledChannel, PERCENT_TO_10_BIT(brightness));
+    ledc_update_duty(ledMode, ledChannel);
+
     for (uint8_t i = 0; i < 2; i++) {
       if (currentWatchers[i] > 0) {
         ESP_ERROR_CHECK(
@@ -294,8 +351,8 @@ void displayNormal(menu_path_t *current_path) {
     hd44780_gotoxy(&lcd, 0, count);
     count++;
     if (_ == select) {
-      hd44780_putc(&lcd, 0b01111110);
-      hd44780_putc(&lcd, ' ');
+      hd44780_puts(&lcd, "\x7E"
+                         " ");
     }
     hd44780_puts(&lcd, current_path->current_menu->submenus[_].label);
   }
@@ -322,8 +379,8 @@ void displayLoop(menu_path_t *current_path) {
   hd44780_gotoxy(&lcd, 0, 1);
   hd44780_puts(&lcd, prev_label);
   hd44780_gotoxy(&lcd, 0, 2);
-  hd44780_putc(&lcd, 0b01111110);
-  hd44780_putc(&lcd, ' ');
+  hd44780_puts(&lcd, "\x7E"
+                     " ");
   hd44780_puts(&lcd, select_label);
   hd44780_gotoxy(&lcd, 0, 3);
   hd44780_puts(&lcd, next_label);
@@ -472,8 +529,8 @@ void back_to_config(rotary_encoder_event_type_t event,
     pcnt_unit_stop(pcnt_unit);
     update_time(0, 0);
     event = RE_ET_BTN_RELEASED;
-    vTaskDelete(hHourglass);
-    hHourglass = NULL;
+    vTaskDelete(tHourglass);
+    tHourglass = NULL;
     hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
     hd44780_putc(&lcd, 7);
   }
@@ -512,8 +569,8 @@ void Pendulum(void *args) {
   hd44780_gotoxy(&lcd, 6, 0);
   hd44780_puts(&lcd, "Pendulum");
   hd44780_gotoxy(&lcd, 1, 1);
-  hd44780_puts(&lcd, "Periods: n\x03");
-  hd44780_puts(&lcd, "00/n\x03");
+  hd44780_puts(&lcd, "Periods: n\x03"
+                     "00/n\x03");
   hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
   hd44780_putc(&lcd, 7);
   update_time(first, lest);
@@ -553,7 +610,7 @@ void Pendulum(void *args) {
         config.watchPoint[1] = 2 * set_periods + 1;
         pcnt_config_experiment(config);
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
-                                2048, NULL, 1, &hHourglass, 0);
+                                2048, NULL, 1, &tHourglass, 0);
       }
     }
     while (stage == EXPERIMENT_WAITTING) {
@@ -619,8 +676,8 @@ void Spring(void *args) {
   hd44780_gotoxy(&lcd, 7, 0);
   hd44780_puts(&lcd, "Spring");
   hd44780_gotoxy(&lcd, 1, 1);
-  hd44780_puts(&lcd, "Periods: n\x03");
-  hd44780_puts(&lcd, "00/n\x03");
+  hd44780_puts(&lcd, "Periods: n\x03"
+                     "00/n\x03");
   hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
   hd44780_putc(&lcd, 7);
   update_time(first, lest);
@@ -662,7 +719,7 @@ void Spring(void *args) {
         print_waitting();
 
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
-                                2048, NULL, 1, &hHourglass, 0);
+                                2048, NULL, 1, &tHourglass, 0);
       }
     }
     while (stage == EXPERIMENT_WAITTING) {
@@ -817,7 +874,7 @@ void Energy(void *args) {
         print_waitting();
 
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
-                                2048, NULL, 1, &hHourglass, 0);
+                                2048, NULL, 1, &tHourglass, 0);
       }
     }
     while (stage == EXPERIMENT_WAITTING) {
@@ -899,8 +956,8 @@ void History(void *args) {
   uint8_t first_hist = 0, end_hist = 0;
 
   hd44780_clear(&lcd);
-  hd44780_puts(&lcd, "n\x03");
-  hd44780_puts(&lcd, "|Timed(s)   |Type");
+  hd44780_puts(&lcd, "n\x03"
+                     "|Timed(s)   |Type");
 
   hd44780_control(&lcd, true, false, true);
 
@@ -982,15 +1039,12 @@ void openNVS(void) {
 
 void Change_menu(void *args) {
 
-  openNVS();
-
-  nvs_get_u8(nvs, "switchmenu", &option_type_menu);
-
   option_type_menu ^= 1;
   config_menu.display = options_display[option_type_menu].type_menu;
   config_menu.loop = options_display[option_type_menu].loop_menu;
-  settings_options[0].label = options_display[option_type_menu].label;
+  snprintf(menu_type_label, 15, "Menu Type: %d", option_type_menu + 1);
 
+  openNVS();
   nvs_set_u8(nvs, "switchmenu", option_type_menu);
   nvs_commit(nvs);
 
@@ -1000,10 +1054,66 @@ void Change_menu(void *args) {
   END_MENU_FUNCTION;
 }
 
-void Brightness(void *args) {
-  hd44780_clear(&lcd);
-  hd44780_puts(&lcd, "Developing");
+void print_bar(uint8_t level) {
+  char bar[21];
+  uint8_t integer = level / 5;
 
+  memset(bar, '\xFF', integer);
+  if (level % 5 > 2) {
+    bar[integer] = '\x08';
+    integer++;
+  }
+  memset(bar + integer, ' ', 20 - integer);
+  bar[20] = '\0';
+  hd44780_gotoxy(&lcd, 0, 2);
+  hd44780_puts(&lcd, bar);
+}
+
+void Brightness(void *args) {
+  rotary_encoder_event_t e;
+  e.type = RE_ET_BTN_RELEASED;
+
+  uint8_t brightnessTemp = brightness;
+
+  char percent[5];
+
+  hd44780_clear(&lcd);
+  hd44780_gotoxy(&lcd, 3, 0);
+  hd44780_puts(&lcd, "Set Brightness");
+  hd44780_gotoxy(&lcd, 3, 3);
+  hd44780_puts(&lcd, "Click To Save!");
+
+  while (e.type != RE_ET_BTN_CLICKED) {
+    snprintf(percent, 5, "%03d%%", brightnessTemp);
+    hd44780_gotoxy(&lcd, 8, 1);
+    hd44780_puts(&lcd, percent);
+
+    print_bar(brightnessTemp);
+
+    xQueueReceive(qCommand, &e, portMAX_DELAY);
+
+    if (e.type == RE_ET_CHANGED) {
+      if (e.diff > 0 && brightnessTemp < 100) {
+        brightnessTemp++;
+      } else if (e.diff < 0 && brightnessTemp > 0) {
+        brightnessTemp--;
+      }
+
+      ledc_set_duty(ledMode, ledChannel, PERCENT_TO_10_BIT(brightnessTemp));
+      ledc_update_duty(ledMode, ledChannel);
+    }
+  }
+
+  brightness = brightnessTemp;
+
+  openNVS();
+  nvs_set_u8(nvs, "brightness", brightness);
+  nvs_commit(nvs);
+  nvs_close(nvs);
+
+  snprintf(brightness_label, 16, "Brightness %03d%%", brightness);
+
+  SET_QUICK_FUNCTION;
   END_MENU_FUNCTION;
 }
 

@@ -19,6 +19,8 @@ esp_err_t startPCNT(void);
 
 esp_err_t startNVS(void);
 
+esp_err_t startPWM(void);
+
 // Menu Manager
 
 Navigate_t map(void);
@@ -50,7 +52,7 @@ typedef enum {
   ENERGY_RIRE,
   ENERGY_RE,
   ENERGY_RI,
-}energy_t;
+} energy_t;
 
 void Pendulum(void *args);
 
@@ -61,13 +63,13 @@ void Energy(void *args);
 typedef struct {
   char timed[12];
   char option[8];
-}experiment_data_t;
+} experiment_data_t;
 
 typedef struct {
   experiment_data_t *array;
   size_t size;
   size_t capability;
-}experiment_data_array_t;
+} experiment_data_array_t;
 
 void append_history(experiment_data_t data);
 
@@ -88,7 +90,6 @@ extern menu_node_t settings_options[3];
 typedef struct {
   void (*type_menu)(menu_path_t *current_path);
   bool loop_menu;
-  char *label;
 } switch_menu_t;
 
 #endif // __MAIN_H__
