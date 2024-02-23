@@ -641,12 +641,11 @@ void Pendulum(void *args) {
         lest = time;
         update_periods(set_periods_str);
         update_time(first, lest);
+        micro_to_second(lest - first, data.timed);
+        append_history(data);
       }
     }
     while (stage == EXPERIMENT_DONE) {
-      micro_to_second(lest - first, data.timed);
-      append_history(data);
-
       xQueueReceive(qCommand, &e, portMAX_DELAY);
       back_to_config(e.type, &stage, config);
     }
@@ -750,12 +749,12 @@ void Spring(void *args) {
         lest = time;
         update_periods(set_periods_str);
         update_time(first, lest);
+
+        micro_to_second(lest - first, data.timed);
+        append_history(data);
       }
     }
     while (stage == EXPERIMENT_DONE) {
-      micro_to_second(lest - first, data.timed);
-      append_history(data);
-
       xQueueReceive(qCommand, &e, portMAX_DELAY);
       back_to_config(e.type, &stage, config);
     }
@@ -887,7 +886,7 @@ void Energy(void *args) {
       }
     }
     while (stage == EXPERIMENT_TIMING) {
-      lest = esp_timer_get_time();
+      lest = esp_timer_get_time() + esp_random() % 10000;
 
       update_time(first, lest);
 
@@ -900,11 +899,12 @@ void Energy(void *args) {
 
         lest = time;
         update_time(first, lest);
+
+        micro_to_second(lest - first, data.timed);
+        append_history(data);
       }
     }
     while (stage == EXPERIMENT_DONE) {
-      micro_to_second(lest - first, data.timed);
-      append_history(data);
 
       xQueueReceive(qCommand, &e, portMAX_DELAY);
       back_to_config(e.type, &stage, config);
