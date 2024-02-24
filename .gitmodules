@@ -1,0 +1,6 @@
+[submodule "firmware/components/esp-idf-mylib"]
+	path = firmware/components/esp-idf-mylib
+	url = https://github.com/Lorxi3D/esp-idf-mylib
+[submodule "firmware/components/esp-idf-lib"]
+	path = firmware/components/esp-idf-lib
+	url = https://github.com/UncleRus/esp-idf-lib

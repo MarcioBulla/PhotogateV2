@@ -1,6 +1,3 @@
-#include "freertos/projdefs.h"
-#include "hal/ledc_types.h"
-#include "hal/pcnt_types.h"
 #include <driver/gpio.h>
 #include <driver/ledc.h>
 #include <driver/pulse_cnt.h>
@@ -10,9 +7,12 @@
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/portmacro.h>
+#include <freertos/projdefs.h>
 #include <freertos/queue.h>
 #include <freertos/semphr.h>
 #include <freertos/task.h>
+#include <hal/ledc_types.h>
+#include <hal/pcnt_types.h>
 #include <hd44780.h>
 #include <i2cdev.h>
 #include <main.h>
@@ -31,7 +31,7 @@
 
 #define H_POSITION_HOURGLASS 3
 #define V_POSITION_HOURGLASS 2
-#define PERCENT_TO_10_BIT(percent) (uint32_t)((percent) * 1024 / 100)
+#define PERCENT_TO_10_BIT(percent) (uint32_t)((percent)*1024 / 100)
 
 static const char *TAG = "main";
 
@@ -97,9 +97,13 @@ nvs_handle_t nvs;
 int32_t currentWatchers[2] = {-1, -1};
 
 esp_err_t startNVS(void) {
+
+  /* Good Example that Non-Volative Storage:
+   * https://github.com/espressif/esp-idf/tree/v5.1.2/examples/storage/nvs_rw_value
+   */
+
   esp_err_t err;
   err = nvs_flash_init();
-
   if (err == ESP_ERR_NVS_NO_FREE_PAGES ||
       err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
     ESP_ERROR_CHECK(nvs_flash_erase());
@@ -160,9 +164,13 @@ static rotary_encoder_t re = {
 };
 
 esp_err_t startEncoder(void) {
+  // Queue with command that control Menu_Manager
   qEncoder = xQueueCreate(5, sizeof(rotary_encoder_event_t));
+  // Queue with command that can control function
   qCommand = xQueueCreate(5, sizeof(rotary_encoder_event_t));
 
+  /* Documentation rotatory Encoder:
+   * https://esp-idf-lib.readthedocs.io/en/latest/groups/encoder.html */
   ESP_ERROR_CHECK(rotary_encoder_init(qEncoder));
   ESP_ERROR_CHECK(rotary_encoder_add(&re));
   return ESP_OK;
@@ -175,6 +183,10 @@ ledc_timer_bit_t duty_resulution = LEDC_TIMER_10_BIT;
 uint32_t ledFreq = 4000;
 
 esp_err_t startPWM(void) {
+
+  /* Good example to control led on ESP-iDF:
+   * https://github.com/espressif/esp-idf/tree/5f42493/examples/peripherals/ledc/ledc_basic
+   */
 
   ledc_timer_config_t ledc_timer = {
       .speed_mode = ledMode,
@@ -198,6 +210,9 @@ esp_err_t startPWM(void) {
   return ledc_channel_config(&ledc_channel);
 }
 
+/* Good example that control LCD with I2C with this component:
+ * https://github.com/UncleRus/esp-idf-lib/tree/master/examples/hd44780/i2c */
+
 static i2c_dev_t pcf8574;
 
 static esp_err_t write_lcd_data(const hd44780_t *lcd, uint8_t data) {
@@ -216,6 +231,8 @@ hd44780_t lcd = {.write_cb = write_lcd_data,
                      .d7 = 7,
                      .bl = 3,
                  }};
+
+/* characters created by: https://maxpromer.github.io/LCD-Character-Creator/ */
 
 static const uint8_t char_data[] = {
     //  LOAD - 0
@@ -269,13 +286,20 @@ void HourGlass_animation(void *args) {
   }
 }
 
+/**
+ * @brief Convert command received of the rotatory encoder to Menu Manager
+ *
+ * @return Command that Menu Manager Needed
+ */
 Navigate_t map(void) {
   rotary_encoder_event_t e;
+  // filter possibles inputs of the encoder
   do {
     xQueueReceive(qEncoder, &e, portMAX_DELAY);
 
   } while (e.type == RE_ET_BTN_PRESSED || e.type == RE_ET_BTN_RELEASED);
 
+  // semaphore to Menu Menager if occuped a function was executed
   if (xSemaphoreTake(Menu_mutex, 0) == pdTRUE) {
     xSemaphoreGive(Menu_mutex);
 
@@ -301,6 +325,8 @@ Navigate_t map(void) {
       ESP_LOGI(TAG, "NOTHIN");
     }
   } else if (e.type == RE_ET_BTN_LONG_PRESSED) {
+
+    hd44780_control(&lcd, true, false, false);
     if (tHourglass != NULL) {
       vTaskDelete(tHourglass);
       tHourglass = NULL;
@@ -320,6 +346,7 @@ Navigate_t map(void) {
     ESP_LOGI(TAG, "BACK");
     return NAVIGATE_BACK;
   } else {
+    // Redirect command to function executed
     xQueueSend(qCommand, &e, 0);
   }
   return NAVIGATE_NOTHIN;
@@ -328,9 +355,12 @@ Navigate_t map(void) {
 uint8_t first = 0, end = 0;
 const char *old_title;
 
+/**
+ * @brief Show Menu Menager to LCD 2004
+ *
+ * @param current_path Situation of Menu Menager
+ */
 void displayNormal(menu_path_t *current_path) {
-  hd44780_control(&lcd, true, false, false);
-
   uint8_t select = current_path->current_index;
   uint8_t count = 1;
   char *title = current_path->current_menu->label;
@@ -358,6 +388,11 @@ void displayNormal(menu_path_t *current_path) {
   }
 }
 
+/**
+ * @brief Another type of the show Menu Menager to LCD 2004
+ *
+ * @param current_path Situation of Menu Menager
+ */
 void displayLoop(menu_path_t *current_path) {
   hd44780_control(&lcd, true, false, false);
 
@@ -387,6 +422,15 @@ void displayLoop(menu_path_t *current_path) {
 }
 
 // Experiments
+/* All experiment are sepate into four stages "experiments_stage_t"
+ * EXPERIMENT_CONFIG config propriety of experiments and all experiment return
+ * in this stage
+ * */
+
+/* A little using example of the pcnt to take timed:
+ * https://github.com/MarcioBulla/Learning_ESP-IDF/blob/main/learning_pcnt/main/main.c
+ */
+
 pcnt_unit_config_t config_unit = {
     .high_limit = 200,
     .low_limit = -10,
@@ -499,7 +543,7 @@ void micro_to_second(time_t microsecond, char *string) {
   unsigned int milliseconds = (unsigned int)((seconds - int_seconds) * 1000);
   unsigned int microseconds_part =
       (unsigned int)(((seconds - int_seconds) * 1000 - milliseconds) * 1000);
-  snprintf(string, 12, "%03d,%03d.%03d", int_seconds, milliseconds,
+  snprintf(string, 12, "%03d,%03d %03d", int_seconds, milliseconds,
            microseconds_part);
 }
 
@@ -511,13 +555,12 @@ void update_periods(char *current_periods_str) {
 }
 
 void update_time(time_t first, time_t lest) {
-  char time_str[13];
+  char time_str[12];
   micro_to_second(lest - first, time_str);
-  time_str[11] = 's';
-  time_str[12] = '\0';
   xQueueSemaphoreTake(sDisplay, 0);
   hd44780_gotoxy(&lcd, 5, 2);
   hd44780_puts(&lcd, time_str);
+  hd44780_putc(&lcd, 's');
   xSemaphoreGive(sDisplay);
 }
 
@@ -546,6 +589,7 @@ void check_obstruct_sensor(void) {
   }
 }
 
+// Config Experiment Pendulum
 void Pendulum(void *args) {
   rotary_encoder_event_t e;
   experiment_data_t data;
@@ -578,14 +622,14 @@ void Pendulum(void *args) {
   while (true) {
     update_periods("00");
     print_config();
-    hd44780_gotoxy(&lcd, 17, 1);
-    hd44780_control(&lcd, true, true, false);
+    hd44780_control(&lcd, true, false, true);
 
     while (stage == EXPERIMENT_CONFIG) {
       xSemaphoreTake(sDisplay, portMAX_DELAY);
       periods_to_string(set_periods, set_periods_str);
-      hd44780_puts(&lcd, set_periods_str);
       hd44780_gotoxy(&lcd, 17, 1);
+      hd44780_puts(&lcd, set_periods_str);
+      hd44780_gotoxy(&lcd, 16, 1);
       xSemaphoreGive(sDisplay);
 
       xQueueReceive(qCommand, &e, portMAX_DELAY);
@@ -1023,8 +1067,9 @@ void History(void *args) {
 
   END_MENU_FUNCTION;
 }
-// Settings
 
+// Settings
+/* All configuration are save into flash memory. */
 void openNVS(void) {
   esp_err_t err;
 
