@@ -31,7 +31,7 @@
 
 #define H_POSITION_HOURGLASS 3
 #define V_POSITION_HOURGLASS 2
-#define PERCENT_TO_10_BIT(percent) (uint32_t)((percent)*1024 / 100)
+#define PERCENT_TO_10_BIT(percent) (uint32_t)((percent) * 1024 / 100)
 
 static const char *TAG = "main";
 
@@ -166,7 +166,7 @@ static rotary_encoder_t re = {
 esp_err_t startEncoder(void) {
   // Queue with command that control Menu_Manager
   qEncoder = xQueueCreate(5, sizeof(rotary_encoder_event_t));
-  // Queue with command that can control function
+  // Queue with command that might control function
   qCommand = xQueueCreate(5, sizeof(rotary_encoder_event_t));
 
   /* Documentation rotatory Encoder:
@@ -260,8 +260,9 @@ esp_err_t startLCD(void) {
 
   hd44780_switch_backlight(&lcd, true);
   ESP_ERROR_CHECK(hd44780_init(&lcd));
-  for (uint8_t i = 0; i < 8; i++) {
-    hd44780_upload_character(&lcd, i, char_data + (i * 8));
+
+  for (uint8_t _ = 0; _ < 8; _++) {
+    hd44780_upload_character(&lcd, _, char_data + (_ * 8));
   }
   ESP_LOGI(TAG, "LCD ON!");
 
@@ -276,10 +277,10 @@ void hd44780_clear_line(const hd44780_t *lcd, uint8_t line) {
 
 void HourGlass_animation(void *args) {
   while (true) {
-    for (uint8_t i = 4; i < 8; i++) {
+    for (uint8_t _ = 4; _ < 8; _++) {
       xSemaphoreTake(sDisplay, portMAX_DELAY);
       hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
-      hd44780_putc(&lcd, i);
+      hd44780_putc(&lcd, _);
       xSemaphoreGive(sDisplay);
       vTaskDelay(pdMS_TO_TICKS(500));
     }
@@ -322,7 +323,7 @@ Navigate_t map(void) {
         return NAVIGATE_DOWN;
       }
     default:
-      ESP_LOGI(TAG, "NOTHIN");
+      ESP_LOGI(TAG, "NOTHING");
     }
   } else if (e.type == RE_ET_BTN_LONG_PRESSED) {
 
@@ -349,7 +350,7 @@ Navigate_t map(void) {
     // Redirect command to function executed
     xQueueSend(qCommand, &e, 0);
   }
-  return NAVIGATE_NOTHIN;
+  return NAVIGATE_NOTHING;
 }
 
 uint8_t first = 0, end = 0;
@@ -423,8 +424,12 @@ void displayLoop(menu_path_t *current_path) {
 
 // Experiments
 /* All experiment are sepate into four stages "experiments_stage_t"
- * EXPERIMENT_CONFIG config propriety of experiments and all experiment return
- * in this stage
+ * - EXPERIMENT_CONFIG: config propriety of experiments and all experiment
+ * return in this stage;
+ * - EXPERIMENT_WAITTING: Experiment running and waiting for start;
+ * - EXPERIMENT_TIMING: Experiment running and show time on screen;
+ * - EXPERIMENT_DONE: Experiment done and show result on screen;
+ *
  * */
 
 /* A little using example of the pcnt to take timed:
@@ -440,11 +445,15 @@ pcnt_chan_config_t config_chan = {
     .edge_gpio_num = CONFIG_SENSOR_IR,
 };
 
+/**
+ * @brief Event that executed when counter reach watch point
+ *
+ */
 static bool cronos(pcnt_unit_handle_t pcnt_unit,
                    const pcnt_watch_event_data_t *edata, void *user_ctx) {
+  time_t temp_time = esp_timer_get_time();
   BaseType_t high_task_wakeup;
   QueueHandle_t qPCNT = (QueueHandle_t)user_ctx;
-  time_t temp_time = esp_timer_get_time();
   xQueueSendFromISR(qPCNT, &temp_time, &high_task_wakeup);
   return (high_task_wakeup == pdTRUE);
 };
@@ -589,7 +598,6 @@ void check_obstruct_sensor(void) {
   }
 }
 
-// Config Experiment Pendulum
 void Pendulum(void *args) {
   rotary_encoder_event_t e;
   experiment_data_t data;

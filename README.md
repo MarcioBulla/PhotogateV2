@@ -1,2 +1,2 @@
-# Photogate_V1
+# Photogate_V2
 Second Version of Photogate
