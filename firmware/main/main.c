@@ -16,6 +16,7 @@
 #include <hd44780.h>
 #include <i2cdev.h>
 #include <main.h>
+#include <math.h>
 #include <menu_manager.h>
 #include <nvs.h>
 #include <nvs_flash.h>
@@ -31,7 +32,7 @@
 
 #define H_POSITION_HOURGLASS 3
 #define V_POSITION_HOURGLASS 2
-#define PERCENT_TO_10_BIT(percent) (uint32_t)((percent) * 1024 / 100)
+#define PERCENT_TO_10_BIT(percent) ((uint32_t)(5 * pow(1.069, percent)))
 
 static const char *TAG = "main";
 
@@ -86,6 +87,7 @@ void app_main(void) {
 }
 
 TaskHandle_t tHourglass = NULL;
+TaskHandle_t tCheckSensor = NULL;
 SemaphoreHandle_t sDisplay = NULL;
 pcnt_unit_handle_t pcnt_unit = NULL;
 pcnt_channel_handle_t pcnt_chan = NULL;
@@ -179,7 +181,7 @@ esp_err_t startEncoder(void) {
 ledc_timer_t ledTimer = LEDC_TIMER_0;
 ledc_mode_t ledMode = LEDC_LOW_SPEED_MODE;
 ledc_channel_t ledChannel = LEDC_CHANNEL_0;
-ledc_timer_bit_t duty_resulution = LEDC_TIMER_10_BIT;
+ledc_timer_bit_t duty_resulution = LEDC_TIMER_12_BIT;
 uint32_t ledFreq = 4000;
 
 esp_err_t startPWM(void) {
@@ -348,6 +350,7 @@ Navigate_t map(void) {
     return NAVIGATE_BACK;
   } else {
     // Redirect command to function executed
+    //
     xQueueSend(qCommand, &e, 0);
   }
   return NAVIGATE_NOTHING;
@@ -424,12 +427,8 @@ void displayLoop(menu_path_t *current_path) {
 
 // Experiments
 /* All experiment are sepate into four stages "experiments_stage_t"
- * - EXPERIMENT_CONFIG: config propriety of experiments and all experiment
- * return in this stage;
- * - EXPERIMENT_WAITTING: Experiment running and waiting for start;
- * - EXPERIMENT_TIMING: Experiment running and show time on screen;
- * - EXPERIMENT_DONE: Experiment done and show result on screen;
- *
+ * EXPERIMENT_CONFIG config propriety of experiments and all experiment return
+ * in this stage
  * */
 
 /* A little using example of the pcnt to take timed:
@@ -445,10 +444,6 @@ pcnt_chan_config_t config_chan = {
     .edge_gpio_num = CONFIG_SENSOR_IR,
 };
 
-/**
- * @brief Event that executed when counter reach watch point
- *
- */
 static bool cronos(pcnt_unit_handle_t pcnt_unit,
                    const pcnt_watch_event_data_t *edata, void *user_ctx) {
   time_t temp_time = esp_timer_get_time();
@@ -574,30 +569,46 @@ void update_time(time_t first, time_t lest) {
 }
 
 void back_to_config(rotary_encoder_event_type_t event,
-                    experiment_stage_t *stage, experiment_config_t config) {
+                    experiment_stage_t *stage) {
   if (event == RE_ET_BTN_CLICKED) {
+    ESP_LOGI(TAG, "Return To Config");
     *stage = EXPERIMENT_CONFIG;
 
     pcnt_unit_stop(pcnt_unit);
     update_time(0, 0);
     event = RE_ET_BTN_RELEASED;
+
     vTaskDelete(tHourglass);
     tHourglass = NULL;
+
+    if (tCheckSensor != NULL) {
+      vTaskDelete(tCheckSensor);
+      tCheckSensor = NULL;
+    }
+
     hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
     hd44780_putc(&lcd, 7);
   }
 }
 
-void check_obstruct_sensor(void) {
+void check_obstruct_sensor(void *args) {
+  ESP_LOGI(TAG, "Checking Obstruct Sensor");
   while (gpio_get_level(CONFIG_SENSOR_IR)) {
 
     print_obstruct_error();
     vTaskDelay(pdMS_TO_TICKS(250));
+
+    xSemaphoreTake(sDisplay, portMAX_DELAY);
     hd44780_clear_line(&lcd, 3);
+    xSemaphoreGive(sDisplay);
     vTaskDelay(pdMS_TO_TICKS(250));
   }
+  ESP_LOGI(TAG, "Sensor non-Obstructed");
+  tCheckSensor = NULL;
+  vTaskDelete(NULL);
 }
 
+// Config Experiment Pendulum
 void Pendulum(void *args) {
   rotary_encoder_event_t e;
   experiment_data_t data;
@@ -653,27 +664,37 @@ void Pendulum(void *args) {
       } else if (e.type == RE_ET_BTN_CLICKED) {
         e.type = RE_ET_BTN_RELEASED;
         hd44780_control(&lcd, true, false, false);
-        check_obstruct_sensor();
 
         stage = EXPERIMENT_WAITTING;
         snprintf(data.option, 8, "Pen%02d", set_periods);
-        print_waitting();
 
         config.watchPoint[1] = 2 * set_periods + 1;
-        pcnt_config_experiment(config);
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
                                 2048, NULL, 1, &tHourglass, 0);
       }
     }
+
+    xTaskCreatePinnedToCore(&check_obstruct_sensor, "check sensor", 2024, NULL,
+                            1, &tCheckSensor, 1);
+    while (tCheckSensor != NULL) {
+      xQueueReceive(qCommand, &e, 10);
+      back_to_config(e.type, &stage);
+    }
+
+    print_waitting();
+
+    pcnt_config_experiment(config);
+
     while (stage == EXPERIMENT_WAITTING) {
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         first = time;
         stage = EXPERIMENT_TIMING;
         print_timing();
       }
     }
+
     while (stage == EXPERIMENT_TIMING) {
       pcnt_unit_get_count(pcnt_unit, &count);
       periods_to_string((count - 1) / 2, current_periods_str);
@@ -684,7 +705,7 @@ void Pendulum(void *args) {
       update_periods(current_periods_str);
 
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
 
@@ -697,9 +718,10 @@ void Pendulum(void *args) {
         append_history(data);
       }
     }
+
     while (stage == EXPERIMENT_DONE) {
       xQueueReceive(qCommand, &e, portMAX_DELAY);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
     }
   }
 }
@@ -773,15 +795,17 @@ void Spring(void *args) {
                                 2048, NULL, 1, &tHourglass, 0);
       }
     }
+
     while (stage == EXPERIMENT_WAITTING) {
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         first = time;
         stage = EXPERIMENT_TIMING;
         print_timing();
       }
     }
+
     while (stage == EXPERIMENT_TIMING) {
       pcnt_unit_get_count(pcnt_unit, &count);
       periods_to_string((count - 1), current_periods_str);
@@ -792,7 +816,7 @@ void Spring(void *args) {
       update_periods(current_periods_str);
 
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
 
@@ -806,9 +830,10 @@ void Spring(void *args) {
         append_history(data);
       }
     }
+
     while (stage == EXPERIMENT_DONE) {
       xQueueReceive(qCommand, &e, portMAX_DELAY);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
     }
   }
 }
@@ -847,7 +872,6 @@ void select_shape_energy(energy_t select, experiment_config_t *exp_config) {
 }
 
 void print_shape_energy(energy_t selecte, char string[6]) {
-
   ESP_LOGI(TAG, "SHAPE: %d", selecte);
   switch (selecte) {
 
@@ -917,33 +941,42 @@ void Energy(void *args) {
         stage = EXPERIMENT_WAITTING;
 
         hd44780_control(&lcd, true, false, false);
-        check_obstruct_sensor();
 
         select_shape_energy(set_shape, &config);
-        pcnt_config_experiment(config);
-
-        print_waitting();
 
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
                                 2048, NULL, 1, &tHourglass, 0);
       }
     }
+
+    xTaskCreatePinnedToCore(&check_obstruct_sensor, "check sensor", 2024, NULL,
+                            1, &tCheckSensor, 1);
+    while (tCheckSensor != NULL) {
+      xQueueReceive(qCommand, &e, 10);
+      back_to_config(e.type, &stage);
+    }
+
+    print_waitting();
+
+    pcnt_config_experiment(config);
+
     while (stage == EXPERIMENT_WAITTING) {
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         first = time;
         stage = EXPERIMENT_TIMING;
         print_timing();
       }
     }
+
     while (stage == EXPERIMENT_TIMING) {
       lest = esp_timer_get_time() + esp_random() % 10000;
 
       update_time(first, lest);
 
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
 
@@ -956,10 +989,11 @@ void Energy(void *args) {
         append_history(data);
       }
     }
+
     while (stage == EXPERIMENT_DONE) {
 
       xQueueReceive(qCommand, &e, portMAX_DELAY);
-      back_to_config(e.type, &stage, config);
+      back_to_config(e.type, &stage);
     }
   }
 }
@@ -1091,7 +1125,6 @@ void openNVS(void) {
 }
 
 void Change_menu(void *args) {
-
   option_type_menu ^= 1;
   config_menu.display = options_display[option_type_menu].type_menu;
   config_menu.loop = options_display[option_type_menu].loop_menu;
