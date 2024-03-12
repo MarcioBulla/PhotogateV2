@@ -18,6 +18,18 @@ GPATH
 # eclipse setting
 .settings
 
+#kicad
+**/_*
+*.log
+*-bak
+*backups/
+*.kicad_prl
+boards/**/*.ini
+
+#freecad
+*.FCBak
+
+
 # MacOS directory files
 .DS_Store
 
