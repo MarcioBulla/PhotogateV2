@@ -272,9 +272,14 @@ esp_err_t startLCD(void) {
 }
 
 void hd44780_clear_line(const hd44780_t *lcd, uint8_t line) {
+
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
+
   hd44780_gotoxy(lcd, 0, line);
   hd44780_puts(lcd, "                    ");
   hd44780_gotoxy(lcd, 0, line);
+
+  xSemaphoreGive(sDisplay);
 }
 
 void HourGlass_animation(void *args) {
@@ -330,9 +335,17 @@ Navigate_t map(void) {
   } else if (e.type == RE_ET_BTN_LONG_PRESSED) {
 
     hd44780_control(&lcd, true, false, false);
+
+    xSemaphoreGive(sDisplay);
+
     if (tHourglass != NULL) {
       vTaskDelete(tHourglass);
       tHourglass = NULL;
+    }
+
+    if (tCheckSensor != NULL) {
+      vTaskDelete(tCheckSensor);
+      tCheckSensor = NULL;
     }
 
     ledc_set_duty(ledMode, ledChannel, PERCENT_TO_10_BIT(brightness));
@@ -503,14 +516,14 @@ void pcnt_config_experiment(experiment_config_t config_experiment) {
 void print_config(void) {
   xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 0, 3);
-  hd44780_puts(&lcd, "     !!Config!!     ");
+  hd44780_puts(&lcd, "     !!Config!!      ");
   xSemaphoreGive(sDisplay);
 }
 
-void print_waitting(void) {
+void print_waiting(void) {
   xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 0, 3);
-  hd44780_puts(&lcd, "    !!Waitting!!    ");
+  hd44780_puts(&lcd, "     !!Waiting!!     ");
   xSemaphoreGive(sDisplay);
 }
 
@@ -552,7 +565,7 @@ void micro_to_second(time_t microsecond, char *string) {
 }
 
 void update_periods(char *current_periods_str) {
-  xQueueSemaphoreTake(sDisplay, 0);
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 12, 1);
   hd44780_puts(&lcd, current_periods_str);
   xSemaphoreGive(sDisplay);
@@ -561,18 +574,16 @@ void update_periods(char *current_periods_str) {
 void update_time(time_t first, time_t lest) {
   char time_str[12];
   micro_to_second(lest - first, time_str);
-  xQueueSemaphoreTake(sDisplay, 0);
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_gotoxy(&lcd, 5, 2);
   hd44780_puts(&lcd, time_str);
   hd44780_putc(&lcd, 's');
   xSemaphoreGive(sDisplay);
 }
 
-void back_to_config(rotary_encoder_event_type_t event,
-                    experiment_stage_t *stage) {
+bool back_to_config(rotary_encoder_event_type_t event) {
   if (event == RE_ET_BTN_CLICKED) {
     ESP_LOGI(TAG, "Return To Config");
-    *stage = EXPERIMENT_CONFIG;
 
     pcnt_unit_stop(pcnt_unit);
     update_time(0, 0);
@@ -588,24 +599,10 @@ void back_to_config(rotary_encoder_event_type_t event,
 
     hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
     hd44780_putc(&lcd, 7);
+
+    return true;
   }
-}
-
-void check_obstruct_sensor(void *args) {
-  ESP_LOGI(TAG, "Checking Obstruct Sensor");
-  while (gpio_get_level(CONFIG_SENSOR_IR)) {
-
-    print_obstruct_error();
-    vTaskDelay(pdMS_TO_TICKS(250));
-
-    xSemaphoreTake(sDisplay, portMAX_DELAY);
-    hd44780_clear_line(&lcd, 3);
-    xSemaphoreGive(sDisplay);
-    vTaskDelay(pdMS_TO_TICKS(250));
-  }
-  ESP_LOGI(TAG, "Sensor non-Obstructed");
-  tCheckSensor = NULL;
-  vTaskDelete(NULL);
+  return false;
 }
 
 // Config Experiment Pendulum
@@ -628,6 +625,7 @@ void Pendulum(void *args) {
 
   periods_to_string(set_periods, set_periods_str);
 
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_clear(&lcd);
   hd44780_gotoxy(&lcd, 6, 0);
   hd44780_puts(&lcd, "Pendulum");
@@ -636,11 +634,17 @@ void Pendulum(void *args) {
                      "00/n\x03");
   hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
   hd44780_putc(&lcd, 7);
+  xSemaphoreGive(sDisplay);
+
   update_time(first, lest);
 
   while (true) {
+
+    xQueueReset(qPCNT);
     update_periods("00");
     print_config();
+    stage = EXPERIMENT_CONFIG;
+
     hd44780_control(&lcd, true, false, true);
 
     while (stage == EXPERIMENT_CONFIG) {
@@ -674,25 +678,37 @@ void Pendulum(void *args) {
       }
     }
 
-    xTaskCreatePinnedToCore(&check_obstruct_sensor, "check sensor", 2024, NULL,
-                            1, &tCheckSensor, 1);
-    while (tCheckSensor != NULL) {
-      xQueueReceive(qCommand, &e, 10);
-      back_to_config(e.type, &stage);
+    while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
+      xSemaphoreTake(sDisplay, portMAX_DELAY);
+      hd44780_gotoxy(&lcd, 0, 3);
+      hd44780_puts(&lcd, "!Obstructed  Sensor!");
+      xSemaphoreGive(sDisplay);
+
+      while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
+        if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
+          if (back_to_config(e.type)) {
+            stage = EXPERIMENT_CONFIG;
+          }
+        }
+      }
+
+      vTaskDelay(pdMS_TO_TICKS(200));
     }
 
-    print_waitting();
-
+    print_waiting();
     pcnt_config_experiment(config);
 
     while (stage == EXPERIMENT_WAITTING) {
-      xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         first = time;
         stage = EXPERIMENT_TIMING;
         print_timing();
       }
+      xQueueReceive(qCommand, &e, 0);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
+
+      pcnt_unit_get_count(pcnt_unit, &count);
     }
 
     while (stage == EXPERIMENT_TIMING) {
@@ -704,8 +720,6 @@ void Pendulum(void *args) {
       update_time(first, lest);
       update_periods(current_periods_str);
 
-      xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
 
@@ -717,11 +731,17 @@ void Pendulum(void *args) {
         micro_to_second(lest - first, data.timed);
         append_history(data);
       }
+
+      xQueueReceive(qCommand, &e, 0);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
     }
 
     while (stage == EXPERIMENT_DONE) {
       xQueueReceive(qCommand, &e, portMAX_DELAY);
-      back_to_config(e.type, &stage);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
+      vTaskDelay(pdMS_TO_TICKS(10));
     }
   }
 }
@@ -745,6 +765,7 @@ void Spring(void *args) {
 
   periods_to_string(set_periods, set_periods_str);
 
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_clear(&lcd);
   hd44780_gotoxy(&lcd, 7, 0);
   hd44780_puts(&lcd, "Spring");
@@ -753,11 +774,16 @@ void Spring(void *args) {
                      "00/n\x03");
   hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
   hd44780_putc(&lcd, 7);
+  xSemaphoreGive(sDisplay);
+
   update_time(first, lest);
 
   while (true) {
+
+    xQueueReset(qPCNT);
     update_periods("00");
     print_config();
+    stage = EXPERIMENT_CONFIG;
     hd44780_control(&lcd, true, false, true);
 
     while (stage == EXPERIMENT_CONFIG) {
@@ -789,7 +815,7 @@ void Spring(void *args) {
 
         pcnt_config_experiment(config);
 
-        print_waitting();
+        print_waiting();
 
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
                                 2048, NULL, 1, &tHourglass, 0);
@@ -798,7 +824,8 @@ void Spring(void *args) {
 
     while (stage == EXPERIMENT_WAITTING) {
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         first = time;
         stage = EXPERIMENT_TIMING;
@@ -816,7 +843,8 @@ void Spring(void *args) {
       update_periods(current_periods_str);
 
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
 
@@ -833,7 +861,8 @@ void Spring(void *args) {
 
     while (stage == EXPERIMENT_DONE) {
       xQueueReceive(qCommand, &e, portMAX_DELAY);
-      back_to_config(e.type, &stage);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
     }
   }
 }
@@ -909,18 +938,24 @@ void Energy(void *args) {
       .filter = {.max_glitch_ns = 100},
   };
 
+  xSemaphoreTake(sDisplay, portMAX_DELAY);
   hd44780_clear(&lcd);
   hd44780_gotoxy(&lcd, 1, 0);
   hd44780_puts(&lcd, "Mechanical  Energy");
   hd44780_gotoxy(&lcd, 1, 1);
   hd44780_puts(&lcd, "Shape: ");
+  xSemaphoreGive(sDisplay);
+
   print_shape_energy(set_shape, data.option);
   hd44780_gotoxy(&lcd, H_POSITION_HOURGLASS, V_POSITION_HOURGLASS);
   hd44780_putc(&lcd, 7);
   update_time(first, lest);
 
   while (true) {
+
+    xQueueReset(qPCNT);
     print_config();
+    stage = EXPERIMENT_CONFIG;
     hd44780_control(&lcd, true, false, true);
 
     while (stage == EXPERIMENT_CONFIG) {
@@ -941,33 +976,43 @@ void Energy(void *args) {
         stage = EXPERIMENT_WAITTING;
 
         hd44780_control(&lcd, true, false, false);
-
-        select_shape_energy(set_shape, &config);
-
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
                                 2048, NULL, 1, &tHourglass, 0);
+
+        select_shape_energy(set_shape, &config);
       }
     }
 
-    xTaskCreatePinnedToCore(&check_obstruct_sensor, "check sensor", 2024, NULL,
-                            1, &tCheckSensor, 1);
-    while (tCheckSensor != NULL) {
-      xQueueReceive(qCommand, &e, 10);
-      back_to_config(e.type, &stage);
+    while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
+      xSemaphoreTake(sDisplay, portMAX_DELAY);
+      hd44780_gotoxy(&lcd, 0, 3);
+      hd44780_puts(&lcd, "!Obstructed  Sensor!");
+      xSemaphoreGive(sDisplay);
+
+      while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
+        if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
+          if (back_to_config(e.type)) {
+            stage = EXPERIMENT_CONFIG;
+          }
+        }
+      }
+
+      vTaskDelay(pdMS_TO_TICKS(200));
     }
 
-    print_waitting();
+    print_waiting();
 
     pcnt_config_experiment(config);
 
     while (stage == EXPERIMENT_WAITTING) {
-      xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage);
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         first = time;
         stage = EXPERIMENT_TIMING;
         print_timing();
       }
+      xQueueReceive(qCommand, &e, 0);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
     }
 
     while (stage == EXPERIMENT_TIMING) {
@@ -976,7 +1021,8 @@ void Energy(void *args) {
       update_time(first, lest);
 
       xQueueReceive(qCommand, &e, 0);
-      back_to_config(e.type, &stage);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
       if (xQueueReceive(qPCNT, &time, pdMS_TO_TICKS(40)) == pdTRUE) {
         stage = EXPERIMENT_DONE;
 
@@ -993,7 +1039,8 @@ void Energy(void *args) {
     while (stage == EXPERIMENT_DONE) {
 
       xQueueReceive(qCommand, &e, portMAX_DELAY);
-      back_to_config(e.type, &stage);
+      if (back_to_config(e.type))
+        stage = EXPERIMENT_CONFIG;
     }
   }
 }
