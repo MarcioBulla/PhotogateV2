@@ -669,7 +669,12 @@ void Pendulum(void *args) {
         e.type = RE_ET_BTN_RELEASED;
         hd44780_control(&lcd, true, false, false);
 
-        stage = EXPERIMENT_WAITTING;
+        if (gpio_get_level(CONFIG_SENSOR_IR)) {
+          stage = EXPERIMENT_ERROR;
+        } else {
+          stage = EXPERIMENT_WAITTING;
+        }
+
         snprintf(data.option, 8, "Pen%02d", set_periods);
 
         config.watchPoint[1] = 2 * set_periods + 1;
@@ -678,21 +683,30 @@ void Pendulum(void *args) {
       }
     }
 
-    while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
+    while (stage == EXPERIMENT_ERROR) {
       xSemaphoreTake(sDisplay, portMAX_DELAY);
       hd44780_gotoxy(&lcd, 0, 3);
       hd44780_puts(&lcd, "!Obstructed  Sensor!");
       xSemaphoreGive(sDisplay);
 
-      while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
-        if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
-          if (back_to_config(e.type)) {
-            stage = EXPERIMENT_CONFIG;
-          }
+      if (gpio_get_level(CONFIG_SENSOR_IR) == 0) {
+        stage = EXPERIMENT_WAITTING;
+        ESP_LOGI(TAG, "Free Sensor");
+      }
+
+      if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
+        if (back_to_config(e.type)) {
+          stage = EXPERIMENT_CONFIG;
         }
       }
 
-      vTaskDelay(pdMS_TO_TICKS(200));
+      if (stage == EXPERIMENT_WAITTING) {
+        vTaskDelay(pdMS_TO_TICKS(200));
+        if (gpio_get_level(CONFIG_SENSOR_IR)) {
+          stage = EXPERIMENT_ERROR;
+          ESP_LOGI(TAG, "Obtructed Again");
+        }
+      }
     }
 
     print_waiting();
@@ -973,8 +987,11 @@ void Energy(void *args) {
         }
       } else if (e.type == RE_ET_BTN_CLICKED) {
         e.type = RE_ET_BTN_RELEASED;
-        stage = EXPERIMENT_WAITTING;
-
+        if (gpio_get_level(CONFIG_SENSOR_IR)) {
+          stage = EXPERIMENT_ERROR;
+        } else {
+          stage = EXPERIMENT_WAITTING;
+        }
         hd44780_control(&lcd, true, false, false);
         xTaskCreatePinnedToCore(&HourGlass_animation, "HourGlass Animation",
                                 2048, NULL, 1, &tHourglass, 0);
@@ -983,21 +1000,30 @@ void Energy(void *args) {
       }
     }
 
-    while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
+    while (stage == EXPERIMENT_ERROR) {
       xSemaphoreTake(sDisplay, portMAX_DELAY);
       hd44780_gotoxy(&lcd, 0, 3);
       hd44780_puts(&lcd, "!Obstructed  Sensor!");
       xSemaphoreGive(sDisplay);
 
-      while (gpio_get_level(CONFIG_SENSOR_IR) && stage == EXPERIMENT_WAITTING) {
-        if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
-          if (back_to_config(e.type)) {
-            stage = EXPERIMENT_CONFIG;
-          }
+      if (gpio_get_level(CONFIG_SENSOR_IR) == 0) {
+        stage = EXPERIMENT_WAITTING;
+        ESP_LOGI(TAG, "Free Sensor");
+      }
+
+      if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
+        if (back_to_config(e.type)) {
+          stage = EXPERIMENT_CONFIG;
         }
       }
 
-      vTaskDelay(pdMS_TO_TICKS(200));
+      if (stage == EXPERIMENT_WAITTING) {
+        vTaskDelay(pdMS_TO_TICKS(200));
+        if (gpio_get_level(CONFIG_SENSOR_IR)) {
+          stage = EXPERIMENT_ERROR;
+          ESP_LOGI(TAG, "Obtructed Again");
+        }
+      }
     }
 
     print_waiting();
