@@ -45,6 +45,7 @@ typedef enum {
   EXPERIMENT_WAITTING,
   EXPERIMENT_TIMING,
   EXPERIMENT_DONE,
+  EXPERIMENT_ERROR,
 } experiment_stage_t;
 
 typedef enum {

@@ -689,22 +689,20 @@ void Pendulum(void *args) {
       hd44780_puts(&lcd, "!Obstructed  Sensor!");
       xSemaphoreGive(sDisplay);
 
-      if (gpio_get_level(CONFIG_SENSOR_IR) == 0) {
-        stage = EXPERIMENT_WAITTING;
-        ESP_LOGI(TAG, "Free Sensor");
-      }
+      for (uint8_t i = 0; i < 5; i++) {
 
-      if (xQueueReceive(qCommand, &e, 25) == pdTRUE) {
-        if (back_to_config(e.type)) {
-          stage = EXPERIMENT_CONFIG;
+        if (xQueueReceive(qCommand, &e, 20) == pdTRUE) {
+          if (back_to_config(e.type)) {
+            stage = EXPERIMENT_CONFIG;
+          }
         }
-      }
 
-      if (stage == EXPERIMENT_WAITTING) {
-        vTaskDelay(pdMS_TO_TICKS(200));
         if (gpio_get_level(CONFIG_SENSOR_IR)) {
           stage = EXPERIMENT_ERROR;
-          ESP_LOGI(TAG, "Obtructed Again");
+          i = 0;
+        } else {
+          stage = EXPERIMENT_WAITTING;
+          ESP_LOGI(TAG, "Free Sensor");
         }
       }
     }
