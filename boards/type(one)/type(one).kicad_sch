@@ -3222,7 +3222,143 @@
 				)
 			)
 		)
-		(symbol "Regulator_Linear:LF33_TO220"
+		(symbol "Regulator_Linear:LM1117DT-ADJ"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -3.81 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "LM1117DT-ADJ"
+				(at 0 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:TO-252-3_TabPin2"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm1117.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "800mA Low-Dropout Linear Regulator, adjustable output, TO-252"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "linear regulator ldo adjustable positive"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO?252*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "LM1117DT-ADJ_0_1"
+				(rectangle
+					(start -5.08 -5.08)
+					(end 5.08 1.905)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "LM1117DT-ADJ_1_1"
+				(pin input line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "ADJ"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "VO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "VI"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Regulator_Linear:LM7805_TO220"
 			(pin_names
 				(offset 0.254)
 			)
@@ -3237,7 +3373,7 @@
 					)
 				)
 			)
-			(property "Value" "LF33_TO220"
+			(property "Value" "LM7805_TO220"
 				(at 0 3.175 0)
 				(effects
 					(font
@@ -3256,7 +3392,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "http://www.st.com/content/ccc/resource/technical/document/datasheet/c4/0e/7e/2a/be/bc/4c/bd/CD00000546.pdf/files/CD00000546.pdf/jcr:content/translations/en.CD00000546.pdf"
+			(property "Datasheet" "https://www.onsemi.cn/PowerSolutions/document/MC7800-D.PDF"
 				(at 0 -1.27 0)
 				(effects
 					(font
@@ -3265,7 +3401,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Low-drop Voltage Regulator, Io up to 500mA, Fixed Vo 3.3V, TO-220"
+			(property "Description" "Positive 1A 35V Linear Regulator, Fixed Output 5V, TO-220"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3274,7 +3410,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "LDO regulator voltage"
+			(property "ki_keywords" "Voltage Regulator 1A Positive"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3292,7 +3428,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "LF33_TO220_0_1"
+			(symbol "LM7805_TO220_0_1"
 				(rectangle
 					(start -5.08 1.905)
 					(end 5.08 -5.08)
@@ -3305,7 +3441,7 @@
 					)
 				)
 			)
-			(symbol "LF33_TO220_1_1"
+			(symbol "LM7805_TO220_1_1"
 				(pin power_in line
 					(at -7.62 0 0)
 					(length 2.54)
@@ -3346,142 +3482,6 @@
 					(at 7.62 0 180)
 					(length 2.54)
 					(name "VO"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "Regulator_Linear:LM1117T-5.0"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "U"
-				(at -3.81 3.175 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "LM1117T-5.0"
-				(at 0 3.175 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm1117.pdf"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "800mA Low-Dropout Linear Regulator, 5.0V fixed output, TO-220"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "linear regulator ldo fixed positive"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TO?220*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "LM1117T-5.0_0_1"
-				(rectangle
-					(start -5.08 -5.08)
-					(end 5.08 1.905)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "LM1117T-5.0_1_1"
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 7.62 0 180)
-					(length 2.54)
-					(name "VO"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -7.62 0 0)
-					(length 2.54)
-					(name "VI"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -5190,16 +5190,16 @@
 		(uuid "15b46f3d-501b-44a1-ae05-56178d836dad")
 	)
 	(junction
-		(at 166.37 67.31)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "21092160-1bab-49e0-8f3f-059e4c51b05c")
-	)
-	(junction
 		(at 205.74 41.91)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "21d3bd30-2ff9-45cd-a9f9-003d3fbf59e5")
+	)
+	(junction
+		(at 194.31 67.31)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2a1d1eb1-efe2-4c22-b25a-cd261ac59175")
 	)
 	(junction
 		(at 50.8 114.3)
@@ -5212,6 +5212,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "39bccf04-d206-43f1-9abe-e6401398a54b")
+	)
+	(junction
+		(at 166.37 67.31)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4386e755-7cf4-4681-951f-d1d1a1c9883c")
 	)
 	(junction
 		(at 50.8 116.84)
@@ -5256,6 +5262,12 @@
 		(uuid "6beebe31-5ce1-492b-b4c1-ea34d2e75ad5")
 	)
 	(junction
+		(at 166.37 41.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6dae6d04-26e6-49a7-8c01-d07b4f48f0ac")
+	)
+	(junction
 		(at 233.68 124.46)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5268,28 +5280,16 @@
 		(uuid "7c6c011f-3039-40b5-8ade-c32b9e819d67")
 	)
 	(junction
-		(at 166.37 41.91)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "803d4a31-105b-456d-8c72-8847bc3d43a1")
-	)
-	(junction
-		(at 184.15 67.31)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8f1d133f-b908-430d-981e-77483211ac19")
-	)
-	(junction
-		(at 175.26 74.93)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "949a7a8a-e7f0-47f4-a6c3-b3482a58d1ad")
-	)
-	(junction
 		(at 233.68 60.96)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "97247158-b0a5-4ecf-948e-e4cf4ec02cad")
+	)
+	(junction
+		(at 185.42 67.31)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9ac15dab-180c-47f4-bbd1-f7247ec82dd3")
 	)
 	(junction
 		(at 27.94 44.45)
@@ -5368,6 +5368,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f77e0f8c-e18b-4bb3-a360-ff644e359446")
+	)
+	(junction
+		(at 185.42 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ff820648-1384-42fd-bd99-572228bbbda5")
 	)
 	(no_connect
 		(at 104.14 85.09)
@@ -5477,16 +5483,6 @@
 	)
 	(wire
 		(pts
-			(xy 166.37 67.31) (xy 154.94 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0ff14c45-a1ac-4115-b6af-612ab242a360")
-	)
-	(wire
-		(pts
 			(xy 50.8 116.84) (xy 50.8 119.38)
 		)
 		(stroke
@@ -5534,6 +5530,16 @@
 			(type default)
 		)
 		(uuid "195ac122-649e-492b-bfd5-02e8d66b63a2")
+	)
+	(wire
+		(pts
+			(xy 166.37 41.91) (xy 167.64 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "195dfb07-c2ce-4661-8cb0-a79734bd12c5")
 	)
 	(wire
 		(pts
@@ -5677,6 +5683,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 80.01) (xy 185.42 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2902e529-637a-4ecc-8bef-e36a0f7b79e2")
+	)
+	(wire
+		(pts
 			(xy 99.06 127) (xy 99.06 129.54)
 		)
 		(stroke
@@ -5717,7 +5733,7 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 67.31) (xy 194.31 67.31)
+			(xy 182.88 67.31) (xy 185.42 67.31)
 		)
 		(stroke
 			(width 0)
@@ -5767,13 +5783,23 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 74.93) (xy 175.26 74.93)
+			(xy 138.43 160.02) (xy 138.43 162.56)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3ddb4773-4e0a-4ee3-a09c-31df4d9b02a2")
+		(uuid "3b479ee1-effb-478e-a7be-97106cf3fc7b")
+	)
+	(wire
+		(pts
+			(xy 194.31 69.85) (xy 194.31 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c862469-cc87-4fea-aed2-756005201da1")
 	)
 	(wire
 		(pts
@@ -5837,6 +5863,16 @@
 	)
 	(wire
 		(pts
+			(xy 185.42 67.31) (xy 194.31 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bf8e973-1a48-4c65-b079-3ee941b7d7d7")
+	)
+	(wire
+		(pts
 			(xy 213.36 52.07) (xy 213.36 50.8)
 		)
 		(stroke
@@ -5844,16 +5880,6 @@
 			(type default)
 		)
 		(uuid "4c8cfcf9-c53a-4b72-af63-43c3f72d4f28")
-	)
-	(wire
-		(pts
-			(xy 135.89 166.37) (xy 133.35 166.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4cc1b197-76f9-4443-96d8-3facbb02fbbe")
 	)
 	(wire
 		(pts
@@ -5917,6 +5943,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 67.31) (xy 167.64 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5836a29e-8000-4005-93df-3f096433f53b")
+	)
+	(wire
+		(pts
 			(xy 38.1 116.84) (xy 35.56 116.84)
 		)
 		(stroke
@@ -5954,16 +5990,6 @@
 			(type default)
 		)
 		(uuid "5a358c21-bcdd-4608-9681-26daff02fca7")
-	)
-	(wire
-		(pts
-			(xy 167.64 67.31) (xy 166.37 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5e254b85-f84e-4f6c-bf4d-043bbf9aac15")
 	)
 	(wire
 		(pts
@@ -6097,13 +6123,13 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 74.93) (xy 175.26 76.2)
+			(xy 166.37 67.31) (xy 154.94 67.31)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "74ecd90e-e67d-4674-8231-aa7bba6f6759")
+		(uuid "75cd83be-3a81-47d7-bbb0-bb83d67c4c01")
 	)
 	(wire
 		(pts
@@ -6114,16 +6140,6 @@
 			(type default)
 		)
 		(uuid "75d9374d-eddd-40ca-89d4-9fcbc71a80c9")
-	)
-	(wire
-		(pts
-			(xy 182.88 67.31) (xy 184.15 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "766b7b80-d230-4842-bb69-a11119ee5408")
 	)
 	(wire
 		(pts
@@ -6164,6 +6180,16 @@
 			(type default)
 		)
 		(uuid "7d703ab5-5222-47df-a2ca-3013ad3ea4f4")
+	)
+	(wire
+		(pts
+			(xy 194.31 77.47) (xy 194.31 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8047cfff-e4de-4f83-adf1-3dbeb469af2d")
 	)
 	(wire
 		(pts
@@ -6347,16 +6373,6 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 41.91) (xy 166.37 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a13b077f-bcc2-430f-bcaf-9a13e1c80006")
-	)
-	(wire
-		(pts
 			(xy 30.48 143.51) (xy 27.94 143.51)
 		)
 		(stroke
@@ -6364,6 +6380,26 @@
 			(type default)
 		)
 		(uuid "a51d527e-6515-4877-991e-96c4da9b2b1a")
+	)
+	(wire
+		(pts
+			(xy 185.42 67.31) (xy 185.42 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a52b5f83-f8f0-420b-8595-4b0f37e3b8f7")
+	)
+	(wire
+		(pts
+			(xy 134.62 166.37) (xy 133.35 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a81898bc-8182-46ac-8642-a39775ce8088")
 	)
 	(wire
 		(pts
@@ -6384,6 +6420,16 @@
 			(type default)
 		)
 		(uuid "aaf6d6a5-ecf8-4340-94ab-7c9d2a7c86c6")
+	)
+	(wire
+		(pts
+			(xy 185.42 80.01) (xy 185.42 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac5f27c2-c33c-46f2-8af9-cf92f5bc6a21")
 	)
 	(wire
 		(pts
@@ -6444,6 +6490,16 @@
 			(type default)
 		)
 		(uuid "bcbc3d51-be73-45af-9ee5-95cbc947f3d1")
+	)
+	(wire
+		(pts
+			(xy 175.26 74.93) (xy 181.61 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcfd73ed-6717-4900-94b9-a91441e70751")
 	)
 	(wire
 		(pts
@@ -6544,6 +6600,26 @@
 			(type default)
 		)
 		(uuid "caee5de9-5f23-4870-86c5-4a6d0245c67b")
+	)
+	(wire
+		(pts
+			(xy 166.37 69.85) (xy 166.37 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc618276-4f73-4687-93c6-78142d1de5de")
+	)
+	(wire
+		(pts
+			(xy 166.37 77.47) (xy 166.37 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d338469e-fc43-4c69-86b6-0d87a67dc8b9")
 	)
 	(wire
 		(pts
@@ -6717,16 +6793,6 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 74.93) (xy 166.37 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e4c4ac27-748b-4c17-a42c-0d25a2513854")
-	)
-	(wire
-		(pts
 			(xy 213.36 59.69) (xy 213.36 60.96)
 		)
 		(stroke
@@ -6734,6 +6800,16 @@
 			(type default)
 		)
 		(uuid "e5a39438-2d3f-4b63-8bc1-0d343370d638")
+	)
+	(wire
+		(pts
+			(xy 194.31 80.01) (xy 185.42 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e9e943c6-3ce5-4e63-8b9b-53174572be0a")
 	)
 	(wire
 		(pts
@@ -6787,7 +6863,7 @@
 	)
 	(wire
 		(pts
-			(xy 166.37 41.91) (xy 154.94 41.91)
+			(xy 154.94 41.91) (xy 166.37 41.91)
 		)
 		(stroke
 			(width 0)
@@ -6814,6 +6890,16 @@
 			(type default)
 		)
 		(uuid "fc0d4660-2ec7-4109-80b5-d381b55b4287")
+	)
+	(wire
+		(pts
+			(xy 185.42 81.28) (xy 185.42 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff468d69-4b26-4c18-ad12-8f81474168ae")
 	)
 	(text_box "ESP32-WROOM-U/UE"
 		(exclude_from_sim no)
@@ -6899,7 +6985,7 @@
 	(text_box "Power Supply"
 		(exclude_from_sim no)
 		(at 148.59 29.21 0)
-		(size 114.3 53.34)
+		(size 114.3 58.42)
 		(stroke
 			(width 0)
 			(type default)
@@ -6999,7 +7085,7 @@
 	(text_box "Sensor Connector"
 		(exclude_from_sim no)
 		(at 107.95 152.4 0)
-		(size 31.75 24.13)
+		(size 38.1 24.13)
 		(stroke
 			(width 0)
 			(type default)
@@ -7464,18 +7550,17 @@
 		(uuid "fef089b4-f1f2-49f8-a2ce-d587380a84ad")
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_US")
-		(at 166.37 71.12 0)
-		(mirror y)
+		(lib_id "Device:C")
+		(at 194.31 73.66 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "0295cddb-d71b-4560-8303-2c7bacfce7b1")
-		(property "Reference" "C5"
-			(at 162.56 69.215 0)
+		(uuid "06409cec-b3ab-4d87-b3d2-1ac7aac79b56")
+		(property "Reference" "C7"
+			(at 198.12 72.3899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7483,8 +7568,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10uF"
-			(at 162.56 71.755 0)
+		(property "Value" "100nF"
+			(at 198.12 74.9299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7492,8 +7577,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
-			(at 166.37 71.12 0)
+		(property "Footprint" ""
+			(at 195.2752 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7502,7 +7587,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 166.37 71.12 0)
+			(at 194.31 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7510,25 +7595,25 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 166.37 71.12 0)
+		(property "Description" "Unpolarized capacitor"
+			(at 194.31 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(pin "1"
-			(uuid "867863a7-de1c-45a4-8e36-7cc6fb7ea500")
 		)
 		(pin "2"
-			(uuid "2b83eea7-e011-46df-92b8-6235fa3f13ee")
+			(uuid "dbf8c4d3-aab0-4b15-89b6-c09ab0aaad36")
+		)
+		(pin "1"
+			(uuid "5855930a-424c-4a13-9711-4ea7e9471eac")
 		)
 		(instances
-			(project "type(one)"
+			(project ""
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C5")
+					(reference "C7")
 					(unit 1)
 				)
 			)
@@ -7901,7 +7986,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "170ba7d4-1e84-4942-9021-9ddede3a2b9c")
-		(property "Reference" "C10"
+		(property "Reference" "C4"
 			(at 61.468 37.084 90)
 			(effects
 				(font
@@ -7955,7 +8040,7 @@
 		(instances
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C10")
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -8181,7 +8266,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2543cd76-4b91-495e-8ec8-d9f5d0642274")
-		(property "Reference" "C9"
+		(property "Reference" "C3"
 			(at 62.23 18.796 90)
 			(effects
 				(font
@@ -8235,7 +8320,7 @@
 		(instances
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C9")
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -8309,7 +8394,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Regulator_Linear:LF33_TO220")
+		(lib_id "Regulator_Linear:LM1117DT-ADJ")
 		(at 175.26 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8317,8 +8402,8 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "2ac7cad1-eab1-4cef-8f6f-9be6620fef29")
-		(property "Reference" "U3"
+		(uuid "2ac122b9-ddf1-4407-946d-4ab807682266")
+		(property "Reference" "U5"
 			(at 175.26 60.96 0)
 			(effects
 				(font
@@ -8326,7 +8411,7 @@
 				)
 			)
 		)
-		(property "Value" "LF33_TO220"
+		(property "Value" "LM1117DT-ADJ"
 			(at 175.26 63.5 0)
 			(effects
 				(font
@@ -8334,26 +8419,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Vertical"
-			(at 175.26 61.595 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.st.com/content/ccc/resource/technical/document/datasheet/c4/0e/7e/2a/be/bc/4c/bd/CD00000546.pdf/files/CD00000546.pdf/jcr:content/translations/en.CD00000546.pdf"
-			(at 175.26 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Low-drop Voltage Regulator, Io up to 500mA, Fixed Vo 3.3V, TO-220"
+		(property "Footprint" "Package_TO_SOT_SMD:TO-252-3_TabPin2"
 			(at 175.26 67.31 0)
 			(effects
 				(font
@@ -8362,19 +8428,37 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "ef6ab57e-6efc-4f66-88ba-43a838fbda7c")
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm1117.pdf"
+			(at 175.26 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
-		(pin "3"
-			(uuid "073f612d-7b6b-4164-97b2-4a8558eec566")
+		(property "Description" "800mA Low-Dropout Linear Regulator, adjustable output, TO-252"
+			(at 175.26 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "1"
-			(uuid "82b01f82-ae16-4d60-af08-c88bfe461cfc")
+			(uuid "374de42f-c9cf-4925-84f5-9c2b322fce95")
+		)
+		(pin "3"
+			(uuid "f0baab5b-7bc5-42da-b383-58778bdd01ab")
+		)
+		(pin "2"
+			(uuid "837e26c7-4322-4bbf-98ff-f0cec01410e0")
 		)
 		(instances
-			(project "type(one)"
+			(project ""
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "U3")
+					(reference "U5")
 					(unit 1)
 				)
 			)
@@ -8719,77 +8803,6 @@
 	)
 	(symbol
 		(lib_id "Device:C_Polarized_US")
-		(at 166.37 45.72 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "410f3a18-46e1-42b5-8c73-9478aec4d73a")
-		(property "Reference" "C6"
-			(at 162.56 43.815 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10uF"
-			(at 162.56 46.355 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
-			(at 166.37 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 166.37 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 166.37 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "f32ce782-69b8-48f5-8454-4c264b63128b")
-		)
-		(pin "1"
-			(uuid "e915884a-0d82-4977-b3ab-320c98adf35e")
-		)
-		(instances
-			(project "type(one)"
-				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Polarized_US")
 		(at 184.15 45.72 0)
 		(mirror y)
 		(unit 1)
@@ -8798,7 +8811,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "423b6884-16d5-4acb-84f7-4df988beaeb1")
-		(property "Reference" "C3"
+		(property "Reference" "C5"
 			(at 187.96 43.18 0)
 			(effects
 				(font
@@ -8852,7 +8865,7 @@
 		(instances
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C3")
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -9144,6 +9157,79 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Potentiometer_Trim_US")
+		(at 138.43 166.37 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "584774ff-e7cd-4c0c-9f3e-82cba76dbbe1")
+		(property "Reference" "RV2"
+			(at 140.97 167.6401 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "1k"
+			(at 140.97 165.1001 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3386X_Horizontal"
+			(at 138.43 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 138.43 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 138.43 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "9b9574c2-449f-4338-8fbb-0df17b49fb60")
+		)
+		(pin "2"
+			(uuid "79a45388-1a0d-437c-8188-2958ca31fa37")
+		)
+		(pin "1"
+			(uuid "2475c32c-4e1b-4e4a-9f1b-7ba65b0a951d")
+		)
+		(instances
+			(project "type(one)"
+				(path "/73f7259c-8605-407c-87e3-a614541c1902"
+					(reference "RV2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Q_SCR_KAG")
 		(at 227.33 48.26 0)
 		(unit 1)
@@ -9210,6 +9296,79 @@
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
 					(reference "D2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Potentiometer_Trim_US")
+		(at 185.42 74.93 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "64dbbfda-fb33-47d2-ba7b-cdd6ef8c9104")
+		(property "Reference" "RV3"
+			(at 187.96 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "10k"
+			(at 187.96 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3386X_Horizontal"
+			(at 185.42 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 185.42 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 185.42 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "1008c686-356c-48bc-9df2-54c9cceddcfe")
+		)
+		(pin "2"
+			(uuid "1dbda28d-4db9-4750-842d-50dd3ff066cd")
+		)
+		(pin "1"
+			(uuid "9e58948d-d78e-4ffb-b82b-d9424a713ef6")
+		)
+		(instances
+			(project "type(one)"
+				(path "/73f7259c-8605-407c-87e3-a614541c1902"
+					(reference "RV3")
 					(unit 1)
 				)
 			)
@@ -9616,6 +9775,145 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Polarized_US")
+		(at 166.37 73.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "77b409ce-ea59-4263-bc69-6387af004796")
+		(property "Reference" "C8"
+			(at 162.56 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "220nF"
+			(at 162.56 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
+			(at 166.37 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 166.37 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 166.37 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "88ba346f-6340-4f62-8b72-f10747eda9d7")
+		)
+		(pin "2"
+			(uuid "66fac906-d836-4d83-b1bf-cdccf6a30dfd")
+		)
+		(instances
+			(project "type(one)"
+				(path "/73f7259c-8605-407c-87e3-a614541c1902"
+					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 166.37 45.72 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "78d92991-96f6-4006-94ee-8008387d4959")
+		(property "Reference" "C6"
+			(at 162.56 44.4499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 162.56 46.9899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 165.4048 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 166.37 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 166.37 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9c82218c-9f33-4c92-bb31-9696e5e707b0")
+		)
+		(pin "1"
+			(uuid "97e297d5-5757-4697-a4d9-e4de037e7c14")
+		)
+		(instances
+			(project "type(one)"
+				(path "/73f7259c-8605-407c-87e3-a614541c1902"
+					(reference "C6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
 		(at 45.72 143.51 180)
 		(unit 1)
@@ -9822,76 +10120,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_US")
-		(at 184.15 71.12 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "83927c46-a7db-4348-b071-26c4348cfa0f")
-		(property "Reference" "C4"
-			(at 187.96 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10uF"
-			(at 187.96 72.39 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
-			(at 184.15 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 184.15 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 184.15 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "8867eced-8303-4a5f-bbfc-f275a666f654")
-		)
-		(pin "1"
-			(uuid "dece681f-3a9e-4b65-aca6-60318551c044")
-		)
-		(instances
-			(project "type(one)"
-				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 274.32 173.99 0)
 		(unit 1)
@@ -9952,77 +10180,6 @@
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
 					(reference "#FLG03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Regulator_Linear:LM1117T-5.0")
-		(at 175.26 41.91 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "89508203-2f0f-47f6-af5a-145928ac7e31")
-		(property "Reference" "U4"
-			(at 175.26 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "LM1117T-5.0"
-			(at 175.26 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Vertical"
-			(at 175.26 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm1117.pdf"
-			(at 175.26 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 175.26 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "3"
-			(uuid "4c94752d-e8f5-4bb6-82f1-70258d5a97a6")
-		)
-		(pin "2"
-			(uuid "eab7d9e0-adce-40b9-8157-3f04b0447107")
-		)
-		(pin "1"
-			(uuid "92edba11-905d-42d1-941b-4c316886237e")
-		)
-		(instances
-			(project "type(one)"
-				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -10331,15 +10488,15 @@
 		(fields_autoplaced yes)
 		(uuid "959bf5b0-ddc6-4c3e-88b3-30665e9d580f")
 		(property "Reference" "F1"
-			(at 241.3 36.83 90)
+			(at 241.3 35.56 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "1A"
-			(at 241.3 39.37 90)
+		(property "Value" "300mA"
+			(at 241.3 38.1 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10914,7 +11071,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 175.26 76.2 0)
+		(at 185.42 81.28 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10924,7 +11081,7 @@
 		(fields_autoplaced yes)
 		(uuid "b34f461a-5929-4031-a955-40ef22bed150")
 		(property "Reference" "#PWR016"
-			(at 175.26 82.55 0)
+			(at 185.42 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10933,7 +11090,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 175.26 81.28 0)
+			(at 185.42 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10941,7 +11098,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 175.26 76.2 0)
+			(at 185.42 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10950,7 +11107,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 175.26 76.2 0)
+			(at 185.42 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10959,7 +11116,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 175.26 76.2 0)
+			(at 185.42 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11261,7 +11418,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 135.89 166.37 0)
+		(at 138.43 160.02 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -11270,7 +11427,7 @@
 		(fields_autoplaced yes)
 		(uuid "bc4c86fe-c685-4eb0-ab5e-684f377dc623")
 		(property "Reference" "#PWR026"
-			(at 135.89 170.18 0)
+			(at 138.43 163.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11279,7 +11436,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 135.89 161.29 0)
+			(at 138.43 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11287,7 +11444,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 135.89 166.37 0)
+			(at 138.43 160.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11296,7 +11453,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 135.89 166.37 0)
+			(at 138.43 160.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11305,7 +11462,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 135.89 166.37 0)
+			(at 138.43 160.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11657,6 +11814,78 @@
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
 					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Regulator_Linear:LM7805_TO220")
+		(at 175.26 41.91 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ce41d8f2-745f-45f4-a038-fcfb5c6f22f8")
+		(property "Reference" "U3"
+			(at 175.26 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LM7805_TO220"
+			(at 175.26 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Vertical"
+			(at 175.26 36.195 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.cn/PowerSolutions/document/MC7800-D.PDF"
+			(at 175.26 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Positive 1A 35V Linear Regulator, Fixed Output 5V, TO-220"
+			(at 175.26 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "7edf2f5e-0a81-4cfa-bf48-dd60b267dd34")
+		)
+		(pin "2"
+			(uuid "faddfa4a-ca08-454b-bee8-451b9d3866ca")
+		)
+		(pin "1"
+			(uuid "2c4e567b-5530-4773-b643-eb83bb6cfc65")
+		)
+		(instances
+			(project ""
+				(path "/73f7259c-8605-407c-87e3-a614541c1902"
+					(reference "U3")
 					(unit 1)
 				)
 			)
@@ -12734,7 +12963,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f93a6170-e6b1-40b8-909a-a108c9a5f670")
-		(property "Reference" "C8"
+		(property "Reference" "C9"
 			(at 237.49 48.26 0)
 			(effects
 				(font
@@ -12788,7 +13017,7 @@
 		(instances
 			(project "type(one)"
 				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "C8")
+					(reference "C9")
 					(unit 1)
 				)
 			)
