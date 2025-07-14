@@ -1,0 +1,7 @@
+# This file was generated using idf.py save-defconfig. It can be edited manually.
+# Espressif IoT Development Framework (ESP-IDF) 5.4.0 Project Minimal Configuration
+#
+CONFIG_ENCODER_DOUBLE_SIGNAL=y
+CONFIG_PCNT_CTRL_FUNC_IN_IRAM=y
+CONFIG_PCNT_ISR_IRAM_SAFE=y
+CONFIG_ESP_TIMER_SUPPORTS_ISR_DISPATCH_METHOD=y

@@ -1,2 +1,22 @@
-idf_component_register(SRCS "main.c"
-                    INCLUDE_DIRS ".")
+idf_component_register(
+                      SRCS 
+                          "main.c"
+                          "core/cronos"
+                          "core/menus.c"
+                          "core/misc.c"
+                          "core/history.c"
+                          "experiments/centripetal.c"
+                          "experiments/mechanical.c"
+                          "experiments/pendulum.c"
+                          "experiments/spring.c"
+                          "experiments/classic.c"
+                          "hardware/counter.c"
+                          "hardware/display.c"
+                          "hardware/encoder.c"
+                          "hardware/memory.c"
+
+                      INCLUDE_DIRS 
+                          "core"
+                          "hardware"
+                          "experiments"
+)
