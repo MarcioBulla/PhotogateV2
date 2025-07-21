@@ -8,7 +8,7 @@ static hist_data_t history[CAPACITY];
 
 static void print_history_line(uint8_t index, uint8_t row) {
   char data[21];
-  snprintf(data, 21, "%02u|%s|%s", index, history[index].time,
+  snprintf(data, 21, "%02u|%s |%s", index, history[index].time,
            history[index].type);
 
   xSemaphoreTake(sDisplay, portMAX_DELAY);
