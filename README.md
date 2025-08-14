@@ -59,11 +59,6 @@ Below is a preview of the Interactive BOM:
 
 🔗 [Open Interactive IBOM](https://photogatev2.marciobulla.com/boards/ibom.html)
 
-<iframe src="./boards/ibom.html" width="100%" height="720px" style="border:none;">
-Your browser does not support iframes.
-</iframe>
-
-
 ---
 
 ## Credits
