@@ -1,341 +1,258 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Photogate V2 - ESP32 Optical Timer</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark"/>
+  <title>Photogate V2 - ESP32 Optical Timer</title>
 
-    <!-- Base theme variables -->
+  <link rel="icon" href="icon.png"/>
+
+  <!-- Preconnect for CDN -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <!-- Main CSS (cache-busting) -->
+  <link rel="stylesheet" href="styles.css?v=4"/>
+
+  <!-- Prism (optional for code blocks) -->
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+
+  <!-- model-viewer (Web Component) -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- App (defer to load after HTML) -->
+  <script src="app.js?v=3" defer></script>
+
+  <!-- Nerd Fonts (JetBrainsMono + Symbols) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/jetbrainsmono.css" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/nerdfontssymbolsonly.css" crossorigin>
+
+  <!-- JS disabled notice -->
+  <noscript>
     <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #333333;
-            --accent-color: #667eea;
-            --card-bg: #f8f9fa;
-            --border-color: #e9ecef;
-            --code-bg: #f8f9fa;
-            --code-text: #495057;
-            --shadow: rgba(0,0,0,.1);
-        }
-        [data-theme="dark"]{
-            --bg-color:#1a1a1a; --text-color:#e0e0e0; --accent-color:#7c3aed;
-            --card-bg:#2d2d2d; --border-color:#404040; --code-bg:#1e1e1e; --code-text:#e0e0e0; --shadow:rgba(0,0,0,.3);
-        }
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:var(--text-color);background:var(--bg-color);transition:background-color .3s,color .3s}
-        .container{max-width:1100px;margin:0 auto;padding:0 20px}
-        header{background:var(--card-bg);border-bottom:1px solid var(--border-color);padding:1rem 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
-        .header-content{display:flex;justify-content:space-between;align-items:center}
-        .logo{display:flex;align-items:center;gap:.6rem}
-        .logo img{height:28px;width:auto;display:block}
-        .logo h1{color:var(--accent-color);font-size:1.2rem;font-weight:700}
-        .theme-controls{display:flex;align-items:center;gap:1rem}
-        .theme-toggle{background:none;border:2px solid var(--border-color);border-radius:50px;padding:.5rem 1rem;cursor:pointer;color:var(--text-color);transition:all .3s;font-size:.9rem}
-        .theme-toggle:hover{border-color:var(--accent-color);color:var(--accent-color)}
-        main{padding:2rem 0}
-        .hero{text-align:center;padding:3rem 0}
-        .hero h2{font-size:2.5rem;margin-bottom:.5rem;color:var(--accent-color);font-weight:700}
-        .hero p{font-size:1.1rem;margin-bottom:2rem;opacity:.8}
-        .version-badge{display:inline-block;background:var(--accent-color);color:#fff;padding:.3rem 1rem;border-radius:20px;font-size:.9rem;font-weight:500;margin-bottom:1rem}
-        .btn{display:inline-block;padding:.8rem 1.5rem;background:var(--accent-color);color:#fff;text-decoration:none;border-radius:6px;font-weight:500;margin:.5rem;transition:all .3s}
-        .btn:hover{background:#5a67d8;transform:translateY(-1px)}
-        .btn-outline{background:transparent;border:2px solid var(--accent-color);color:var(--accent-color)}
-        .btn-outline:hover{background:var(--accent-color);color:#fff}
-        .section{margin:3rem 0}
-        .section h3{font-size:1.8rem;margin-bottom:1.5rem;color:var(--accent-color);font-weight:600}
-        .card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;padding:1.5rem;margin:1rem 0;box-shadow:0 2px 8px var(--shadow)}
-        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:2rem}
-        .feature-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;padding:1.5rem;text-align:center;transition:all .3s}
-        .feature-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow)}
-        .feature-icon{font-size:2.5rem;margin-bottom:1rem}
-        .feature-card h4{font-size:1.1rem;margin-bottom:.5rem;color:var(--accent-color)}
-        .tech-stack{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin:2rem 0}
-        .tech-item{background:var(--accent-color);color:#fff;padding:.5rem 1rem;border-radius:20px;font-size:.9rem;font-weight:500}
-        .repository-list{list-style:none;margin:1rem 0}
-        .repository-list li{padding:.5rem 0;border-bottom:1px solid var(--border-color)}
-        .repository-list li:last-child{border-bottom:none}
-        .folder-name{font-weight:600;color:var(--accent-color)}
-        footer{background:var(--card-bg);border-top:1px solid var(--border-color);text-align:center;padding:2rem 0;margin-top:4rem}
-        @media (max-width:768px){.hero h2{font-size:2rem}.header-content{flex-direction:column;gap:1rem}.container{padding:0 15px}}
-        .fade-in{animation:fadeIn .6s ease-in}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        /* Code wrapper + copy */
-        .code-wrapper{position:relative;background:var(--code-bg);border:1px solid var(--border-color);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px var(--shadow);margin:.75rem 0 1.25rem}
-        .code-wrapper pre{margin:0;padding:1.25rem 1rem 1rem;background:transparent}
-        .copy-btn{position:absolute;top:8px;right:8px;background:var(--accent-color);color:#fff;border:none;padding:4px 10px;font-size:.8rem;border-radius:4px;cursor:pointer;opacity:.9;transition:opacity .2s,transform .05s}
-        .copy-btn:hover{opacity:1}.copy-btn:active{transform:translateY(1px)}
-        
-        /* IBOM iframe synchronization styles - No modification to ibom.html needed */
-        .ibom-container iframe {
-            transition: filter 0.3s ease;
-            border-radius: 0 0 8px 8px;
-        }
-        
-        /* Improved dark theme filter for IBOM iframe - better contrast and clarity */
-        [data-theme="dark"] .ibom-container iframe {
-            filter: invert(1) hue-rotate(180deg) contrast(1.1) brightness(1.2) saturate(0.9);
-        }
-        
-        /* Enhanced iframe container */
-        .ibom-container {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Theme sync indicator */
-        .theme-sync-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--accent-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        
-        .theme-sync-indicator.show {
-            opacity: 1;
-        }
+      .no-js-banner{background:#ffeded;color:#6b0000;padding:.75rem 1rem;margin:0;border-bottom:2px solid #e0b4b4;font:600 14px/1.4 ui-sans-serif,system-ui;}
     </style>
-
-    <!-- Favicon + OpenGraph icon (your logo) -->
-    <link rel="icon" type="image/png" href="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAA..." />
-
-    <!-- Prism CSS (syntax highlight) -->
-    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+    <div class="no-js-banner">JavaScript is disabled. Some features (theme, 3D viewer, copy code) will not work.</div>
+  </noscript>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <img alt="Photogate V2 logo" src="icon.png"/>
-                    <h1>Photogate V2</h1>
-                </div>
-                <div class="theme-controls">
-                    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
-                </div>
-            </div>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1 id="projectName">Photogate V2</h1>
         </div>
-    </header>
+        <div class="header-right">
+          <button id="themeToggle" class="btn" type="button">
+            <span class="nf nf-moon" aria-hidden="true"></span> Dark Mode
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <main class="container">
-        <section class="hero fade-in">
-            <div class="version-badge">Version 2.1</div>
-            <h2>Photogate V2</h2>
-            <p>High-precision optical timer based on ESP32</p>
-            <div>
-                <a href="https://github.com/MarcioBulla/PhotogateV2" class="btn" target="_blank" rel="noopener">📁 GitHub</a>
-                <a href="#ibom" class="btn btn-outline">🔧 View IBOM</a>
-            </div>
-        </section>
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero fade-in">
+      <div class="version-badge" id="versionBadge">Version 2.1</div>
+      <h2 id="heroTitle">Photogate V2</h2>
+      <p id="heroTagline">High-precision optical timer based on ESP32</p>
 
-        <section class="section">
-            <h3>Overview</h3>
-            <div class="card">
-                <p>This is the second version of the <strong>Photogate</strong> project, featuring significant improvements in accuracy, reliability, and visual interface, along with available 3D models and schematics. Designed for educational and experimental applications using the ESP32 platform.</p>
-                <div class="tech-stack">
-                    <div class="tech-item">ESP-IDF v5.4.2</div>
-                    <div class="tech-item">ESP32</div>
-                    <div class="tech-item">Open Hardware</div>
-                </div>
-            </div>
-        </section>
+      <!-- BUTTON GROUP (alinhado e sem quebrar layout) -->
+      <div class="btn-group">
+        <a id="btnGithub" href="https://github.com/MarcioBulla/PhotogateV2" class="btn" target="_blank" rel="noopener">
+          <span class="nf nf-github" aria-hidden="true"></span> GitHub
+        </a>
+        <a id="btnIBOM" href="#ibom" class="btn" rel="noopener">
+          <!-- mantém SVG (link) como estava -->
+          <img class="ibom-inline" src="https://raw.githubusercontent.com/openscopeproject/InteractiveHtmlBom/f42ee38fc93ecb7d619eb63db897cb2477d98423/icons/plugin.svg" alt="" aria-hidden="true">
+          View IBOM
+        </a>
+      </div>
+    </section>
 
-        <section class="section">
-            <h3>Key Features</h3>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h4>High Precision</h4>
-                    <p>Extremely precise time measurements for scientific experiments.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔧</div>
-                    <h4>Open Hardware</h4>
-                    <p>PCB schematics and 3D models available for custom builds.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎓</div>
-                    <h4>Educational</h4>
-                    <p>Perfect for physics labs and kinematics experiments.</p>
-                </div>
-            </div>
-        </section>
+    <!-- Overview -->
+    <section class="section">
+      <h3 id="overviewTitle">Overview</h3>
+      <div class="card">
+        <p id="overviewBody">
+          Photogate V2 brings improved accuracy, reliability, and a clean interface for educational physics experiments on the ESP32 platform. The project is open hardware and uses a fully open-source toolchain for CAD and firmware.
+        </p>
+        <div class="tech-stack">
+          <div class="tech-item">ESP-IDF v5.4.2</div>
+          <div class="tech-item">ESP32</div>
+          <div class="tech-item">Open Hardware</div>
+          <div class="tech-item">FreeRTOS</div>
+        </div>
+      </div>
+    </section>
 
-        <section class="section">
-            <h3>Build and Run</h3>
-            <div class="card">
-                <h4>📋 Requirements</h4>
-                <ul style="margin:1rem 0 1rem 2rem">
-                    <li><strong>ESP-IDF v5.4.2</strong></li>
-                    <li>A configured ESP32 development environment (terminal toolchain)</li>
-                    <li>Required cables and hardware to flash the firmware</li>
-                </ul>
+    <!-- Characteristics -->
+    <section class="section">
+      <h3 id="charTitle">Characteristics</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+            <img class="feature-logo" src="https://www.espressif.com/sites/all/themes/espressif/images/logo-guidelines/primary-vertical-logo.png" alt="Espressif logo"/>
+          <h4>High Precision</h4>
+          <p>Uses the ESP32’s <strong>internal high-resolution timer/counter</strong> with a <strong>FreeRTOS</strong>-based design for deterministic, accurate measurements.</p>
+        </div>
 
-                <h4>🚀 Quick Start</h4>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/3/3e/FreeRTOS_logo_2005.svg" alt="FreeRTOS logo"/>
+          </div>
+          <h4>FreeRTOS Firmware</h4>
+          <p>Task-based architecture improves responsiveness and timing isolation (ISR → queue → measurement task).</p>
+        </div>
 
-                <p><strong>1️⃣ Clone the repository</strong></p>
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                    <pre><code class="language-bash">git clone https://github.com/MarcioBulla/PhotogateV2.git
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/65/KiCad_logo_square.svg" alt="KiCad logo"/>
+          </div>
+          <h4>KiCad (PCB)</h4>
+          <p>PCB layout and schematics created with the open-source KiCad suite.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/1/1a/FreeCAD-symbol.svg" alt="FreeCAD logo"/>
+          </div>
+          <h4>FreeCAD (3D)</h4>
+          <p>Parametric enclosure modeled with FreeCAD for easy editing and printing.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Open-source-hardware-logo.svg" alt="Open-source Hardware logo"/>
+          </div>
+          <h4>Open Hardware</h4>
+          <p>All design files are published for study, modification, and reuse.</p>
+        </div>
+
+        
+<div class="feature-card">
+  <div class="feature-icon">
+    <span class="nf nf-printer_3d_nozzle" aria-hidden="true"></span>
+  </div>
+  <h4>High Precision</h4>
+  <p>The case parts are <strong>easy to 3D print</strong> — no supports needed.</p>
+</div>
+      </div>
+    </section>
+
+    <!-- IBOM -->
+    <section id="ibom" class="section ibom-section">
+      <h3 id="ibomTitle">Interactive BOM</h3>
+      <div class="card ibom-container" style="padding:0;overflow:hidden">
+        <div class="ibom-header">
+          <img class="ibom-icon" src="https://raw.githubusercontent.com/openscopeproject/InteractiveHtmlBom/f42ee38fc93ecb7d619eb63db897cb2477d98423/icons/plugin.svg" alt="iBOM icon"/>
+          <span>Interactive Bill of Materials</span>
+        </div>
+        <iframe id="ibom-iframe" src="ibom.html" width="100%" height="720" style="border:none">
+          Your browser does not support iframes.
+        </iframe>
+      </div>
+    </section>
+
+    <!-- 3D Preview -->
+    <section class="section">
+      <h3 id="previewTitle">Interactive 3D Preview</h3>
+
+      <div class="viewer-bar">
+        <div class="viewer-title">3D</div>
+        <div class="viewer-controls">
+          <button class="btn viewer-btn" data-key="board" type="button" aria-pressed="false" id="btnBoard">Board</button>
+          <button class="btn viewer-btn active" data-key="case" type="button" aria-pressed="true" id="btnCase">Case</button>
+        </div>
+      </div>
+
+      <div class="viewer-wrap">
+        <model-viewer
+          id="pg-viewer"
+          src="3dmodels/case.gltf"
+          alt="Photogate V2 – Case 3D"
+          camera-controls
+          auto-rotate
+          auto-rotate-delay="2000"
+          interaction-prompt="none"
+          touch-action="pan-y"
+          shadow-intensity="1"
+          exposure="1"
+          style="background: transparent"
+        ></model-viewer>
+      </div>
+    </section>
+
+    <!-- Build and Run -->
+    <section class="section">
+      <h3 id="buildTitle">Build and Run</h3>
+      <div class="card">
+        <h4 id="reqTitle">Requirements</h4>
+        <ul class="req-list">
+          <li id="req1"><strong>ESP-IDF v5.4.2</strong></li>
+          <li id="req2">A configured ESP32 development environment (terminal toolchain)</li>
+          <li id="req3">Required cables and hardware to flash the firmware</li>
+        </ul>
+
+        <h4 id="qsTitle">Quick Start</h4>
+
+        <p id="qsCloneTitle"><strong>1) Clone the repository</strong></p>
+        <div class="code-wrapper">
+          <button class="btn" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-bash">git clone https://github.com/MarcioBulla/PhotogateV2.git
 cd PhotogateV2
 </code></pre>
-                </div>
-
-                <p><strong>2️⃣ Set up the ESP-IDF environment</strong></p>
-                <p>Follow the official guide: <a href="https://docs.espressif.com/projects/esp-idf" target="_blank" rel="noopener">Get Started with ESP-IDF</a>.</p>
-
-                <p><strong>3️⃣ Build, flash, and monitor</strong></p>
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                    <pre><code class="language-bash">idf.py build flash monitor
-</code></pre>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h3>Repository Structure</h3>
-            <div class="card">
-                <ul class="repository-list">
-                    <li><div class="folder-name">📁 firmware/</div><div>C source code for ESP32 firmware</div></li>
-                    <li><div class="folder-name">📁 boards/</div><div>PCB layouts or circuit schematics</div></li>
-                    <li><div class="folder-name">📁 3DModels/</div><div>Printable or viewable 3D models of the device</div></li>
-                    <li><div class="folder-name">📄 README.md</div><div>Project documentation</div></li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="ibom" class="section ibom-section">
-            <h3>Interactive BOM</h3>
-            <div class="card ibom-container" style="padding:0;overflow:hidden">
-                <div class="ibom-header" style="background:var(--accent-color);color:#fff;padding:1rem;font-weight:600">
-                    📋 Interactive Bill of Materials
-                </div>
-                <iframe id="ibom-iframe" src="ibom.html" width="100%" height="720" style="border:none">
-                    Your browser does not support iframes.
-                </iframe>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
-            <p style="margin-top:.5rem;opacity:.7;font-size:.9rem">
-                Inspired by the first Photogate (Optical Timer) version<br>
-                Special thanks to the libraries used: encoder_menu.py, rotary.py, and rotary_irq_esp.py
-            </p>
         </div>
-    </footer>
 
-    <!-- Theme sync indicator -->
-    <div id="theme-sync-indicator" class="theme-sync-indicator">
-        Theme synchronized! 🎨
+        <p id="qsEnvTitle"><strong>2) Set up the ESP-IDF environment</strong></p>
+        <p id="qsEnvDesc">
+          Follow the official guide:
+          <a class="btn btn-inline" href="https://docs.espressif.com/projects/esp-idf" target="_blank" rel="noopener">Get Started with ESP-IDF</a>
+        </p>
+
+        <p id="qsBuildTitle"><strong>3) Build, flash, and monitor</strong></p>
+        <div class="code-wrapper">
+          <button class="btn" onclick="copyCode(this)">Copy</button>
+          <pre><code class="language-bash">cd firmware
+idf.py build flash monitor
+</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Repo structure (substitui emojis por Nerd Fonts) -->
+    <section class="section">
+      <h3 id="repoTitle">Repository Structure</h3>
+      <div class="card">
+        <ul class="repository-list">
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> firmware/</div><div id="repoFirmware">C source code for ESP32 firmware</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> boards/</div><div id="repoBoards">PCB layouts or circuit schematics</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> 3DModels/</div><div id="repo3d">Printable or viewable 3D models of the device</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file" aria-hidden="true"></span> README.md</div><div id="repoReadme">Project documentation</div></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p id="footerLine1">&copy; 2025 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
+      <p id="footerLine2" class="footer-sub">
+        Inspired by the first Photogate (Optical Timer) version<br/>
+        Special thanks to the libraries used: encoder_menu.py, rotary.py, and rotary_irq_esp.py
+      </p>
     </div>
+  </footer>
 
-    <!-- Prism core + autoloader -->
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script>Prism.plugins.autoloader.languages_path='https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';</script>
-
-    <script>
-        // Enhanced Theme Management with CSS-only IBOM Synchronization
-        class ThemeManager {
-            constructor() {
-                this.currentTheme = this.getPreferredTheme();
-                this.syncIndicator = document.getElementById('theme-sync-indicator');
-                this.init();
-            }
-
-            init() {
-                // Set initial theme
-                this.setTheme(this.currentTheme);
-                
-                // Listen for system theme changes
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                    if (!localStorage.getItem('theme')) {
-                        this.setTheme(e.matches ? 'dark' : 'light');
-                    }
-                });
-            }
-
-            getPreferredTheme() {
-                const stored = localStorage.getItem('theme');
-                if (stored) return stored;
-                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-
-            setTheme(theme) {
-                const body = document.body;
-                const btn = document.querySelector('.theme-toggle');
-                
-                if (theme === 'dark') {
-                    body.setAttribute('data-theme', 'dark');
-                    btn.textContent = '☀️ Light Mode';
-                } else {
-                    body.removeAttribute('data-theme');
-                    btn.textContent = '🌙 Dark Mode';
-                }
-                
-                localStorage.setItem('theme', theme);
-                this.currentTheme = theme;
-                
-                // The IBOM synchronization happens automatically via CSS
-                // No need to modify the iframe content directly
-                this.showSyncIndicator();
-            }
-
-            showSyncIndicator() {
-                if (this.syncIndicator) {
-                    this.syncIndicator.classList.add('show');
-                    setTimeout(() => {
-                        this.syncIndicator.classList.remove('show');
-                    }, 2000);
-                }
-            }
-
-            toggle() {
-                const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-                this.setTheme(newTheme);
-            }
-        }
-
-        // Initialize theme manager
-        const themeManager = new ThemeManager();
-
-        // Global toggle function for button
-        function toggleTheme() {
-            themeManager.toggle();
-        }
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(a => 
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                const target = document.querySelector(a.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            })
-        );
-
-        // Copy button functionality
-        function copyCode(button) {
-            const code = button.nextElementSibling?.innerText || '';
-            navigator.clipboard.writeText(code).then(() => {
-                const original = button.textContent;
-                button.textContent = 'Copied!';
-                setTimeout(() => button.textContent = original, 2000);
-            }).catch(() => {
-                button.textContent = 'Failed';
-                setTimeout(() => button.textContent = 'Copy', 2000);
-            });
-        }
-    </script>
+  <!-- Prism core + autoloader (optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    if (window.Prism && Prism.plugins && Prism.plugins.autoloader) {
+      Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';
+    }
+  </script>
 </body>
 </html>
+
