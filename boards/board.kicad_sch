@@ -4657,7 +4657,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "RF_Module:ESP32-WROOM-32U"
+		(symbol "RF_Module:ESP32-WROOM-32D"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -4670,7 +4670,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "ESP32-WROOM-32U"
+			(property "Value" "ESP32-WROOM-32D"
 				(at 1.27 34.29 0)
 				(effects
 					(font
@@ -4679,8 +4679,8 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "RF_Module:ESP32-WROOM-32U"
-				(at 0 -38.1 0)
+			(property "Footprint" "RF_Module:ESP32-WROOM-32D"
+				(at 16.51 -34.29 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -4697,7 +4697,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "RF Module, ESP32-D0WD SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 2.7-3.6V, external antenna, SMD"
+			(property "Description" "RF Module, ESP32-D0WD SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 2.7-3.6V, onboard antenna, SMD"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4706,7 +4706,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "RF Radio BT ESP ESP32 Espressif external U.FL antenna"
+			(property "ki_keywords" "RF Radio BT ESP ESP32 Espressif onboard PCB antenna"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4715,7 +4715,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "ESP32?WROOM?32U*"
+			(property "ki_fp_filters" "ESP32?WROOM?32D*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4724,7 +4724,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "ESP32-WROOM-32U_0_1"
+			(symbol "ESP32-WROOM-32D_0_1"
 				(rectangle
 					(start -12.7 33.02)
 					(end 12.7 -33.02)
@@ -4737,7 +4737,7 @@
 					)
 				)
 			)
-			(symbol "ESP32-WROOM-32U_1_1"
+			(symbol "ESP32-WROOM-32D_1_1"
 				(pin input line
 					(at -15.24 30.48 0)
 					(length 2.54)
@@ -8339,6 +8339,12 @@
 		(uuid "5e20fbaf-035a-42d5-957a-1b8984a95c5d")
 	)
 	(junction
+		(at 128.27 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6348694a-f96b-443a-bc43-d73e62942adf")
+	)
+	(junction
 		(at 252.73 58.42)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8588,7 +8594,7 @@
 	)
 	(wire
 		(pts
-			(xy 120.65 50.8) (xy 124.46 50.8)
+			(xy 120.65 50.8) (xy 128.27 50.8)
 		)
 		(stroke
 			(width 0)
@@ -8635,6 +8641,16 @@
 			(type default)
 		)
 		(uuid "0502a97f-6443-466c-a507-029d4494eeff")
+	)
+	(wire
+		(pts
+			(xy 128.27 46.99) (xy 128.27 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05553fb8-43bd-4528-9026-77475b5823cd")
 	)
 	(wire
 		(pts
@@ -9238,16 +9254,6 @@
 	)
 	(wire
 		(pts
-			(xy 132.08 48.26) (xy 132.08 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "57e178b1-790f-4d4e-b266-f07e9805802c")
-	)
-	(wire
-		(pts
 			(xy 184.15 83.82) (xy 185.42 83.82)
 		)
 		(stroke
@@ -9585,16 +9591,6 @@
 			(type default)
 		)
 		(uuid "806eef89-f101-41e2-965b-4e68097849c4")
-	)
-	(wire
-		(pts
-			(xy 132.08 50.8) (xy 135.89 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "81e783e6-3173-4e33-835c-613580cda97d")
 	)
 	(wire
 		(pts
@@ -9948,6 +9944,16 @@
 	)
 	(wire
 		(pts
+			(xy 128.27 50.8) (xy 135.89 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c018d466-90ac-409f-8752-c5564fe1afdd")
+	)
+	(wire
+		(pts
 			(xy 57.15 27.94) (xy 57.15 35.56)
 		)
 		(stroke
@@ -10058,7 +10064,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 135.89) (xy 163.83 129.54)
+			(xy 163.83 138.43) (xy 163.83 129.54)
 		)
 		(stroke
 			(width 0)
@@ -10068,7 +10074,7 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 86.36) (xy 184.15 83.82)
+			(xy 184.15 88.9) (xy 184.15 83.82)
 		)
 		(stroke
 			(width 0)
@@ -10115,16 +10121,6 @@
 			(type default)
 		)
 		(uuid "d230891c-f404-462a-86f2-e1389fdd731b")
-	)
-	(wire
-		(pts
-			(xy 184.15 93.98) (xy 184.15 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d338469e-fc43-4c69-86b6-0d87a67dc8b9")
 	)
 	(wire
 		(pts
@@ -10278,16 +10274,6 @@
 	)
 	(wire
 		(pts
-			(xy 124.46 48.26) (xy 124.46 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "df775121-56fb-4fc7-bde7-22dcbede89ce")
-	)
-	(wire
-		(pts
 			(xy 236.22 127) (xy 236.22 130.81)
 		)
 		(stroke
@@ -10388,7 +10374,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 143.51) (xy 163.83 147.32)
+			(xy 163.83 146.05) (xy 163.83 147.32)
 		)
 		(stroke
 			(width 0)
@@ -11131,7 +11117,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
+		(property "Footprint" "easyeda2kicad:CAP-TH_BD5.0-P2.00-D0.8-FD"
 			(at 212.09 90.17 0)
 			(effects
 				(font
@@ -11151,6 +11137,15 @@
 		)
 		(property "Description" "Polarized capacitor, US symbol"
 			(at 212.09 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C165586"
+			(at 215.9 88.2649 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11228,6 +11223,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C9114"
+			(at 95.25 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "776c86bf-0bc2-454e-a808-7909847b1b15")
 		)
@@ -11293,6 +11297,15 @@
 		)
 		(property "Description" "800mA Low-Dropout Linear Regulator, adjustable output, TO-252"
 			(at 153.67 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C498319"
+			(at 153.67 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11478,7 +11491,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 32.004 139.954 90)
 			(effects
 				(font
@@ -11498,6 +11511,15 @@
 		)
 		(property "Description" ""
 			(at 31.75 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119324"
+			(at 31.75 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11641,6 +11663,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C110254"
+			(at 47.498 39.624 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "90f9a3af-e7ff-4042-a906-ba730fbe2eb5")
 		)
@@ -11710,6 +11741,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C239365"
+			(at 53.34 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "4"
 			(uuid "7acbaf3f-20d0-4695-b95a-c268e7c2c0ec")
 		)
@@ -11735,7 +11775,7 @@
 		)
 	)
 	(symbol
-		(lib_id "RF_Module:ESP32-WROOM-32U")
+		(lib_id "RF_Module:ESP32-WROOM-32D")
 		(at 57.15 77.47 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11753,7 +11793,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "ESP32-WROOM-32U"
+		(property "Value" "ESP32-WROOM-32D"
 			(at 59.2933 41.91 0)
 			(effects
 				(font
@@ -11762,8 +11802,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "RF_Module:ESP32-WROOM-32"
-			(at 57.15 115.57 0)
+		(property "Footprint" "RF_Module:ESP32-WROOM-32D"
+			(at 73.66 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11780,8 +11820,17 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "RF Module, ESP32-D0WD SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 2.7-3.6V, external antenna, SMD"
+		(property "Description" "RF Module, ESP32-D0WD SoC, Wi-Fi 802.11b/g/n, Bluetooth, BLE, 32-bit, 2.7-3.6V, onboard antenna, SMD"
 			(at 57.15 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C473012"
+			(at 59.2933 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11916,73 +11965,6 @@
 		)
 	)
 	(symbol
-		(lib_name "+3V3_2")
-		(lib_id "power:+3V3")
-		(at 132.08 48.26 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1c039106-a5a3-4155-99b3-7592dec730b3")
-		(property "Reference" "#PWR07"
-			(at 132.08 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 132.08 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 132.08 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 132.08 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 132.08 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4e42f0f2-0c49-45bf-ba68-a98e13a2d85c")
-		)
-		(instances
-			(project "type(one)"
-				(path "/73f7259c-8605-407c-87e3-a614541c1902"
-					(reference "#PWR07")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint_Probe")
 		(at 175.26 49.53 0)
 		(unit 1)
@@ -12077,7 +12059,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D6.0mm_P2.50mm"
+		(property "Footprint" "easyeda2kicad:CAP-TH_BD4.0-P1.50-D0.8-FD"
 			(at 49.53 27.94 0)
 			(effects
 				(font
@@ -12097,6 +12079,15 @@
 		)
 		(property "Description" ""
 			(at 49.53 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C43845"
+			(at 48.26 21.336 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12171,6 +12162,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C725322"
+			(at 256.54 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "8"
 			(uuid "2e424d7a-6d0e-4c50-8b80-1353667145b2")
 		)
@@ -12206,7 +12206,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Polarized_US")
-		(at 163.83 139.7 0)
+		(at 163.83 142.24 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12215,15 +12215,6 @@
 		(dnp no)
 		(uuid "2aa09d13-ca77-451b-b81c-2c648c110cf9")
 		(property "Reference" "C11"
-			(at 167.64 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10uF"
 			(at 167.64 139.7 0)
 			(effects
 				(font
@@ -12232,8 +12223,17 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
-			(at 163.83 139.7 0)
+		(property "Value" "10uF"
+			(at 167.64 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "easyeda2kicad:CAP-TH_BD5.0-P2.00-D0.8-FD"
+			(at 163.83 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12242,7 +12242,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 163.83 139.7 0)
+			(at 163.83 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12251,7 +12251,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 163.83 139.7 0)
+			(at 163.83 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C106654"
+			(at 167.64 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12327,6 +12336,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C498319"
+			(at 193.04 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "374de42f-c9cf-4925-84f5-9c2b322fce95")
 		)
@@ -12391,6 +12409,15 @@
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 109.22 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C239362"
+			(at 109.22 123.19 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12528,6 +12555,15 @@
 		)
 		(property "Description" ""
 			(at 193.04 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C110254"
+			(at 189.23 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12739,6 +12775,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C125389"
+			(at 204.978 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "46202cef-a4fa-4bb8-b81c-02bf93971f38")
 		)
@@ -12876,6 +12921,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C780119"
+			(at 200.66 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "312713f5-452f-4478-8fc5-5cc77e3abb9c")
 		)
@@ -12989,7 +13043,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 212.344 123.444 90)
 			(effects
 				(font
@@ -13009,6 +13063,15 @@
 		)
 		(property "Description" ""
 			(at 213.36 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119347"
+			(at 210.82 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13156,6 +13219,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C118536"
+			(at 45.72 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "5826a505-4f58-4d75-8773-d1f5effd4aef")
 		)
@@ -13229,6 +13301,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C780120"
+			(at 140.97 177.8001 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "9b9574c2-449f-4338-8fbb-0df17b49fb60")
 		)
@@ -13294,6 +13375,15 @@
 		)
 		(property "Description" ""
 			(at 252.73 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C9211"
+			(at 248.92 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13708,6 +13798,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C780120"
+			(at 205.74 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "1008c686-356c-48bc-9df2-54c9cceddcfe")
 		)
@@ -13879,7 +13978,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "50k"
+		(property "Value" "51k"
 			(at 226.568 128.27 90)
 			(effects
 				(font
@@ -13888,7 +13987,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 225.044 131.826 90)
 			(effects
 				(font
@@ -13908,6 +14007,15 @@
 		)
 		(property "Description" ""
 			(at 224.79 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119363"
+			(at 226.568 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13958,7 +14066,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm"
+		(property "Footprint" "easyeda2kicad:CAP-TH_BD5.0-P2.00-D0.8-FD"
 			(at 132.08 142.24 0)
 			(effects
 				(font
@@ -13978,6 +14086,15 @@
 		)
 		(property "Description" "Polarized capacitor, US symbol"
 			(at 132.08 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C165586"
+			(at 136.144 140.462 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14068,7 +14185,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Polarized_US")
-		(at 184.15 90.17 0)
+		(at 184.15 92.71 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14076,15 +14193,6 @@
 		(dnp no)
 		(uuid "77b409ce-ea59-4263-bc69-6387af004796")
 		(property "Reference" "C8"
-			(at 180.34 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10uF"
 			(at 180.34 90.17 0)
 			(effects
 				(font
@@ -14093,8 +14201,17 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.5mm_P2.50mm"
-			(at 184.15 90.17 0)
+		(property "Value" "10uF"
+			(at 180.34 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "easyeda2kicad:CAP-TH_BD5.0-P2.00-D0.8-FD"
+			(at 184.15 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14103,7 +14220,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 184.15 90.17 0)
+			(at 184.15 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14112,7 +14229,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 184.15 90.17 0)
+			(at 184.15 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C106654"
+			(at 180.34 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14180,6 +14306,15 @@
 		)
 		(property "Description" "Low-Power, Low-Offset Voltage, Dual Comparators, DIP-8/SOIC-8/TO-99-8"
 			(at 224.79 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C725322"
+			(at 228.346 144.272 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14275,6 +14410,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C110254"
+			(at 180.34 60.9599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "9c82218c-9f33-4c92-bb31-9696e5e707b0")
 		)
@@ -14343,6 +14487,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C239362"
+			(at 157.48 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e3fc2442-a349-479a-af9f-448e0516521b")
 		)
@@ -14386,7 +14539,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 30.734 40.894 90)
 			(effects
 				(font
@@ -14406,6 +14559,15 @@
 		)
 		(property "Description" ""
 			(at 31.75 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119347"
+			(at 29.21 39.624 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14474,6 +14636,15 @@
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 81.28 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C239362"
+			(at 81.28 168.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14633,7 +14804,7 @@
 	(symbol
 		(lib_name "+5V_1")
 		(lib_id "power:+5V")
-		(at 124.46 48.26 0)
+		(at 128.27 46.99 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14642,7 +14813,7 @@
 		(fields_autoplaced yes)
 		(uuid "84bb8c1d-bcf5-4e5f-bc51-030695b3bece")
 		(property "Reference" "#PWR08"
-			(at 124.46 52.07 0)
+			(at 128.27 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14651,7 +14822,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 124.46 43.18 0)
+			(at 128.27 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14659,7 +14830,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 124.46 48.26 0)
+			(at 128.27 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14668,7 +14839,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 124.46 48.26 0)
+			(at 128.27 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14677,7 +14848,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 124.46 48.26 0)
+			(at 128.27 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15059,7 +15230,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 117.094 133.604 90)
 			(effects
 				(font
@@ -15079,6 +15250,15 @@
 		)
 		(property "Description" ""
 			(at 118.11 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119353"
+			(at 119.888 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15148,6 +15328,15 @@
 		)
 		(property "Description" ""
 			(at 266.7 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C239362"
+			(at 266.7 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15265,7 +15454,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 235.204 123.444 90)
 			(effects
 				(font
@@ -15285,6 +15474,15 @@
 		)
 		(property "Description" ""
 			(at 236.22 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119347"
+			(at 237.998 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15355,6 +15553,15 @@
 		)
 		(property "Description" ""
 			(at 231.14 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C110254"
+			(at 227.33 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15490,6 +15697,15 @@
 		)
 		(property "Description" "1x DIP Switch, Single Pole Single Throw (SPST) switch, small symbol"
 			(at 213.36 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C239362"
+			(at 213.36 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15902,6 +16118,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C261229"
+			(at 228.6 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f35725f0-9ce1-458a-a165-046e6de19682")
 		)
@@ -16012,7 +16237,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 117.094 143.764 90)
 			(effects
 				(font
@@ -16032,6 +16257,15 @@
 		)
 		(property "Description" ""
 			(at 118.11 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C714012"
+			(at 119.888 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16082,7 +16316,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+		(property "Footprint" "easyeda2kicad:TO-92-3_L4.8-W3.7-P2.54-R"
 			(at 64.77 139.065 0)
 			(effects
 				(font
@@ -16105,6 +16339,15 @@
 		)
 		(property "Description" "-0.2A Ic, -40V Vce, Small Signal PNP Transistor, TO-92"
 			(at 59.69 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C358534"
+			(at 64.77 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16253,6 +16496,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C2564"
+			(at 238.76 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "ab1954cc-204b-4fbc-99bf-4d3c4506a700")
 		)
@@ -16366,7 +16618,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 237.744 72.644 90)
 			(effects
 				(font
@@ -16386,6 +16638,15 @@
 		)
 		(property "Description" ""
 			(at 238.76 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119324"
+			(at 245.11 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16435,7 +16696,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 129.794 175.514 90)
 			(effects
 				(font
@@ -16455,6 +16716,15 @@
 		)
 		(property "Description" ""
 			(at 129.54 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C385454"
+			(at 127.635 179.705 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16524,6 +16794,15 @@
 		)
 		(property "Description" "Positive 1A 35V Linear Regulator, Fixed Output 5V, TO-220"
 			(at 193.04 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C3795"
+			(at 193.04 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16709,7 +16988,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:DO-41_BD2.4-L4.7-P8.70-D0.9-RD"
 			(at 132.08 124.46 0)
 			(effects
 				(font
@@ -16747,6 +17026,15 @@
 		)
 		(property "Sim.Pins" "1=K 2=A"
 			(at 132.08 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C5359862"
+			(at 129.54 123.1899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16865,7 +17153,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD4.5-L11.0-P15.00-D0.7"
 			(at 137.414 130.556 90)
 			(effects
 				(font
@@ -16885,6 +17173,15 @@
 		)
 		(property "Description" ""
 			(at 137.16 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C479307"
+			(at 139.192 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16936,7 +17233,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 91.186 181.356 90)
 			(effects
 				(font
@@ -16956,6 +17253,15 @@
 		)
 		(property "Description" ""
 			(at 90.17 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119347"
+			(at 87.63 180.3399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17004,7 +17310,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "easyeda2kicad:RES-TH_BD2.3-L6.5-P10.50-D0.5"
 			(at 49.784 134.874 90)
 			(effects
 				(font
@@ -17024,6 +17330,15 @@
 		)
 		(property "Description" ""
 			(at 49.53 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C119324"
+			(at 49.53 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17168,6 +17483,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C110254"
+			(at 28.448 52.578 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4a70a9ee-52b6-4dd4-97d4-72d88fa0a503")
 		)
@@ -17258,7 +17582,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "e35bebd7-d8a0-4116-8d2f-d4fe25d967f9")
 		(property "Reference" "J8"
 			(at 142.24 44.45 0)
@@ -17269,7 +17592,7 @@
 			)
 		)
 		(property "Value" "Conn_02x05_Odd_Even"
-			(at 142.24 46.99 0)
+			(at 145.034 46.736 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17296,6 +17619,15 @@
 		)
 		(property "Description" "Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 140.97 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C5665"
+			(at 142.24 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17483,7 +17815,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ea12a185-09ed-4bdc-b98e-aff785e0e59f")
 		(property "Reference" "J7"
 			(at 114.3 44.45 0)
@@ -17494,7 +17825,7 @@
 			)
 		)
 		(property "Value" "Conn_02x03_Odd_Even"
-			(at 114.3 46.99 0)
+			(at 112.268 46.736 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17521,6 +17852,15 @@
 		)
 		(property "Description" "Generic connector, double row, 02x03, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 113.03 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C11214"
+			(at 114.3 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17603,6 +17943,15 @@
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 116.84 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C239363"
+			(at 118.11 167.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17816,6 +18165,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C239366"
+			(at 22.86 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "4"
 			(uuid "7b3b8d41-bfa5-4f87-ab6d-0aff1c441b44")
 		)
@@ -17891,6 +18249,15 @@
 		)
 		(property "Description" "Low-Power, Low-Offset Voltage, Dual Comparators, DIP-8/SOIC-8/TO-99-8"
 			(at 273.05 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C725322"
+			(at 271.78 139.6999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17978,6 +18345,15 @@
 		)
 		(property "Description" ""
 			(at 259.08 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C110254"
+			(at 262.89 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
