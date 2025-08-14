@@ -1,13 +1,16 @@
 
 # Photogate V2
 
+[🌐 Access Photogate V2 Website](https://photogatev2.marciobulla.com/)  
+[📄 View Interactive IBOM](https://photogatev2.marciobulla.com/ibom.html)
+
 **Version 2 of the Photogate** — implemented with **ESP-IDF v5.4.2** for an ESP32-based photogate project.
 
 ---
 
 ## Overview
 
-This is the second version of the **Photogate** project, featuring significant improvements in accuracy, reliability, and visual interface, along with available 3D models and schematics.  
+This is the second version of the **Photogate** project, featuring significant improvements in accuracy, reliability, and visual interface, along with available 3D models and schematics.  :
 Designed for educational and experimental applications using the ESP32 platform.
 
 ---
@@ -26,18 +29,16 @@ Designed for educational and experimental applications using the ESP32 platform.
    ```bash
    git clone https://github.com/marciobulla/photogateV2.git
    cd photogateV2
-    ```
+   ```
 
-2. Set up the ESP-IDF environment
+2. Set up the ESP-IDF environment  
    Follow the [Get Started with ESP-IDF](https://docs.espressif.com/projects/esp-idf) guide.
 
 3. Build, flash, and monitor:
 
    ```bash
-   idf.py build
-   idf.py flash
-   idf.py monitor
-    ```
+   idf.py build flash monitor
+   ```
 
    This will compile the project, upload it to your ESP32, and open the serial monitor.
 
@@ -57,11 +58,12 @@ Designed for educational and experimental applications using the ESP32 platform.
 
 Below is a preview of the Interactive BOM:
 
-🔗 [Open Interactive IBOM](https://photogatev2.marciobulla.com/boards/ibom.html)
+🔗 [Open Interactive IBOM](https://photogatev2.marciobulla.com/ibom.html)
 
 ---
 
 ## Credits
 
-Developed by **Marcio Bulla**. Inspired by the first Photogate (Optical Timer) version.
+Developed by **Marcio Bulla**. Inspired by the first Photogate (Optical Timer) version.  
 Special thanks to the libraries used in this project, such as `encoder_menu.py`, `rotary.py`, and `rotary_irq_esp.py`.
+
