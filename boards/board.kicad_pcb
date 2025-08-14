@@ -216,7 +216,7 @@
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/7b780c5e-5c2a-4e97-a192-06448b230f68")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -621,7 +621,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/d98afb0c-fdb0-452d-afb1-d7c9b7bd39a8")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -4.32 0)
@@ -828,7 +828,7 @@
 		(property ki_fp_filters "Connector*:*_2x??_*")
 		(path "/ea12a185-09ed-4bdc-b98e-aff785e0e59f")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -4.68 -0.5)
@@ -1289,7 +1289,7 @@
 		(property ki_fp_filters "Potentiometer*")
 		(path "/584774ff-e7cd-4c0c-9f3e-82cba76dbbe1")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 3.795 -2.335)
@@ -1475,7 +1475,7 @@
 		(property ki_fp_filters "CP_*")
 		(path "/2aa09d13-ca77-451b-b81c-2c648c110cf9")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1 -2)
@@ -1677,7 +1677,7 @@
 		(property ki_fp_filters "D*DO?41*")
 		(path "/d50c7c2d-2a3c-4010-9ae3-a00935c81800")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -2.6 1.4)
@@ -1876,7 +1876,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/3ccc210d-f9e7-4441-8ec6-decff0c68511")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 5.62 1.37)
@@ -2072,7 +2072,7 @@
 		(property ki_fp_filters "TO?252*")
 		(path "/2ac122b9-ddf1-4407-946d-4ab807682266")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 7.65 1.36)
@@ -2310,8 +2310,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/8fe2f09f-ab68-4bcf-9584-72c73f91aa62")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -2484,7 +2484,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/9ca6e7bc-72f2-4eca-9592-20cd81334543")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 5.62 -1.37)
@@ -2680,7 +2680,7 @@
 		(property ki_fp_filters "*Fuse*")
 		(path "/959bf5b0-ddc6-4c3e-88b3-30665e9d580f")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -3074,8 +3074,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/b0cef7a3-beca-4341-ab0d-8ddf3af26a44")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -3248,7 +3248,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/423b6884-16d5-4acb-84f7-4df988beaeb1")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 6.12 1.37)
@@ -3422,7 +3422,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/9ae9821d-99ec-4e94-bbde-6e331cad4969")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 -1.15)
@@ -3626,7 +3626,7 @@
 		(property ki_fp_filters "CP_*")
 		(path "/77b409ce-ea59-4263-bc69-6387af004796")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.52 -1.5)
@@ -3793,8 +3793,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/1cb9bed5-f546-489c-852f-05ed44d56581")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -3907,7 +3907,7 @@
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "e48ff78d-cb6b-4514-b4fb-4c857c4fc7c3")
+			(uuid "4717e210-08a3-4ac1-9a65-6c3ef84d5563")
 			(effects
 				(font
 					(size 1.5 1.5)
@@ -3919,7 +3919,7 @@
 			(at 0.75 0 0)
 			(layer "F.SilkS")
 			(hide yes)
-			(uuid "c7ab8685-bd66-40fb-8ce1-cfdef7a9e23f")
+			(uuid "c3f07e40-5ffa-43f8-ba57-47f615ba727f")
 			(effects
 				(font
 					(size 1.5 1.5)
@@ -3931,7 +3931,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "e23e8dd4-7052-444d-98b3-515bf6cc55ea")
+			(uuid "c0e8f065-2edd-4265-850e-7d8af8acac2d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3943,7 +3943,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "57f07b79-63ce-4dbd-9c22-4f87b32490bc")
+			(uuid "aed076f5-0075-4bbd-a377-84d999ac4759")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4581,7 +4581,7 @@
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/f64a7433-7be9-47f1-8644-bc7043e1e2d8")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -5152,7 +5152,7 @@
 		(property ki_fp_filters "TO?220*")
 		(path "/be261f92-b945-42cf-91e5-d5e89c5bdf73")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 7.65 -3.26)
@@ -5400,7 +5400,7 @@
 		)
 		(path "/589036db-7840-43de-ad7f-9173c3e1f473")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -2.57 1.36)
@@ -5647,7 +5647,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/dd583db3-e2b0-4714-afec-a566040e8401")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 3.25 1.15)
@@ -5854,7 +5854,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/f93a6170-e6b1-40b8-909a-a108c9a5f670")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 5.62 -1.37)
@@ -6039,8 +6039,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/501098fe-cb5c-41c2-bf77-ac9de7c35ae5")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -6213,7 +6213,7 @@
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/2eb5fbe1-5176-4dbc-94cd-e3e077dc02fe")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -6620,7 +6620,7 @@
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/7d344d0a-dea7-4212-8b75-36802ea45ef5")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -7024,7 +7024,7 @@
 		(property ki_fp_filters "CP_*")
 		(path "/75c31531-3c95-40bc-927a-19c0ba5716f2")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1 -2)
@@ -7200,7 +7200,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/733119fe-c1a2-47a0-9994-917fe1a597fd")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 -1.15)
@@ -7407,7 +7407,7 @@
 		(property ki_fp_filters "TO?252*")
 		(path "/0bf39e84-3353-446e-a009-f01a38ff3510")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -2.57 -3.26)
@@ -7656,7 +7656,7 @@
 		(property ki_fp_filters "SW?DIP?x1*")
 		(path "/a67ec97e-d1bb-46f4-bfd4-93fb438ce83e")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -8039,8 +8039,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/34ca5358-13ac-443b-808d-6a7961a659c5")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -8215,7 +8215,7 @@
 		(property ki_fp_filters "TO?92*")
 		(path "/5808859e-2172-4308-9f38-2f4584843217")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -0.53 1.85)
@@ -8446,7 +8446,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/170ba7d4-1e84-4942-9021-9ddede3a2b9c")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 5.62 -1.37)
@@ -8640,7 +8640,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/b8349473-37b6-46a7-a338-591bf2eddf9d")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 -1.15)
@@ -8844,7 +8844,7 @@
 		(property ki_fp_filters "CP_*")
 		(path "/06409cec-b3ab-4d87-b3d2-1ac7aac79b56")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.52 -1.5)
@@ -9020,7 +9020,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/d7ca1420-78db-4ecd-bcea-daa78453fccd")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -5.5 2.26)
@@ -9216,8 +9216,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/56844744-a5e5-4df0-ade8-181b0b0e9497")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -9388,7 +9388,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/92c58f11-04b6-4332-9b38-8ce48664df0f")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 1.15)
@@ -9593,7 +9593,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/ca2ea3eb-22f7-4c8b-87a2-514be72ff251")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -4.32 0)
@@ -9798,7 +9798,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/7bed47d5-3df2-49cd-822b-557d8422173c")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 1.15)
@@ -10002,7 +10002,7 @@
 		(property ki_fp_filters "CP_*")
 		(path "/2543cd76-4b91-495e-8ec8-d9f5d0642274")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -0.2 -1.2)
@@ -10180,7 +10180,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/e015949d-39d6-4c90-aeb4-568cb526f086")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -0.62 1.37)
@@ -10376,7 +10376,7 @@
 		(property ki_fp_filters "C_*")
 		(path "/78d92991-96f6-4006-94ee-8008387d4959")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -0.12 -1.37)
@@ -10574,7 +10574,7 @@
 		(property ki_fp_filters "TO?92*")
 		(path "/0a520136-8d02-449e-8a92-1942b1c4d2f9")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -0.53 1.85)
@@ -10805,7 +10805,7 @@
 		(property ki_fp_filters "Potentiometer*")
 		(path "/64dbbfda-fb33-47d2-ba7b-cdd6ef8c9104")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 3.795 -2.335)
@@ -10980,7 +10980,7 @@
 		(property ki_fp_filters "TO?92*")
 		(path "/ba1b9e04-3c5f-4424-b338-339afd7d9b48")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr smd)
 		(fp_line
 			(start -1.770559 1.7)
@@ -11172,7 +11172,7 @@
 		(property ki_fp_filters "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm* SOP*5.28x5.23mm*P1.27mm* VSSOP*3x3mm*P0.65mm* TSSOP*4.4x3mm*P0.65mm*")
 		(path "/7843c942-0962-41b1-ae0c-db6980d1795b")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 1.16 -1.33)
@@ -11464,8 +11464,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/cee8a9d9-f049-481f-aa7f-4990b5587ea1")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -11638,7 +11638,7 @@
 		(property ki_fp_filters "TO?220*")
 		(path "/ce41d8f2-745f-45f4-a038-fcfb5c6f22f8")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 7.65 1.36)
@@ -11887,7 +11887,7 @@
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/17d4470f-478b-4ae2-b2cc-fa344367b68d")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.67 -2)
@@ -12417,7 +12417,7 @@
 		(property ki_fp_filters "TO-???* *_Diode_* *SingleDiode* D_*")
 		(path "/b6b57a89-054f-404c-a2a6-0d0c495abbce")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 1.04 0)
@@ -12691,7 +12691,7 @@
 		(property ki_fp_filters "ESP32?WROOM?32D*")
 		(path "/1a04a5d0-83a4-4e77-9d44-f42d7c980cab")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr smd)
 		(fp_line
 			(start -9.12 -15.86)
@@ -13843,8 +13843,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/a8397c2f-2142-4e0e-aba6-70fed76ab24b")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -14015,7 +14015,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/c469dec9-ee5b-4e44-a8d2-789596e42230")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 -1.15)
@@ -14220,7 +14220,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/54ea56c9-97f7-44b4-81bd-bc3792f38d30")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -3.25 -1.15)
@@ -14411,7 +14411,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C239363"
+		(property "LCSC" "C29275"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14427,7 +14427,7 @@
 		(property ki_fp_filters "Connector*:*_1x??_*")
 		(path "/f059391f-b0cb-48a9-929f-7cd830c9cbea")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 6.46 2.99)
@@ -14875,7 +14875,7 @@
 		(property ki_fp_filters "Connector*:*_2x??_*")
 		(path "/e35bebd7-d8a0-4116-8d2f-d4fe25d967f9")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -4.68 -0.5)
@@ -15380,7 +15380,7 @@
 		(property ki_fp_filters "Potentiometer*")
 		(path "/51421f47-bbfb-4d84-9377-1804e30f6104")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.255 7.415)
@@ -16846,8 +16846,8 @@
 		(property ki_fp_filters "Pin* Test*")
 		(path "/3d06669c-900d-4d2e-9b8d-01656dfcb7e3")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
-		(attr exclude_from_pos_files)
+		(sheetfile "board.kicad_sch")
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.7 -1.7)
 			(end 1.7 -1.7)
@@ -17018,7 +17018,7 @@
 		(property ki_fp_filters "R_*")
 		(path "/11f2293f-af96-4f49-aefc-594a5ca1f8af")
 		(sheetname "/")
-		(sheetfile "type(one).kicad_sch")
+		(sheetfile "board.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 3.25 1.15)

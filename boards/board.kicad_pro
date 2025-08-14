@@ -467,7 +467,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "type(one).kicad_pro",
+    "filename": "board.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -506,7 +506,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "board.step",
       "svg": "",
       "vrml": ""
     },
