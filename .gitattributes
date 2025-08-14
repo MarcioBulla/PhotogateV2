@@ -1,0 +1,3 @@
+# Ignorar só o BOM gerado
+./boards/ibom.html linguist-generated=true
+
