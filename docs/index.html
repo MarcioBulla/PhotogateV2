@@ -149,7 +149,7 @@
           <img class="ibom-icon" src="https://raw.githubusercontent.com/openscopeproject/InteractiveHtmlBom/f42ee38fc93ecb7d619eb63db897cb2477d98423/icons/plugin.svg" alt="iBOM icon"/>
           <span>Interactive Bill of Materials</span>
         </div>
-        <iframe id="ibom-iframe" src="ibom.html" width="100%" height="720" style="border:none">
+        <iframe id="ibom-iframe" src="ibom.html" width="100%" height="520" style="border:none">
           Your browser does not support iframes.
         </iframe>
       </div>
@@ -179,7 +179,7 @@
           touch-action="pan-y"
           shadow-intensity="1"
           exposure="1"
-          style="background: rgba(128,128,128,0.25)"
+          style="background: rgba(128,128,128,0.15)"
         ></model-viewer>
       </div>
     </section>
@@ -235,15 +235,25 @@ idf.py build flash monitor
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p id="footerLine1">&copy; 2025 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
+
+<footer>
+  <div class="container footer-flex">
+    <div class="footer-text">
+      <p id="footerLine1">
+        &copy; 2025 Photogate V2 - Developed by <strong>Marcio Bulla</strong>
+      </p>
       <p id="footerLine2" class="footer-sub">
         Inspired by the first Photogate (Optical Timer) version<br/>
-        Special thanks to the libraries used: encoder_menu.py, rotary.py, and rotary_irq_esp.py
+        <span class="footer-thanks-text">Special thanks to <strong>Fabiano Yokaichiya</strong></span>
       </p>
     </div>
-  </footer>
+
+    <div class="footer-seal">
+      <img src="images/FabianoYokaichiyaSeal.png" alt="Seal of Fabiano Yokaichiya">
+    </div>
+  </div>
+</footer>
+
 
   <!-- Prism core + autoloader (optional) -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>

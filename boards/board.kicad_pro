@@ -506,7 +506,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "board.step",
+      "step": "../docs/3dmodels/board.glb",
       "svg": "",
       "vrml": ""
     },

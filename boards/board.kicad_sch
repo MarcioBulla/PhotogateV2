@@ -17897,8 +17897,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x03")
-		(at 116.84 176.53 0)
-		(mirror y)
+		(at 116.84 176.53 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -17951,7 +17950,7 @@
 			)
 		)
 		(property "LCSC" "C29275"
-			(at 118.11 167.64 0)
+			(at 118.11 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
