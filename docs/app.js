@@ -13,33 +13,25 @@ class ThemeManager {
     this.btn = document.getElementById('themeToggle');
     this.currentTheme = this.getPreferredTheme();
   }
-
   init() {
-    // always apply theme, even without the button
     this.apply(this.currentTheme);
-
-    // listen to system changes if user didn't lock a theme
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener?.('change', (e) => {
       if (!localStorage.getItem('theme')) {
         this.apply(e.matches ? 'dark' : 'light');
       }
     });
-
-    // wire up toggle button if it exists
     if (this.btn) {
       this.btn.addEventListener('click', () => this.toggle());
     }
   }
-
   getPreferredTheme() {
     try {
       const stored = localStorage.getItem('theme');
       if (stored) return stored;
-    } catch (_) { /* ignore */ }
+    } catch (_) {}
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
-
   apply(theme) {
     if (theme === 'dark') {
       document.body.setAttribute('data-theme', 'dark');
@@ -48,10 +40,9 @@ class ThemeManager {
       document.body.removeAttribute('data-theme');
       if (this.btn) this.btn.innerHTML = '<span class="nf nf-moon" aria-hidden="true"></span> Dark Mode';
     }
-    try { localStorage.setItem('theme', theme); } catch (_) { /* ignore */ }
+    try { localStorage.setItem('theme', theme); } catch (_) {}
     this.currentTheme = theme;
   }
-
   toggle() {
     this.apply(this.currentTheme === 'dark' ? 'light' : 'dark');
   }
@@ -79,7 +70,6 @@ function copyCode(button) {
   const codeBlock = button?.nextElementSibling?.querySelector('code');
   const code = codeBlock?.textContent ?? '';
   if (!code) return;
-
   if (navigator.clipboard?.writeText) {
     navigator.clipboard.writeText(code).then(() => showCopySuccess(button)).catch(() => showCopyError(button));
   } else {
@@ -119,13 +109,11 @@ function showCopyError(button) {
 function setup3DViewer() {
   const viewer = document.getElementById('pg-viewer');
   const modelButtons = document.querySelectorAll('.viewer-btn');
-  if (!viewer || !modelButtons.length) return; // keep app running if absent
-
+  if (!viewer || !modelButtons.length) return;
   const MODELS = {
     board: '3dmodels/board.glb',
     case:  '3dmodels/case.gltf'
   };
-
   function setActiveModel(key) {
     modelButtons.forEach(btn => {
       btn.classList.remove('active');
@@ -142,7 +130,6 @@ function setup3DViewer() {
     }
     try { localStorage.setItem('pgv2_model', key); } catch (_) {}
   }
-
   modelButtons.forEach(btn => btn.addEventListener('click', () => setActiveModel(btn.dataset.key)));
   const savedModel = (typeof localStorage !== 'undefined' && localStorage.getItem('pgv2_model')) || 'case';
   setActiveModel(savedModel);
@@ -155,11 +142,10 @@ function setupPrism() {
   }
 }
 
-// ===== ANIMATIONS (IntersectionObserver with fallback) =====
+// ===== ANIMATIONS =====
 function setupAnimations() {
   const sections = document.querySelectorAll('.section');
   if (!sections.length) return;
-
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -169,7 +155,6 @@ function setupAnimations() {
         }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
     sections.forEach(section => {
       section.style.opacity = '0';
       section.style.transform = 'translateY(20px)';
@@ -177,7 +162,6 @@ function setupAnimations() {
       observer.observe(section);
     });
   } else {
-    // no observer available: apply directly
     sections.forEach(section => {
       section.style.opacity = '1';
       section.style.transform = 'none';
@@ -200,7 +184,6 @@ function hideLoadingSpinner(element) {
 
 // ===== ERROR HANDLING =====
 function handleError(error, context = '') {
-  // friendly log without breaking the app
   console.error(`Error in ${context}:`, error);
   if (context === '3D Viewer') {
     const viewer = document.getElementById('pg-viewer');
@@ -218,18 +201,6 @@ function throttle(func, limit) {
   let inThrottle; return function(...args){ if(!inThrottle){ func.apply(this,args); inThrottle=true; setTimeout(()=>inThrottle=false,limit); } };
 }
 
-// ===== PERFORMANCE (dev) =====
-function measurePerformance() {
-  if ('performance' in window) {
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const nav = performance.getEntriesByType('navigation')[0];
-        if (nav) console.log('Page load time:', Math.round(nav.loadEventEnd - nav.fetchStart), 'ms');
-      }, 0);
-    });
-  }
-}
-
 // ===== ACCESSIBILITY =====
 function setupAccessibility() {
   document.querySelectorAll('.btn').forEach(btn => {
@@ -244,6 +215,17 @@ function setupAccessibility() {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
+
+  // REMOVE SW antigo e caches
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      for (const reg of regs) reg.unregister();
+    }).catch(()=>{});
+    if (window.caches?.keys) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+    }
+  }
+
   safe('Theme Manager', () => { const tm = new ThemeManager(); tm.init(); });
   safe('Smooth Scroll', setupSmoothScroll);
   safe('3D Viewer', setup3DViewer);
@@ -251,7 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
   safe('Animations', setupAnimations);
   safe('Accessibility', setupAccessibility);
 
-  // expose copyCode safely
   window.copyCode = copyCode;
 
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
@@ -279,13 +260,4 @@ const handleResize = debounce(() => {
   viewer.style.height = (window.innerWidth < 768) ? '400px' : '520px';
 }, 200);
 window.addEventListener('resize', handleResize);
-
-// ===== SERVICE WORKER (optional) =====
-if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('SW registered: ', reg))
-      .catch(err => console.log('SW registration failed: ', err));
-  });
-}
 
