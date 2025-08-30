@@ -43,7 +43,7 @@ void fMenu_Info(void *args) {
       "Version: 2.1",
       "Developers: Marcio Bulla",
       "Repository: github.com/MarcioBulla/PhotogateV2",
-      "Federal University of Parana",
+      "Site: PhotogateV2.MarcioBulla.com",
   };
   size_t max_scroll[4] = {0};
   size_t min_position[4] = {0};
