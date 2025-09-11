@@ -159,6 +159,14 @@ void fMenu_brightnessControl(void *args) {
 }
 
 esp_err_t display_init(void) {
+  
+  ESP_LOGI(TAG, "Initializing display's pwm");
+  ESP_ERROR_CHECK(ledc_timer_config(&backlightTimer));
+  ESP_ERROR_CHECK(ledc_channel_config(&backlightChannel));
+  displaySetBrightness(0);
+  
+  ESP_LOGI(TAG, "Display's pwm started");
+
   ESP_LOGI(TAG, "Creating display's semaphore");
   vSemaphoreCreateBinary(sDisplay);
   xSemaphoreGive(sDisplay);
@@ -167,11 +175,6 @@ esp_err_t display_init(void) {
   ESP_ERROR_CHECK(i2c_param_config(I2C_NUM_0, &i2cConfig));
   ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0));
   ESP_LOGI(TAG, "I2C STARTED");
-
-  ESP_LOGI(TAG, "Initializing display's pwm");
-  ESP_ERROR_CHECK(ledc_timer_config(&backlightTimer));
-  ESP_ERROR_CHECK(ledc_channel_config(&backlightChannel));
-  ESP_LOGI(TAG, "Display's pwm started");
 
   ESP_LOGI(TAG, "Initializing display");
   lcd_init(&lcd, CONFIG_DISPLAY_ADDR, I2C_NUM_0);
@@ -183,7 +186,6 @@ esp_err_t display_init(void) {
     lcd_create_char(&lcd, _, char_data + (_ * 8));
   }
 
-  lcd_set_backlight(&lcd, 255);
 
   // Get brightness saved
   esp_err_t ret = ESP_OK;
@@ -219,5 +221,6 @@ esp_err_t display_init(void) {
 
   ESP_LOGI(TAG, "Display started");
 
+  lcd_set_backlight(&lcd, 255);
   return ESP_OK;
 }
