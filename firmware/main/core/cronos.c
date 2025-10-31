@@ -57,7 +57,7 @@ static void print_obstruct_error(void) {
 static inline void microsecond_string(uint64_t microsecond, char *string) {
   uint32_t seconds = microsecond / 1000000U;
   uint32_t microseconds_part = microsecond - (seconds * 1000000U);
-  sprintf(string, "%03lu,%06lu", seconds, microseconds_part);
+  sprintf(string, "%03u,%06u", seconds, microseconds_part);
 }
 
 static void update_time(time_t first, time_t last) {
@@ -92,7 +92,9 @@ static void reset_experiment_stage(void) {
 static bool setup_queue_set(void) {
   if (qPCNT_qCommands == NULL) {
     qPCNT_qCommands = xQueueCreateSet(10);
+    xQueueReset(qPCNT);
     xQueueAddToSet(qPCNT, qPCNT_qCommands);
+    xQueueReset(qCommands);
     xQueueAddToSet(qCommands, qPCNT_qCommands);
     ESP_LOGI(TAG, "Queue set created and configured");
     return true;
@@ -328,6 +330,8 @@ static experiment_stage_t handle_done_stage(void) {
 
     if (qActive == qCommands) {
       return handle_command(current_stage, "DONE");
+    } else{
+      xQueueReset(qActive);
     }
   }
 
