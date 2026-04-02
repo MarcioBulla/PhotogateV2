@@ -17,7 +17,7 @@ Designed for educational and experimental applications using the ESP32 platform.
 
 ## Requirements
 
-- **ESP-IDF v5.4.2**
+- **ESP-IDF v5.4**
 - A configured ESP32 development environment (terminal toolchain)
 - Required cables and hardware to flash the firmware
 
