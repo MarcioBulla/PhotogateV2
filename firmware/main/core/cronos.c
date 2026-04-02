@@ -57,7 +57,7 @@ static void print_obstruct_error(void) {
 static inline void microsecond_string(uint64_t microsecond, char *string) {
   uint32_t seconds = microsecond / 1000000U;
   uint32_t microseconds_part = microsecond - (seconds * 1000000U);
-  sprintf(string, "%03u,%06u", seconds, microseconds_part);
+  sprintf(string, "%03lu,%06lu", seconds, microseconds_part);
 }
 
 static void update_time(time_t first, time_t last) {
