@@ -1,4 +1,5 @@
 #include "spring.h"
+#include "sdkconfig.h"
 
 const static char *TAG = "Spring";
 
@@ -31,7 +32,7 @@ static counter_config_t mk_counter_config_spring(uint8_t value) {
   counter_config_t counter_config = {
       .rising = PCNT_CHANNEL_EDGE_ACTION_HOLD,
       .falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
-      .filter = {.max_glitch_ns = 100},
+      .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
       .watchPoint = {1, value},
       .resetCounter = NULL,
   };

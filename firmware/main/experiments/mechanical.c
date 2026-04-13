@@ -1,4 +1,5 @@
 #include "mechanical.h"
+#include "sdkconfig.h"
 
 const static char *TAG = "mechanical";
 
@@ -49,7 +50,7 @@ static char *print_option_mechanical(uint8_t selected) {
 static counter_config_t mk_counter_config_mechanical(uint8_t value) {
   counter_config_t counter_config = {
       .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
-      .filter = {.max_glitch_ns = 50},
+      .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
       .resetCounter = NULL,
   };
 

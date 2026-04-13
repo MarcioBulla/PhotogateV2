@@ -1,4 +1,5 @@
 #include "classic.h"
+#include "sdkconfig.h"
 
 const static char *TAG = "classic";
 
@@ -64,42 +65,42 @@ static const counter_config_t classic_configs[6] = {
         .watchPoint = {1, 3},
         .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
         .falling = PCNT_CHANNEL_EDGE_ACTION_HOLD,
-        .filter = {.max_glitch_ns = 100},
+        .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
         .resetCounter = NULL,
     },
     {
         .watchPoint = {1, 3},
         .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
         .falling = PCNT_CHANNEL_EDGE_ACTION_HOLD,
-        .filter = {.max_glitch_ns = 100},
+        .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
         .resetCounter = &reset_pend,
     },
     {
         .watchPoint = {1, 2},
         .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
         .falling = PCNT_CHANNEL_EDGE_ACTION_HOLD,
-        .filter = {.max_glitch_ns = 100},
+        .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
         .resetCounter = NULL,
     },
     {
         .watchPoint = {1, 2},
         .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
         .falling = PCNT_CHANNEL_EDGE_ACTION_HOLD,
-        .filter = {.max_glitch_ns = 100},
+        .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
         .resetCounter = &reset_classic,
     },
     {
         .watchPoint = {1, 2},
         .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
         .falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
-        .filter = {.max_glitch_ns = 50},
+        .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
         .resetCounter = NULL,
     },
     {
         .watchPoint = {1, 2},
         .rising = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
         .falling = PCNT_CHANNEL_EDGE_ACTION_INCREASE,
-        .filter = {.max_glitch_ns = 50},
+        .filter = {.max_glitch_ns = CONFIG_PCNT_MIN_PULSE_WIDTH_NS},
         .resetCounter = &reset_classic,
     },
 };

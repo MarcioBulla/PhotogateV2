@@ -76,6 +76,15 @@ menu "Photogate V2.1 config"
             default 23
             help
                 GPIO pin number for the infrared photogate sensor input.
+
+        config PCNT_MIN_PULSE_WIDTH_NS
+            int "Minimum pulse width to detect (ns)"
+            default 100
+            help
+              Sets the minimum pulse width, in nanoseconds, that the system will
+              recognize as a valid pulse.
+              
+                
     endmenu
 
     menu "Experiments"
