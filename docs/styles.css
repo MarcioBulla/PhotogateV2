@@ -19,6 +19,38 @@
   --gh-btn-active-bg: #ebecf0;
   --gh-btn-selected-bg: #ddf4ff;
   --gh-btn-selected-border: #0969da;
+  --diagram-bg: #ffffff;
+  --diagram-node: #f6f8fa;
+  --diagram-text: #24292f;
+  --diagram-border: #d0d7de;
+  --diagram-line: #57606a;
+  --diagram-accent-soft: #ddf4ff;
+  --diagram-power-fill: #d9f2d9;
+  --diagram-power-stroke: #2e7d32;
+  --diagram-control-fill: #dbeafe;
+  --diagram-control-stroke: #1565c0;
+  --diagram-sensor-fill: #fff3cd;
+  --diagram-sensor-stroke: #b8860b;
+  --diagram-connector-fill: #efe0ff;
+  --diagram-connector-stroke: #7b1fa2;
+  --diagram-program-fill: #eeeeee;
+  --diagram-program-stroke: #616161;
+  --diagram-junction-fill: #ffffff;
+  --diagram-junction-stroke: #444444;
+  --diagram-class-text: #111111;
+  --diagram-command-input-fill: #eaf4ff;
+  --diagram-command-input-stroke: #2563eb;
+  --diagram-command-transport-fill: #fff7ed;
+  --diagram-command-transport-stroke: #ea580c;
+  --diagram-command-menu-fill: #ecfdf5;
+  --diagram-command-menu-stroke: #059669;
+  --diagram-command-decision-fill: #fefce8;
+  --diagram-command-decision-stroke: #ca8a04;
+  --diagram-command-experiment-fill: #f5f3ff;
+  --diagram-command-experiment-stroke: #7c3aed;
+  --diagram-command-display-fill: #fdf2f8;
+  --diagram-command-display-stroke: #db2777;
+  --diagram-command-text: #0f172a;
 }
 
 [data-theme="dark"] {
@@ -37,6 +69,38 @@
   --gh-btn-active-bg: #3a3f45;
   --gh-btn-selected-bg: rgba(31, 111, 235, 0.2);
   --gh-btn-selected-border: #2f81f7;
+  --diagram-bg: #0d1117;
+  --diagram-node: #161b22;
+  --diagram-text: #c9d1d9;
+  --diagram-border: #30363d;
+  --diagram-line: #8b949e;
+  --diagram-accent-soft: rgba(47, 129, 247, 0.2);
+  --diagram-power-fill: #143a24;
+  --diagram-power-stroke: #56d364;
+  --diagram-control-fill: #102f55;
+  --diagram-control-stroke: #58a6ff;
+  --diagram-sensor-fill: #3a2f12;
+  --diagram-sensor-stroke: #d29922;
+  --diagram-connector-fill: #2f2146;
+  --diagram-connector-stroke: #bc8cff;
+  --diagram-program-fill: #21262d;
+  --diagram-program-stroke: #8b949e;
+  --diagram-junction-fill: #0d1117;
+  --diagram-junction-stroke: #c9d1d9;
+  --diagram-class-text: #f0f6fc;
+  --diagram-command-input-fill: #102a4d;
+  --diagram-command-input-stroke: #58a6ff;
+  --diagram-command-transport-fill: #3a2713;
+  --diagram-command-transport-stroke: #f0883e;
+  --diagram-command-menu-fill: #123626;
+  --diagram-command-menu-stroke: #3fb950;
+  --diagram-command-decision-fill: #352d12;
+  --diagram-command-decision-stroke: #d29922;
+  --diagram-command-experiment-fill: #2b2147;
+  --diagram-command-experiment-stroke: #bc8cff;
+  --diagram-command-display-fill: #3b1730;
+  --diagram-command-display-stroke: #f778ba;
+  --diagram-command-text: #f0f6fc;
 }
 
 /* ===== RESET & BASE ===== */
@@ -85,6 +149,35 @@ header {
   gap: 0.5rem;
 }
 
+.logo-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.site-nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--accent-color);
+  border-color: var(--border-color);
+  background: var(--gh-btn-bg);
+}
+
 /* ===== BUTTONS ===== */
 .btn {
   display: inline-flex;
@@ -109,7 +202,7 @@ header {
 .btn[aria-pressed="true"], .btn.active { background: var(--gh-btn-selected-bg); border-color: var(--gh-btn-selected-border); }
 .btn-inline { padding: 0.2rem 0.5rem; font-weight: 600; }
 
-/* ===== HERO BUTTON GROUP (novo) ===== */
+/* ===== HERO BUTTON GROUP ===== */
 .btn-group{
   display:flex;
   justify-content:center;
@@ -123,7 +216,7 @@ header {
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/nerdfontssymbolsonly.css" crossorigin>
 */
 
-/* Garante Nerd Fonts prioritário para os ícones */
+/* Prefer Nerd Fonts for icon glyphs */
 .nf{
   font-family:
     'NerdFontsSymbols Nerd Font',
@@ -138,35 +231,31 @@ header {
   display:inline-block;
 }
 
-/* Mapas usados (iguais aos que você já tinha) */
-.nf-github::before     { content: "\f09b"; } /* GitHub */
-.nf-printer_3d_nozzle::before { content: "\f0e5b"; } /* nozzle */
-.nf-timer::before      { content: "\f017"; } /* clock */
-.nf-sun::before        { content: "\f185"; } /* sun */
-.nf-moon::before       { content: "\f186"; } /* moon */
-.nf-oct-file_directory::before { content: "\f07b"; } /* folder */
-.nf-oct-file::before           { content: "\f15b"; } /* file */
-.nf-oct-list_unordered::before { content: "\f03a"; } /* list */
-/* Octicons / misc used in the page */
-.nf-oct-file_directory::before { content: "\f07b"; }  /* Folder */
-.nf-oct-file::before           { content: "\f15b"; }  /* File */
-.nf-oct-list_unordered::before { content: "\f03a"; }  /* List */
-
-/* Extra feature icons used in cards */
-.nf-mdi-cube_outline::before          { content: "\f1b2"; } /* Cube (FA) */
-.nf-mdi-circuit_board::before         { content: "\eae4"; } /* Circuit board (MDI patched) */
-.nf-mdi-open_source_initiative::before { content: "\eaff"; } /* OSI (MDI patched) */
-.nf-mdi-memory::before                { content: "\f108"; } /* Chip/Memory (FA) */
-
-.ibom-inline { height: 1em; width: auto; display: inline-block; vertical-align: -0.15em; margin-right: 0.35rem; }
+/* Glyph maps used by the page */
+.nf-github::before { content: "\f09b"; }
+.nf-sun::before { content: "\f185"; }
+.nf-moon::before { content: "\f186"; }
+.nf-oct-file_directory::before { content: "\f07b"; }
 
 /* ===== MAIN CONTENT ===== */
 main { padding: 2rem 0; }
 
-.hero { text-align: center; padding: 3rem 0; animation: fadeIn 0.6s ease-out; }
+.hero {
+  text-align: center;
+  padding: 3.8rem 1.25rem;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+  box-shadow: 0 1px 0 var(--shadow);
+  animation: fadeIn 0.6s ease-out;
+}
 
 .hero h2 { font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--accent-color); font-weight: 700; }
-.hero p  { font-size: 1rem; margin-bottom: 2rem; opacity: 0.9; }
+.hero p  { font-size: 1rem; margin-bottom: 2rem; color: var(--text-color); opacity: 0.92; }
 
 .version-badge {
   display: inline-block; background: var(--accent-color); color: #fff;
@@ -177,6 +266,72 @@ main { padding: 2rem 0; }
 .section { margin: 3rem 0; }
 
 .section h3 { font-size: 1.4rem; margin-bottom: 1rem; color: var(--accent-color); font-weight: 700; }
+.section-lead { margin: -0.2rem 0 1rem; max-width: 900px; }
+.subsection-title { margin-top: 1.5rem; }
+.section-lead code {
+  background: var(--code-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.05rem 0.3rem;
+}
+
+.page-heading {
+  margin: 2rem 0 1rem;
+}
+
+.page-heading h2 {
+  color: var(--accent-color);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.content-grid,
+.link-grid,
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.doc-card {
+  display: block;
+  min-height: 100%;
+  color: var(--text-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.1rem;
+  text-decoration: none;
+  box-shadow: 0 1px 0 var(--shadow);
+}
+
+.doc-card:hover {
+  border-color: var(--accent-color);
+}
+
+.doc-card h4,
+.process-step h4,
+.card h4 {
+  color: var(--accent-color);
+  margin-bottom: 0.45rem;
+}
+
+.process-step {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 0 var(--shadow);
+}
+
+.compact-list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.compact-list li {
+  margin-bottom: 0.35rem;
+}
 
 .card {
   background: var(--card-bg);
@@ -187,6 +342,355 @@ main { padding: 2rem 0; }
   box-shadow: 0 1px 0 var(--shadow);
 }
 
+/* ===== IMAGE GALLERY ===== */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.image-gallery-spaced,
+.image-card-spaced {
+  margin-top: 1rem;
+}
+
+.image-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0;
+  box-shadow: 0 1px 0 var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.image-card-full { grid-column: 1 / -1; }
+
+.image-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  display: block;
+}
+
+.image-card img.contain {
+  object-fit: contain;
+  padding: 0.75rem;
+}
+
+.image-card img.schematic-img {
+  aspect-ratio: 4 / 3;
+}
+
+.image-card img.pcb-img,
+.image-card img.prototype-img {
+  aspect-ratio: 4 / 3;
+}
+
+.image-card figcaption {
+  padding: 0.85rem 1rem 1rem;
+  font-size: 0.88rem;
+}
+
+.image-card figcaption strong {
+  display: block;
+  color: var(--accent-color);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ===== MERMAID DIAGRAMS ===== */
+.diagram-card {
+  background: var(--diagram-bg);
+  color: var(--diagram-text);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow: auto;
+  box-shadow: 0 1px 0 var(--shadow);
+}
+
+.has-expanded-diagram {
+  overflow: hidden;
+}
+
+.diagram-card.diagram-card-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 1rem;
+  background: var(--diagram-bg);
+  box-shadow: none;
+}
+
+.diagram-card.diagram-card-expanded .mermaid {
+  min-width: 0;
+  height: calc(100vh - 5rem);
+  display: grid;
+  place-items: center;
+}
+
+.diagram-card.diagram-card-expanded svg {
+  width: 100%;
+  height: 100%;
+}
+
+.diagram-card-full { grid-column: 1 / -1; }
+
+.diagram-card h4 {
+  color: var(--accent-color);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.diagram-tools {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin: -0.25rem 0 0.75rem;
+  padding: 0.25rem;
+  background: var(--diagram-bg);
+  border-bottom: 1px solid var(--diagram-border);
+}
+
+.diagram-tools .btn {
+  min-width: 2.3rem;
+  justify-content: center;
+  min-height: 2rem;
+}
+
+.diagram-card .mermaid {
+  min-width: 280px;
+  margin: 0;
+  overflow: visible;
+  background: transparent;
+  text-align: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.diagram-card .mermaid[data-zoom]:not([data-zoom="1"]) {
+  cursor: grab;
+}
+
+.diagram-card .mermaid.is-panning {
+  cursor: grabbing;
+}
+
+.diagram-card svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.electronics-architecture-card .mermaid {
+  min-width: 900px;
+}
+
+.electronics-architecture-card svg {
+  font-size: 1.14rem;
+}
+
+.electronics-architecture-card svg .nodeLabel,
+.electronics-architecture-card svg .edgeLabel,
+.electronics-architecture-card svg .edgeLabel p {
+  font-size: 1.06rem !important;
+}
+
+.command-flow-card {
+  padding: 0;
+  background:
+    linear-gradient(180deg, var(--diagram-bg), color-mix(in srgb, var(--diagram-accent-soft), var(--diagram-bg) 82%));
+  border-color: color-mix(in srgb, var(--accent-color), var(--border-color) 72%);
+}
+
+.command-flow-card .diagram-tools {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--diagram-bg), var(--diagram-accent-soft) 22%);
+}
+
+.command-flow-card .mermaid {
+  min-width: 560px;
+  padding: 1.1rem 1rem 1.35rem;
+}
+
+.command-flow-card svg {
+  font-size: 0.92rem;
+}
+
+.command-flow-card svg .node rect,
+.command-flow-card svg .node path,
+.command-flow-card svg .node polygon,
+.command-flow-card svg .node circle {
+  filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.08));
+}
+
+[data-theme="dark"] .command-flow-card svg .node rect,
+[data-theme="dark"] .command-flow-card svg .node path,
+[data-theme="dark"] .command-flow-card svg .node polygon,
+[data-theme="dark"] .command-flow-card svg .node circle {
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.26));
+}
+
+.command-flow-card svg .edgePaths path {
+  stroke: var(--diagram-line) !important;
+  stroke-width: 2.2px !important;
+}
+
+.command-flow-card svg .arrowheadPath {
+  fill: var(--diagram-line) !important;
+  stroke: var(--diagram-line) !important;
+}
+
+.command-flow-card svg .edgeLabel,
+.command-flow-card svg .edgeLabel p {
+  color: var(--diagram-text) !important;
+  fill: var(--diagram-text) !important;
+  font-size: 0.78rem !important;
+}
+
+.command-flow-card svg .edgeLabel rect {
+  fill: var(--diagram-bg) !important;
+  opacity: 0.92 !important;
+}
+
+.command-flow-card svg .node.cmdInput > *,
+.command-flow-card svg .node.cmdInput rect,
+.command-flow-card svg .node.cmdInput path,
+.command-flow-card svg .node.cmdInput polygon,
+.command-flow-card svg .node.cmdInput circle {
+  fill: var(--diagram-command-input-fill) !important;
+  stroke: var(--diagram-command-input-stroke) !important;
+}
+
+.command-flow-card svg .node.cmdTransport > *,
+.command-flow-card svg .node.cmdTransport rect,
+.command-flow-card svg .node.cmdTransport path,
+.command-flow-card svg .node.cmdTransport polygon,
+.command-flow-card svg .node.cmdTransport circle {
+  fill: var(--diagram-command-transport-fill) !important;
+  stroke: var(--diagram-command-transport-stroke) !important;
+}
+
+.command-flow-card svg .node.cmdMenu > *,
+.command-flow-card svg .node.cmdMenu rect,
+.command-flow-card svg .node.cmdMenu path,
+.command-flow-card svg .node.cmdMenu polygon,
+.command-flow-card svg .node.cmdMenu circle {
+  fill: var(--diagram-command-menu-fill) !important;
+  stroke: var(--diagram-command-menu-stroke) !important;
+}
+
+.command-flow-card svg .node.cmdDecision > *,
+.command-flow-card svg .node.cmdDecision rect,
+.command-flow-card svg .node.cmdDecision path,
+.command-flow-card svg .node.cmdDecision polygon,
+.command-flow-card svg .node.cmdDecision circle {
+  fill: var(--diagram-command-decision-fill) !important;
+  stroke: var(--diagram-command-decision-stroke) !important;
+}
+
+.command-flow-card svg .node.cmdExperiment > *,
+.command-flow-card svg .node.cmdExperiment rect,
+.command-flow-card svg .node.cmdExperiment path,
+.command-flow-card svg .node.cmdExperiment polygon,
+.command-flow-card svg .node.cmdExperiment circle {
+  fill: var(--diagram-command-experiment-fill) !important;
+  stroke: var(--diagram-command-experiment-stroke) !important;
+}
+
+.command-flow-card svg .node.cmdDisplay > *,
+.command-flow-card svg .node.cmdDisplay rect,
+.command-flow-card svg .node.cmdDisplay path,
+.command-flow-card svg .node.cmdDisplay polygon,
+.command-flow-card svg .node.cmdDisplay circle {
+  fill: var(--diagram-command-display-fill) !important;
+  stroke: var(--diagram-command-display-stroke) !important;
+}
+
+.command-flow-card svg .node.cmdInput .label,
+.command-flow-card svg .node.cmdTransport .label,
+.command-flow-card svg .node.cmdMenu .label,
+.command-flow-card svg .node.cmdDecision .label,
+.command-flow-card svg .node.cmdExperiment .label,
+.command-flow-card svg .node.cmdDisplay .label {
+  color: var(--diagram-command-text) !important;
+  fill: var(--diagram-command-text) !important;
+  font-weight: 650 !important;
+}
+
+.diagram-card svg .node.power > *,
+.diagram-card svg .node.power rect,
+.diagram-card svg .node.power path,
+.diagram-card svg .node.power polygon {
+  fill: var(--diagram-power-fill) !important;
+  stroke: var(--diagram-power-stroke) !important;
+}
+
+.diagram-card svg .node.control > *,
+.diagram-card svg .node.control rect,
+.diagram-card svg .node.control path,
+.diagram-card svg .node.control polygon {
+  fill: var(--diagram-control-fill) !important;
+  stroke: var(--diagram-control-stroke) !important;
+}
+
+.diagram-card svg .node.sensor > *,
+.diagram-card svg .node.sensor rect,
+.diagram-card svg .node.sensor path,
+.diagram-card svg .node.sensor polygon {
+  fill: var(--diagram-sensor-fill) !important;
+  stroke: var(--diagram-sensor-stroke) !important;
+}
+
+.diagram-card svg .node.conn > *,
+.diagram-card svg .node.conn rect,
+.diagram-card svg .node.conn path,
+.diagram-card svg .node.conn polygon {
+  fill: var(--diagram-connector-fill) !important;
+  stroke: var(--diagram-connector-stroke) !important;
+}
+
+.diagram-card svg .node.prog > *,
+.diagram-card svg .node.prog rect,
+.diagram-card svg .node.prog path,
+.diagram-card svg .node.prog polygon {
+  fill: var(--diagram-program-fill) !important;
+  stroke: var(--diagram-program-stroke) !important;
+}
+
+.diagram-card svg .node.junction > *,
+.diagram-card svg .node.junction rect,
+.diagram-card svg .node.junction path,
+.diagram-card svg .node.junction circle,
+.diagram-card svg .node.junction polygon {
+  fill: var(--diagram-junction-fill) !important;
+  stroke: var(--diagram-junction-stroke) !important;
+}
+
+.diagram-card svg .node.power .label,
+.diagram-card svg .node.control .label,
+.diagram-card svg .node.sensor .label,
+.diagram-card svg .node.conn .label,
+.diagram-card svg .node.prog .label,
+.diagram-card svg .node.junction .label {
+  color: var(--diagram-class-text) !important;
+  fill: var(--diagram-class-text) !important;
+}
+
 /* ===== TECH STACK ===== */
 .tech-stack { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin: 1.1rem 0; }
 
@@ -195,22 +699,54 @@ main { padding: 2rem 0; }
   border-radius: 999px; font-size: 0.8rem; font-weight: 700;
 }
 
-.tech-item.tech-logo {
-  background: transparent; border: 1px solid var(--border-color); padding: 0.35rem 0.6rem;
+/* ===== TOOLCHAIN OVERVIEW ===== */
+.toolchain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1rem;
 }
-.tech-item.tech-logo img { height: 18px; display: block; }
 
-/* ===== FEATURES GRID ===== */
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 0.6rem; }
-
-.feature-card {
-  background: var(--card-bg); border: 1px solid var(--border-color);
-  border-radius: 8px; padding: 1.1rem; text-align: center; transition: box-shadow 0.2s, transform 0.2s;
+.toolchain-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 0.9rem;
+  align-items: center;
+  min-height: 126px;
+  padding: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 1px 0 var(--shadow);
 }
-.feature-card:hover { box-shadow: 0 4px 12px var(--shadow); transform: translateY(-2px); }
 
-.feature-icon { font-size: 3rem; margin-bottom: 0.5rem; color: var(--accent-color); }
-.feature-logo { height: 3.1rem; object-fit: contain; display: inline-block; }
+.toolchain-logo {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  padding: 0.45rem;
+  background: #fff;
+  border: 1px solid rgba(36, 41, 47, 0.12);
+  border-radius: 8px;
+}
+
+.toolchain-logo img {
+  max-width: 100%;
+  max-height: 42px;
+  object-fit: contain;
+  display: block;
+}
+
+.toolchain-item h4 {
+  color: var(--accent-color);
+  margin-bottom: 0.25rem;
+}
+
+.toolchain-item p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
 
 /* ===== IBOM SECTION ===== */
 .ibom-container { padding: 0; overflow: hidden; }
@@ -220,20 +756,32 @@ main { padding: 2rem 0; }
 }
 .ibom-icon { height: 18px; display: block; filter: brightness(0) invert(1); }
 .ibom-container iframe { transition: filter 0.3s ease; border-radius: 0 0 8px 8px; border: none; width: 100%; height: 520px; }
-[data-theme="dark"] .ibom-container iframe { filter: invert(1) hue-rotate(180deg) contrast(1.1) brightness(1.2) saturate(0.9); }
 
 /* ===== 3D VIEWER ===== */
 .viewer-bar {
   display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 1rem;
   border: 1px solid var(--border-color); border-radius: 8px 8px 0 0; background: var(--card-bg);
+  margin-top: 1rem;
 }
 .viewer-title { font-weight: 700; }
-.viewer-controls { display: flex; gap: 0.5rem; }
 .viewer-wrap {
   border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 8px 8px;
-  background: transparent; overflow: hidden;
+  background: transparent; overflow: hidden; margin-bottom: 1rem;
 }
-#pg-viewer { width: 100%; height: 520px; background: transparent; }
+.viewer-wrap model-viewer {
+  width: 100%;
+  height: 520px;
+  background: rgba(128,128,128,0.15);
+}
+
+.viewer-error {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  opacity: 0.7;
+}
 
 /* ===== CODE BLOCKS ===== */
 .code-wrapper {
@@ -251,7 +799,7 @@ main { padding: 2rem 0; }
   display: flex; align-items: center; gap: 1rem;
 }
 .repository-list li:last-child { border-bottom: none; }
-.folder-name { font-weight: 700; color: var(--accent-color); min-width: 150px; }
+.folder-name { font-weight: 700; color: var(--accent-color); min-width: 190px; }
 
 /* ===== REQUIREMENTS LIST ===== */
 .req-list { margin: 1rem 0; padding-left: 1.5rem; }
@@ -262,7 +810,7 @@ main { padding: 2rem 0; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* para quebrar no mobile */
+  flex-wrap: wrap; /* wrap on mobile */
 }
 
 .footer-text {
@@ -272,7 +820,7 @@ main { padding: 2rem 0; }
 }
 
 .footer-seal img {
-  max-width: 120px; /* tamanho estilo selo */
+  max-width: 120px; /* seal-style size */
   height: auto;
   display: block;
 }
@@ -281,22 +829,22 @@ main { padding: 2rem 0; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in { animation: fadeIn 0.6s ease-out; }
 
-/* ===== LOADING STATE ===== */
-body.loaded { opacity: 1; }
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .hero h2 { font-size: 1.8rem; }
   .container { padding: 0 15px; }
   .header-content { flex-direction: column; gap: 1rem; }
-  .hero { padding: 2rem 0; }
+  .site-nav { justify-content: center; }
+  .hero { padding: 2rem 1rem; min-height: 300px; }
   .hero .btn { display: flex; justify-content: center; margin: 0.25rem 0; }
+  .image-card-full { grid-column: span 1; }
+  .diagram-card-full { grid-column: span 1; }
+  .repository-list li { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
+  .folder-name { min-width: 0; }
 }
 
 @media (max-width: 480px) {
-  .features-grid { grid-template-columns: 1fr; }
   .tech-stack { justify-content: flex-start; }
   .viewer-bar { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
-  #pg-viewer { height: 400px; }
+  .viewer-wrap model-viewer { height: 400px; }
 }
-

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark"/>
+  <title>Photogate V2 - Hardware</title>
+  <link rel="icon" href="icon.png"/>
+  <link rel="stylesheet" href="styles.css?v=17"/>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js" defer></script>
+  <script src="app.js?v=13" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/jetbrainsmono.css" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/nerdfontssymbolsonly.css" crossorigin>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a class="logo-link" href="index.html"><h1>Photogate V2</h1></a>
+        </div>
+        <nav class="site-nav" aria-label="Site navigation">
+          <a href="index.html">Overview</a>
+          <a href="hardware.html" aria-current="page">Hardware</a>
+          <a href="software.html">Software</a>
+          <a href="modeling.html">3D Modeling</a>
+        </nav>
+        <div class="header-right">
+          <button id="themeToggle" class="btn" type="button">
+            <span class="nf nf-moon" aria-hidden="true"></span> Dark Mode
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-heading">
+      <h2>Hardware Development</h2>
+      <p>
+        The electronic hardware was designed in KiCad around an ESP32-WROOM module. The board integrates power conditioning, the infrared sensor interface, display and encoder connectors, LED signaling, battery support, and programming/debug interfaces.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3>KiCad Project</h3>
+      <div class="content-grid">
+        <div class="card">
+          <h4>Design Files</h4>
+          <ul class="compact-list">
+            <li><code>boards/board.kicad_pro</code> opens the KiCad project.</li>
+            <li><code>boards/board.kicad_sch</code> stores the complete schematic.</li>
+            <li><code>boards/board.kicad_pcb</code> stores the PCB layout.</li>
+            <li><code>boards/packages3D/</code> contains the component 3D packages.</li>
+            <li><code>boards/jlcpcb/</code> contains production files for fabrication.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Functional Blocks</h4>
+          <ul class="compact-list">
+            <li>9V to 12V power input with protection and regulation.</li>
+            <li>Optional 2S battery/BMS support.</li>
+            <li>Infrared sensor connector and current adjustment.</li>
+            <li>LM393 comparator with adjustable threshold and hysteresis.</li>
+            <li>LCD display, encoder, LED signal, ESP32, UART, and JTAG interfaces.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Electronics Architecture</h3>
+      <div class="diagram-card diagram-card-full electronics-architecture-card">
+        <pre class="mermaid">
+flowchart LR
+  Battery[(BMS 2S Battery Supply)]
+  Power[[Power Supply]]
+  Source[/Supply Source Connector/]
+  Prog[/ESP32 Interfaces/]
+  J5V((5V))
+  J3V3((3V3))
+  JPulse((3V3 Pulse))
+  ConnSensor[/Sensor Connector/]
+  Sensor{{IR Sensor to Digital}}
+  Brightness{{Brightness LCD Control}}
+  ConnDisplay[/Display Module PCF8574 Connector/]
+  ConnEncoder[/Encoder KY-040 Connector/]
+  ConnLed[/LED Connector/]
+  ESP32([ESP32-WROOM])
+
+  Battery ==>|8.4V to 7V| Power
+  Power ==>|approx. 100 mA| Battery
+  Source ==>|9V to 12V| Power
+  Prog <==>|UART and JTAG| ESP32
+  Power === J5V
+  Prog ==> J5V
+  J5V ==> ConnSensor
+  J5V === J3V3
+  J3V3 ==> Sensor
+  ConnSensor ==>|Signal| Sensor
+  Sensor ==> JPulse
+  JPulse ==> ESP32
+  JPulse ==> ConnLed
+  J3V3 ==> ConnLed
+  ConnLed ~~~ ESP32
+  ConnEncoder ==> ESP32
+  J3V3 ==> ConnEncoder
+  J3V3 ==> ESP32
+  J5V ==> Brightness
+  ESP32 ==>|I2C| ConnDisplay
+  ESP32 ==>|3V3 PWM| Brightness
+  Brightness ==>|5V PWM| ConnDisplay
+  J5V ==> ConnDisplay
+
+  classDef power fill:#d9f2d9,stroke:#2e7d32,stroke-width:2px,color:#111111;
+  classDef control fill:#dbeafe,stroke:#1565c0,stroke-width:2px,color:#111111;
+  classDef sensor fill:#fff3cd,stroke:#b8860b,stroke-width:2px,color:#111111;
+  classDef conn fill:#efe0ff,stroke:#7b1fa2,stroke-width:2px,color:#111111;
+  classDef prog fill:#eeeeee,stroke:#616161,stroke-width:2px,color:#111111;
+  classDef junction fill:#ffffff,stroke:#444444,stroke-width:2px,color:#111111;
+
+  class Power,Battery power;
+  class ESP32 control;
+  class Sensor,Brightness sensor;
+  class Source,ConnDisplay,ConnEncoder,ConnLed,ConnSensor conn;
+  class Prog prog;
+  class J3V3,J5V,JPulse junction;
+
+        </pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Complete Schematic</h3>
+      <p class="section-lead">
+        The complete schematic shows how the ESP32, power rails, sensor conditioning, user interface, and programming interfaces are connected in the same KiCad project.
+      </p>
+      <figure class="image-card image-card-full">
+        <img class="contain schematic-img" src="images/project/schematics/complete-schematic.svg" alt="Complete Photogate V2 schematic" loading="lazy">
+        <figcaption>
+          <strong>Complete schematic</strong>
+          KiCad schematic for the full Photogate V2 electronics.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="section ibom-section">
+      <h3>Interactive BOM</h3>
+      <div class="card ibom-container">
+        <div class="ibom-header">
+          <img class="ibom-icon" src="https://raw.githubusercontent.com/openscopeproject/InteractiveHtmlBom/f42ee38fc93ecb7d619eb63db897cb2477d98423/icons/plugin.svg" alt="iBOM icon"/>
+          <span>Interactive Bill of Materials</span>
+        </div>
+        <iframe id="ibom-iframe" src="ibom.html">
+          Your browser does not support iframes.
+        </iframe>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>PCB Layout</h3>
+      <p class="section-lead">
+        The PCB layout prioritizes through-hole components, clear labels, polarized connectors, test points, and a compact two-layer board. These images document the board design before fabrication.
+      </p>
+      <div class="viewer-bar">
+        <div class="viewer-title">Board 3D Preview</div>
+      </div>
+      <div class="viewer-wrap pcb-viewer-wrap">
+        <model-viewer
+          id="pcb-viewer"
+          src="3dmodels/board.glb"
+          alt="Photogate V2 PCB 3D preview"
+          camera-controls
+          auto-rotate
+          auto-rotate-delay="2000"
+          interaction-prompt="none"
+          touch-action="pan-y"
+          shadow-intensity="1"
+          exposure="1"
+        ></model-viewer>
+      </div>
+      <div class="image-gallery">
+        <figure class="image-card">
+          <img class="contain pcb-img" src="images/project/board/pcb-layout-front.jpg" alt="KiCad front PCB layout" loading="lazy">
+          <figcaption><strong>Front layout</strong> KiCad front-side layout with connector labels and routing.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="contain pcb-img" src="images/project/board/pcb-layout-back.jpg" alt="KiCad back PCB layout" loading="lazy">
+          <figcaption><strong>Back layout</strong> Back-side copper routing and board outline.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Prototype Board</h3>
+      <p class="section-lead">
+        The prototype photos document the assembled hardware used during development and testing.
+      </p>
+      <div class="image-gallery">
+        <figure class="image-card">
+          <img class="prototype-img" src="images/project/board/pcb-front.jpg" alt="Assembled Photogate V2 board front" loading="lazy">
+          <figcaption><strong>Prototype front</strong> Assembled ESP32 board with connectors, regulators, comparator, and controls.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="prototype-img" src="images/project/board/pcb-back.jpg" alt="Assembled Photogate V2 board back" loading="lazy">
+          <figcaption><strong>Prototype back</strong> Manual prototype wiring and soldering on the back side.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-flex">
+      <div class="footer-text">
+        <p>&copy; 2026 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
+        <p class="footer-sub">Hardware documentation based on the KiCad and project material files.</p>
+      </div>
+      <div class="footer-seal">
+        <img src="images/FabianoYokaichiyaSeal.png" alt="Seal of Fabiano Yokaichiya">
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

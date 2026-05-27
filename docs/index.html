@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,43 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="color-scheme" content="light dark"/>
   <title>Photogate V2 - ESP32 Optical Timer</title>
-
   <link rel="icon" href="icon.png"/>
-
-  <!-- Preconnect for CDN -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-
-  <!-- Main CSS (cache-busting) -->
-  <link rel="stylesheet" href="styles.css?v=4"/>
-
-  <!-- Prism (optional for code blocks) -->
-  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
-
-  <!-- model-viewer (Web Component) -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-  <!-- App (defer to load after HTML) -->
-  <script src="app.js?v=3" defer></script>
-
-  <!-- Nerd Fonts (JetBrainsMono + Symbols) -->
+  <link rel="stylesheet" href="styles.css?v=17"/>
+  <script src="app.js?v=13" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/jetbrainsmono.css" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/nerdfontssymbolsonly.css" crossorigin>
-
-  <!-- JS disabled notice -->
-  <noscript>
-    <style>
-      .no-js-banner{background:#ffeded;color:#6b0000;padding:.75rem 1rem;margin:0;border-bottom:2px solid #e0b4b4;font:600 14px/1.4 ui-sans-serif,system-ui;}
-    </style>
-    <div class="no-js-banner">JavaScript is disabled. Some features (theme, 3D viewer, copy code) will not work.</div>
-  </noscript>
 </head>
 <body>
   <header>
     <div class="container">
       <div class="header-content">
         <div class="logo">
-          <h1 id="projectName">Photogate V2</h1>
+          <a class="logo-link" href="index.html"><h1>Photogate V2</h1></a>
         </div>
+        <nav class="site-nav" aria-label="Site navigation">
+          <a href="index.html" aria-current="page">Overview</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="software.html">Software</a>
+          <a href="modeling.html">3D Modeling</a>
+        </nav>
         <div class="header-right">
           <button id="themeToggle" class="btn" type="button">
             <span class="nf nf-moon" aria-hidden="true"></span> Dark Mode
@@ -53,151 +35,134 @@
   </header>
 
   <main class="container">
-    <!-- Hero -->
     <section class="hero fade-in">
-      <div class="version-badge" id="versionBadge">Version 2.1</div>
-      <h2 id="heroTitle">Photogate V2</h2>
-      <p id="heroTagline">High-precision optical timer based on ESP32</p>
-
-      <!-- BUTTON GROUP (alinhado e sem quebrar layout) -->
+      <div class="version-badge">Version 2.1</div>
+      <h2>Photogate V2</h2>
+      <p>ESP32 optical timer documented from electronics to firmware and 3D modeling</p>
       <div class="btn-group">
-        <a id="btnGithub" href="https://github.com/MarcioBulla/PhotogateV2" class="btn" target="_blank" rel="noopener">
+        <a href="hardware.html" class="btn">Hardware</a>
+        <a href="software.html" class="btn">Software</a>
+        <a href="modeling.html" class="btn">3D Modeling</a>
+        <a href="https://github.com/MarcioBulla/PhotogateV2" class="btn" target="_blank" rel="noopener">
           <span class="nf nf-github" aria-hidden="true"></span> GitHub
-        </a>
-        <a id="btnIBOM" href="#ibom" class="btn" rel="noopener">
-          <!-- mantém SVG (link) como estava -->
-          <img class="ibom-inline" src="https://raw.githubusercontent.com/openscopeproject/InteractiveHtmlBom/f42ee38fc93ecb7d619eb63db897cb2477d98423/icons/plugin.svg" alt="" aria-hidden="true">
-          View IBOM
         </a>
       </div>
     </section>
 
-    <!-- Overview -->
     <section class="section">
-      <h3 id="overviewTitle">Overview</h3>
+      <h3>Project Overview</h3>
       <div class="card">
-        <p id="overviewBody">
-          Photogate V2 brings improved accuracy, reliability, and a clean interface for educational physics experiments on the ESP32 platform. The project is open hardware and uses a fully open-source toolchain for CAD and firmware.
+        <p>
+          Photogate V2 measures time intervals produced by an infrared optical barrier. The analog sensor response is conditioned by an LM393 comparator, converted into 3V3 digital pulses, counted by the ESP32, and interpreted by firmware routines for physics experiments.
         </p>
         <div class="tech-stack">
           <div class="tech-item">ESP-IDF v5.4</div>
           <div class="tech-item">ESP32</div>
-          <div class="tech-item">Open Hardware</div>
+          <div class="tech-item">KiCad</div>
+          <div class="tech-item">FreeCAD</div>
           <div class="tech-item">FreeRTOS</div>
         </div>
       </div>
     </section>
 
-    <!-- Characteristics -->
     <section class="section">
-      <h3 id="charTitle">Characteristics</h3>
-      <div class="features-grid">
-        <div class="feature-card">
-            <img class="feature-logo" src="https://www.espressif.com/sites/all/themes/espressif/images/logo-guidelines/primary-vertical-logo.png" alt="Espressif logo"/>
-          <h4>High Precision</h4>
-          <p>Uses the ESP32’s <strong>internal high-resolution timer/counter</strong> with a <strong>FreeRTOS</strong>-based design for deterministic, accurate measurements.</p>
-        </div>
+      <h3>Documentation Sections</h3>
+      <div class="link-grid">
+        <a class="doc-card" href="hardware.html">
+          <h4>Hardware</h4>
+          <p>KiCad schematic, PCB layout, prototype board, power system, sensor interface, display, encoder, and manufacturing files.</p>
+        </a>
+        <a class="doc-card" href="software.html">
+          <h4>Software and Pulses</h4>
+          <p>ESP-IDF firmware architecture, how pulses are read, menu flow, experiment state machine, and pulse timing diagrams.</p>
+        </a>
+        <a class="doc-card" href="modeling.html">
+          <h4>3D Modeling</h4>
+          <p>FreeCAD assembly, printable parts, mechanical design decisions, and the interactive 3D viewer for the board and case.</p>
+        </a>
+      </div>
+    </section>
 
-        <div class="feature-card">
-          <div class="feature-icon">
-            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/3/3e/FreeRTOS_logo_2005.svg" alt="FreeRTOS logo"/>
+    <section class="section">
+      <h3>Open Development Toolchain</h3>
+      <p class="section-lead">
+        The project was developed with open and widely available tools so the electronics, firmware, and mechanical parts can be studied, modified, reproduced, and maintained without depending on closed design files.
+      </p>
+      <div class="toolchain-grid">
+        <div class="toolchain-item">
+          <div class="toolchain-logo">
+            <img src="https://www.espressif.com/sites/all/themes/espressif/images/logo-guidelines/primary-vertical-logo.png" alt="Espressif logo" loading="lazy">
           </div>
-          <h4>FreeRTOS Firmware</h4>
-          <p>Task-based architecture improves responsiveness and timing isolation (ISR → queue → measurement task).</p>
+          <div>
+            <h4>ESP-IDF</h4>
+            <p>Official Espressif framework used to build, flash, monitor, and configure the ESP32 firmware.</p>
+          </div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/65/KiCad_logo_square.svg" alt="KiCad logo"/>
+        <div class="toolchain-item">
+          <div class="toolchain-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/FreeRTOS_logo_2005.svg" alt="FreeRTOS logo" loading="lazy">
           </div>
-          <h4>KiCad (PCB)</h4>
-          <p>PCB layout and schematics created with the open-source KiCad suite.</p>
+          <div>
+            <h4>FreeRTOS</h4>
+            <p>Provides the task, queue, and timing structure used by the menu and measurement routines.</p>
+          </div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/1/1a/FreeCAD-symbol.svg" alt="FreeCAD logo"/>
+        <div class="toolchain-item">
+          <div class="toolchain-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/KiCad_logo_square.svg" alt="KiCad logo" loading="lazy">
           </div>
-          <h4>FreeCAD (3D)</h4>
-          <p>Parametric enclosure modeled with FreeCAD for easy editing and printing.</p>
+          <div>
+            <h4>KiCad</h4>
+            <p>Used for schematic capture, PCB layout, board documentation, and manufacturing outputs.</p>
+          </div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <img class="feature-logo" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Open-source-hardware-logo.svg" alt="Open-source Hardware logo"/>
+        <div class="toolchain-item">
+          <div class="toolchain-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/FreeCAD-symbol.svg" alt="FreeCAD logo" loading="lazy">
           </div>
-          <h4>Open Hardware</h4>
-          <p>All design files are published for study, modification, and reuse.</p>
+          <div>
+            <h4>FreeCAD</h4>
+            <p>Used to model the enclosure and mechanical assembly as editable parametric parts.</p>
+          </div>
         </div>
-
-                
-        <div class="feature-card">
-          <div class="feature-icon">
-            <span class="nf nf-printer_3d_nozzle" aria-hidden="true"></span>
+        <div class="toolchain-item">
+          <div class="toolchain-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux logo" loading="lazy">
           </div>
-          <h4>Easy to Print</h4>
-          <p>The case parts are <strong>easy to 3D print</strong> — no supports needed.</p>
+          <div>
+            <h4>Linux Workflow</h4>
+            <p>Development was organized around a reproducible terminal workflow for building and documenting the project.</p>
+          </div>
+        </div>
+        <div class="toolchain-item">
+          <div class="toolchain-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Open-source-hardware-logo.svg" alt="Open-source Hardware logo" loading="lazy">
+          </div>
+          <div>
+            <h4>Open Hardware</h4>
+            <p>Design files are kept in the repository so the device can be inspected, adapted, and reproduced.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- IBOM -->
-    <section id="ibom" class="section ibom-section">
-      <h3 id="ibomTitle">Interactive BOM</h3>
-      <div class="card ibom-container" style="padding:0;overflow:hidden">
-        <div class="ibom-header">
-          <img class="ibom-icon" src="https://raw.githubusercontent.com/openscopeproject/InteractiveHtmlBom/f42ee38fc93ecb7d619eb63db897cb2477d98423/icons/plugin.svg" alt="iBOM icon"/>
-          <span>Interactive Bill of Materials</span>
-        </div>
-        <iframe id="ibom-iframe" src="ibom.html" width="100%" height="520" style="border:none">
-          Your browser does not support iframes.
-        </iframe>
-      </div>
-    </section>
-
-    <!-- 3D Preview -->
     <section class="section">
-      <h3 id="previewTitle">Interactive 3D Preview</h3>
-
-      <div class="viewer-bar">
-        <div class="viewer-title">3D</div>
-        <div class="viewer-controls">
-          <button class="btn viewer-btn" data-key="board" type="button" aria-pressed="false" id="btnBoard">Board</button>
-          <button class="btn viewer-btn active" data-key="case" type="button" aria-pressed="true" id="btnCase">Case</button>
-        </div>
-      </div>
-
-      <div class="viewer-wrap">
-        <model-viewer
-          id="pg-viewer"
-          src="3dmodels/case.gltf"
-          alt="Photogate V2 – Case 3D"
-          camera-controls
-          auto-rotate
-          auto-rotate-delay="2000"
-          interaction-prompt="none"
-          touch-action="pan-y"
-          shadow-intensity="1"
-          exposure="1"
-          style="background: rgba(128,128,128,0.15)"
-        ></model-viewer>
-      </div>
-    </section>
-
-    <!-- Build and Run -->
-    <section class="section">
-      <h3 id="buildTitle">Build and Run</h3>
+      <h3>Build and Run</h3>
       <div class="card">
-        <h4 id="reqTitle">Requirements</h4>
+        <h4>Requirements</h4>
         <ul class="req-list">
-          <li id="req1"><strong>ESP-IDF v5.4</strong></li>
-          <li id="req2">A configured ESP32 development environment (terminal toolchain)</li>
-          <li id="req3">Required cables and hardware to flash the firmware</li>
+          <li><strong>ESP-IDF v5.4</strong></li>
+          <li>A configured ESP32 development environment installed with Espressif's official tools</li>
+          <li>Required cables and hardware to flash the firmware</li>
         </ul>
 
-        <h4 id="qsTitle">Quick Start</h4>
+        <p>
+          Install and configure ESP-IDF from Espressif's official installation site:
+          <a class="btn btn-inline" href="https://docs.espressif.com/projects/idf-im-ui/en/latest/" target="_blank" rel="noopener">ESP-IDF Installation Manager</a>
+        </p>
 
-        <p id="qsCloneTitle"><strong>1) Clone the repository</strong></p>
+        <h4>Quick Start</h4>
+        <p><strong>1. Clone the repository</strong></p>
         <div class="code-wrapper">
           <button class="btn" onclick="copyCode(this)">Copy</button>
           <pre><code class="language-bash">git clone https://github.com/MarcioBulla/PhotogateV2.git
@@ -205,13 +170,12 @@ cd PhotogateV2
 </code></pre>
         </div>
 
-        <p id="qsEnvTitle"><strong>2) Set up the ESP-IDF environment</strong></p>
-        <p id="qsEnvDesc">
-          Follow the official guide:
-          <a class="btn btn-inline" href="https://docs.espressif.com/projects/esp-idf" target="_blank" rel="noopener">Get Started with ESP-IDF</a>
+        <p><strong>2. Open an ESP-IDF terminal/session</strong></p>
+        <p>
+          After installing ESP-IDF, use the terminal or shell configured by the official installer so that <code>idf.py</code> and the ESP-IDF environment variables are available.
         </p>
 
-        <p id="qsBuildTitle"><strong>3) Build, flash, and monitor</strong></p>
+        <p><strong>3. Build, flash, and monitor</strong></p>
         <div class="code-wrapper">
           <button class="btn" onclick="copyCode(this)">Copy</button>
           <pre><code class="language-bash">cd firmware
@@ -221,48 +185,31 @@ idf.py build flash monitor
       </div>
     </section>
 
-    <!-- Repo structure (substitui emojis por Nerd Fonts) -->
     <section class="section">
-      <h3 id="repoTitle">Repository Structure</h3>
+      <h3>Repository Structure</h3>
       <div class="card">
         <ul class="repository-list">
-          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> firmware/</div><div id="repoFirmware">C source code for ESP32 firmware</div></li>
-          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> boards/</div><div id="repoBoards">PCB layouts or circuit schematics</div></li>
-          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> 3DModels/</div><div id="repo3d">Printable or viewable 3D models of the device</div></li>
-          <li><div class="folder-name"><span class="nf nf-oct-file" aria-hidden="true"></span> README.md</div><div id="repoReadme">Project documentation</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> firmware/</div><div>C source code for the ESP32 firmware</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> boards/</div><div>KiCad schematic, PCB layout, packages, and JLCPCB files</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> 3DModels/</div><div>FreeCAD mechanical model files</div></li>
+          <li><div class="folder-name"><span class="nf nf-oct-file_directory" aria-hidden="true"></span> docs/</div><div>Website, IBOM, 3D preview, and curated image assets</div></li>
         </ul>
       </div>
     </section>
   </main>
 
-
-<footer>
-  <div class="container footer-flex">
-    <div class="footer-text">
-      <p id="footerLine1">
-        &copy; 2025 Photogate V2 - Developed by <strong>Marcio Bulla</strong>
-      </p>
-      <p id="footerLine2" class="footer-sub">
-        Inspired by the first Photogate (Optical Timer) version<br/>
-        <span class="footer-thanks-text">Special thanks to <strong>Fabiano Yokaichiya</strong></span>
-      </p>
+  <footer>
+    <div class="container footer-flex">
+      <div class="footer-text">
+        <p>&copy; 2026 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
+        <p class="footer-sub">Inspired by the first Photogate (Optical Timer) version<br/>
+          <span class="footer-thanks-text">Special thanks to <strong>Fabiano Yokaichiya</strong></span>
+        </p>
+      </div>
+      <div class="footer-seal">
+        <img src="images/FabianoYokaichiyaSeal.png" alt="Seal of Fabiano Yokaichiya">
+      </div>
     </div>
-
-    <div class="footer-seal">
-      <img src="images/FabianoYokaichiyaSeal.png" alt="Seal of Fabiano Yokaichiya">
-    </div>
-  </div>
-</footer>
-
-
-  <!-- Prism core + autoloader (optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script>
-    if (window.Prism && Prism.plugins && Prism.plugins.autoloader) {
-      Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';
-    }
-  </script>
+  </footer>
 </body>
 </html>
-

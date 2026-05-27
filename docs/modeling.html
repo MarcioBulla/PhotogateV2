@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark"/>
+  <title>Photogate V2 - 3D Modeling</title>
+  <link rel="icon" href="icon.png"/>
+  <link rel="stylesheet" href="styles.css?v=17"/>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="app.js?v=13" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/jetbrainsmono.css" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/nerdfontssymbolsonly.css" crossorigin>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a class="logo-link" href="index.html"><h1>Photogate V2</h1></a>
+        </div>
+        <nav class="site-nav" aria-label="Site navigation">
+          <a href="index.html">Overview</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="software.html">Software</a>
+          <a href="modeling.html" aria-current="page">3D Modeling</a>
+        </nav>
+        <div class="header-right">
+          <button id="themeToggle" class="btn" type="button">
+            <span class="nf nf-moon" aria-hidden="true"></span> Dark Mode
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-heading">
+      <h2>3D Modeling and Mechanical Design</h2>
+      <p>
+        The mechanical design was made in FreeCAD as a single editable assembly. This keeps the case, arm, sensor holder, clips, knobs, stand, fasteners, and electronics references in one place while the design is adjusted for printing and assembly.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3>FreeCAD Assembly</h3>
+      <div class="content-grid">
+        <div class="card">
+          <h4>Main Model</h4>
+          <ul class="compact-list">
+            <li><code>3DModels/All_Models.FCStd</code> contains the editable mechanical model.</li>
+            <li>The assembly documents the relationship between case, display opening, encoder, board, arm, and sensor holder.</li>
+            <li>Parts can be adapted before exporting to printing formats such as STL or 3MF.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Design Intent</h4>
+          <ul class="compact-list">
+            <li>Keep the optical sensor aligned with the measurement path.</li>
+            <li>Make the controls visible and accessible for classroom use.</li>
+            <li>Reduce support material where practical for easier printing.</li>
+            <li>Use M3 screws, nuts, and inserts for repeatable assembly.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="image-gallery image-gallery-spaced">
+        <figure class="image-card image-card-full">
+          <img src="images/project/mechanical/freecad-assembly.jpeg" alt="Photogate V2 FreeCAD assembly" loading="lazy">
+          <figcaption><strong>Complete assembly</strong> FreeCAD model showing the case, arm, sensor holder, knobs, and fasteners.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Interactive 3D Preview</h3>
+      <p class="section-lead">
+        The browser preview allows quick inspection of the case model without opening CAD software.
+      </p>
+      <div class="viewer-bar">
+        <div class="viewer-title">Case 3D Preview</div>
+      </div>
+      <div class="viewer-wrap">
+        <model-viewer
+          id="pg-viewer"
+          src="3dmodels/case.gltf"
+          alt="Photogate V2 case 3D preview"
+          camera-controls
+          auto-rotate
+          auto-rotate-delay="2000"
+          interaction-prompt="none"
+          touch-action="pan-y"
+          shadow-intensity="1"
+          exposure="1"
+        ></model-viewer>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Mechanical Notes</h3>
+      <div class="content-grid">
+        <div class="card">
+          <h4>Printing</h4>
+          <p>The case parts were modeled for practical 3D printing. Most parts can be printed in common materials such as PLA, PETG, or ABS, while flexible parts can benefit from TPU when elasticity is useful.</p>
+        </div>
+        <div class="card">
+          <h4>Assembly</h4>
+          <p>The model uses M3 hardware for repeatable assembly. The CAD file is the preferred reference for checking how screws, inserts, and printed parts fit together.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-flex">
+      <div class="footer-text">
+        <p>&copy; 2026 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
+        <p class="footer-sub">3D documentation based on the FreeCAD model and project material.</p>
+      </div>
+      <div class="footer-seal">
+        <img src="images/FabianoYokaichiyaSeal.png" alt="Seal of Fabiano Yokaichiya">
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

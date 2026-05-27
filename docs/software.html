@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark"/>
+  <title>Photogate V2 - Software and Pulses</title>
+  <link rel="icon" href="icon.png"/>
+  <link rel="stylesheet" href="styles.css?v=17"/>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js" defer></script>
+  <script src="app.js?v=13" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/jetbrainsmono.css" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mshaugh/nerdfont-webfonts@v3.3.0/build/nerdfontssymbolsonly.css" crossorigin>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a class="logo-link" href="index.html"><h1>Photogate V2</h1></a>
+        </div>
+        <nav class="site-nav" aria-label="Site navigation">
+          <a href="index.html">Overview</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="software.html" aria-current="page">Software</a>
+          <a href="modeling.html">3D Modeling</a>
+        </nav>
+        <div class="header-right">
+          <button id="themeToggle" class="btn" type="button">
+            <span class="nf nf-moon" aria-hidden="true"></span> Dark Mode
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-heading">
+      <h2>Software and Pulse Measurement</h2>
+      <p>
+        The firmware is built with ESP-IDF and FreeRTOS. It reads digital pulses from the sensor circuit using the ESP32 PCNT pulse counter peripheral, interprets pulse edges in the selected experiment mode, updates the LCD, and stores readings in history while the device is powered.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3>Measurement Menu</h3>
+      <p class="section-lead">
+        The device starts from a compact menu tree. The user selects a measurement mode, changes configuration values, opens history, or adjusts settings using the rotary encoder.
+      </p>
+      <div class="diagram-card diagram-card-full">
+        <pre class="mermaid">
+mindmap
+  ((Root))
+    ((Classic))
+      Pend
+      Pulse
+      Gate
+    Pendulum
+    Spring
+    Mechanical Energy
+    Centripetal
+    History
+    ((Settings))
+      Brightness control
+      Info
+        </pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>How Pulses Are Read</h3>
+      <div class="process-grid">
+        <div class="process-step">
+          <h4>1. Optical event</h4>
+          <p>The infrared beam is interrupted by the object being measured, changing the photodiode signal.</p>
+        </div>
+        <div class="process-step">
+          <h4>2. Comparator output</h4>
+          <p>The LM393 compares the sensor signal with the reference threshold and produces a 0V or 3V3 digital pulse.</p>
+        </div>
+        <div class="process-step">
+          <h4>3. PCNT hardware counting</h4>
+          <p>The ESP32 PCNT peripheral counts rising and falling edges in hardware. A short-pulse filter rejects pulses shorter than the configured noise threshold, reducing false counts without relying on software polling.</p>
+        </div>
+        <div class="process-step">
+          <h4>4. Experiment state</h4>
+          <p>The selected mode decides which edge starts timing, which edge stops timing, and when the next reading should begin.</p>
+        </div>
+      </div>
+      <figure class="image-card image-card-full image-card-spaced">
+        <img class="contain" src="images/project/signals/sensor-hysteresis.jpg" alt="Sensor signal, hysteresis region, and comparator output" loading="lazy">
+        <figcaption>
+          <strong>Illustrative sensor signal and hysteresis</strong>
+          This graph is illustrative. It explains the expected relationship between the analog sensor signal, the reference level, the hysteresis region, and the comparator output; it is not presented as an oscilloscope capture.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="section">
+      <h3>Command Flow</h3>
+      <p class="section-lead">
+        Encoder actions are converted into navigation commands, passed through the menu layer, and reflected on the LCD. Experiment routines use the same command path to enter configuration, start waiting for pulses, and return to the menu.
+      </p>
+      <div class="diagram-card diagram-card-full command-flow-card">
+          <pre class="mermaid">
+flowchart TB
+    A(["Rotary encoder input"])
+    B["encoder.c<br/>decode rotation and button"]
+    C{{"Navigation command<br/>UP / DOWN / SELECT / BACK"}}
+    D[("FreeRTOS<br/>command queue")]
+    E["menus.c<br/>dispatch command"]
+    F["menu_manager<br/>update menu state"]
+    G{"Active context"}
+    H["Menu screen<br/>selection, settings, history"]
+    I["Experiment routine<br/>config / wait / time / done"]
+    J["display.c<br/>render output"]
+    K[["20x4 LCD"]]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G -->|browse menu| H
+    G -->|measurement selected| I
+    H --> J
+    I --> J
+    J --> K
+
+    classDef cmdInput fill:#EAF4FF,stroke:#2563EB,stroke-width:2px,color:#0F172A,rx:12,ry:12;
+    classDef cmdTransport fill:#FFF7ED,stroke:#EA580C,stroke-width:2px,color:#0F172A,rx:12,ry:12;
+    classDef cmdMenu fill:#ECFDF5,stroke:#059669,stroke-width:2px,color:#0F172A,rx:12,ry:12;
+    classDef cmdDecision fill:#FEFCE8,stroke:#CA8A04,stroke-width:2px,color:#0F172A,rx:12,ry:12;
+    classDef cmdExperiment fill:#F5F3FF,stroke:#7C3AED,stroke-width:2px,color:#0F172A,rx:12,ry:12;
+    classDef cmdDisplay fill:#FDF2F8,stroke:#DB2777,stroke-width:2px,color:#0F172A,rx:12,ry:12;
+
+    class A,B cmdInput;
+    class C,D cmdTransport;
+    class E,F cmdMenu;
+    class G cmdDecision;
+    class I cmdExperiment;
+    class H,J,K cmdDisplay;
+        </pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Experiment State Machine</h3>
+      <div class="content-grid">
+        <div class="card">
+          <h4>States</h4>
+          <ul class="compact-list">
+            <li><strong>Config:</strong> the user chooses parameters such as memory, periods, or mechanical interval.</li>
+            <li><strong>Waiting:</strong> the device waits for the edge that starts the measurement.</li>
+            <li><strong>Timing:</strong> the timer runs while the LCD shows the active measurement.</li>
+            <li><strong>Done:</strong> the measured result is shown and can be saved to history.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Encoder Commands</h4>
+          <ul class="compact-list">
+            <li><code>NAVIGATE_UP</code> and <code>NAVIGATE_DOWN</code> move through values and menu entries.</li>
+            <li><code>NAVIGATE_SELECT</code> enters menus, confirms values, or returns to configuration while a mode is running.</li>
+            <li><code>NAVIGATE_BACK</code> returns to the previous menu or exits the current function.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Pulse Timing Diagrams</h3>
+      <p class="section-lead">
+        These diagrams are kept in their own section because they describe how each experiment interprets pulse edges.
+      </p>
+
+      <h4>Classic Modes</h4>
+      <div class="image-gallery">
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/generic-pulse.jpeg" alt="Pulse mode timing diagram" loading="lazy">
+          <figcaption><strong>Pulse</strong> Measures one complete pulse cycle from rising edge to rising edge.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/pendulum-pulse.jpeg" alt="Pend mode timing diagram" loading="lazy">
+          <figcaption><strong>Pend</strong> Measures from the first rising edge to the third rising edge.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/gate-pulse.jpeg" alt="Gate mode timing diagram" loading="lazy">
+          <figcaption><strong>Gate</strong> Measures the time that the pulse remains at high level.</figcaption>
+        </figure>
+      </div>
+
+      <h4 class="subsection-title">Period-Based Experiments</h4>
+      <div class="image-gallery">
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/pendulum-centripetal-pulse.jpeg" alt="Pendulum and centripetal timing diagram" loading="lazy">
+          <figcaption><strong>Pendulum and centripetal</strong> Counts rising edges according to the selected number of periods.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/spring-pulse.jpeg" alt="Spring timing diagram" loading="lazy">
+          <figcaption><strong>Spring</strong> Counts falling edges for the selected number of oscillations.</figcaption>
+        </figure>
+      </div>
+
+      <h4 class="subsection-title">Mechanical Energy</h4>
+      <div class="image-gallery">
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/solid-cylinder-pulse.jpeg" alt="Solid cylinder timing diagram" loading="lazy">
+          <figcaption><strong>Solid cylinder</strong> Uses a gate-like interval for the object crossing.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="contain" src="images/project/experiments/hollow-cylinder-pulse.jpeg" alt="Hollow cylinder timing diagram" loading="lazy">
+          <figcaption><strong>Hollow cylinder</strong> Separates intervals associated with the inner and outer radii.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Configuration</h3>
+      <p class="section-lead">
+        Project options are exposed through ESP-IDF <code>menuconfig</code>, so pins, filters, encoder behavior, display settings, and experiment defaults can be adjusted without editing source files directly.
+      </p>
+      <div class="image-gallery">
+        <figure class="image-card">
+          <img class="contain" src="images/project/firmware/menuconfig-main.jpg" alt="Photogate V2 menuconfig main screen" loading="lazy">
+          <figcaption><strong>Main project menu</strong> Entry point for Photogate V2 firmware settings.</figcaption>
+        </figure>
+        <figure class="image-card">
+          <img class="contain" src="images/project/firmware/menuconfig-experiments.jpg" alt="Photogate V2 experiments menuconfig screen" loading="lazy">
+          <figcaption><strong>Experiment defaults</strong> Configuration values used by the experiment modes.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-flex">
+      <div class="footer-text">
+        <p>&copy; 2026 Photogate V2 - Developed by <strong>Marcio Bulla</strong></p>
+        <p class="footer-sub">Software documentation based on the ESP-IDF source and project material.</p>
+      </div>
+      <div class="footer-seal">
+        <img src="images/FabianoYokaichiyaSeal.png" alt="Seal of Fabiano Yokaichiya">
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
