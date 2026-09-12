@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: Marcio Bulla and PhotogateV2 contributors
+
 #include "counter.h"
 
 static const char *TAG = "counter";

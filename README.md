@@ -1,6 +1,8 @@
 
 # Photogate V2
 
+[DOI: 10.5281/zenodo.22728248](https://doi.org/10.5281/zenodo.22728248)
+
 [🌐 Access Photogate V2 Website](https://photogatev2.marciobulla.com/)  
 [📄 View Interactive IBOM](https://photogatev2.marciobulla.com/ibom.html)
 
@@ -67,3 +69,16 @@ Below is a preview of the Interactive BOM:
 Developed by **Marcio Bulla**. Inspired by the first Photogate (Optical Timer) version.  
 Special thanks to the libraries used in this project, such as `encoder_menu.py`, `rotary.py`, and `rotary_irq_esp.py`.
 
+## License
+
+PhotogateV2 uses different open-source licenses for its original contributions:
+
+- Electronic hardware and PCB design: CERN-OHL-W-2.0
+- Mechanical and 3D design: CERN-OHL-W-2.0
+- PhotogateV2 firmware: Apache-2.0
+- Documentation: CC-BY-SA-4.0
+
+Third-party components retain their respective licenses. Imported assets and
+materials of unresolved origin are excluded from these grants.
+See [LICENSES.md](LICENSES.md) for scope and exceptions, and
+[THIRD_PARTY.md](THIRD_PARTY.md) for firmware dependencies and license evidence.

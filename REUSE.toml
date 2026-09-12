@@ -1,0 +1,22 @@
+version = 1
+
+# Deliberately partial: do not blanket-annotate mixed CAD, images, dependencies,
+# generated output, or files whose provenance is still unresolved.
+# C/H files carry their own SPDX headers; see LICENSE_AUDIT.md for exclusions.
+[[annotations]]
+path = ["README.md", "LICENSES.md", "LICENSE_AUDIT.md", "THIRD_PARTY.md", "REUSE.toml", "boards/LICENSE.md", "3DModels/LICENSE.md", "firmware/LICENSE.md", "docs/LICENSE.md", "docs/index.html", "docs/hardware.html", "docs/modeling.html", "docs/software.html", "docs/app.js", "docs/styles.css", "docs/images/project/README.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Marcio Bulla and PhotogateV2 contributors"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+[[annotations]]
+path = ["firmware/main/CMakeLists.txt", "firmware/main/Kconfig.projbuild", "firmware/main/idf_component.yml", "firmware/sdkconfig.defaults"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Marcio Bulla and PhotogateV2 contributors"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ["boards/board.kicad_pro"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Marcio Bulla and PhotogateV2 contributors"
+SPDX-License-Identifier = "CERN-OHL-W-2.0"

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: Marcio Bulla and PhotogateV2 contributors
+
 #include "misc.h"
 
 const static char *TAG = "misc";
