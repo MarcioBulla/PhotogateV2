@@ -819,6 +819,36 @@ main { padding: 2rem 0; }
   min-width: 200px;
 }
 
+.footer-marks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem;
+  padding: 0.6rem 0.75rem;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.footer-certification { text-align: center; }
+
+.footer-certification a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.footer-certification img {
+  width: 120px;
+  height: auto;
+  display: block;
+}
+
 .footer-seal img {
   max-width: 120px; /* seal-style size */
   height: auto;

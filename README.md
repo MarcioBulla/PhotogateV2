@@ -3,6 +3,10 @@
 
 [DOI: 10.5281/zenodo.22728248](https://doi.org/10.5281/zenodo.22728248)
 
+[![OSHWA Certified AR000006](https://img.shields.io/badge/OSHWA-Certified%20AR000006-ff4444?labelColor=333333)](https://certification.oshwa.org/ar000006.html)
+
+PhotogateV2 is certified by OSHWA as **AR000006**.
+
 [🌐 Access Photogate V2 Website](https://photogatev2.marciobulla.com/)  
 [📄 View Interactive IBOM](https://photogatev2.marciobulla.com/ibom.html)
 
